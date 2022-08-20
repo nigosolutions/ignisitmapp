@@ -22,6 +22,7 @@ import {
 } from "native-base";
 import AssetTagging from "./app/screens/AssetTagging";
 import LoginScreen from "./app/screens/Login";
+import AssetDetails from "./app/screens/AssetTagging/AssetDetails";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -156,7 +157,7 @@ function MyDrawer() {
       >
         <Drawer.Screen name="Inbox" component={AssetTagging} />
         <Drawer.Screen name="Outbox" component={LoginScreen} />
-        <Drawer.Screen name="Favorites" component={Component} />
+        <Drawer.Screen name="Favorites" component={AssetDetails} />
         <Drawer.Screen name="Archive" component={Component} />
         <Drawer.Screen name="Trash" component={Component} />
         <Drawer.Screen name="Spam" component={Component} />

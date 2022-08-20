@@ -22,23 +22,60 @@ import React from "react";
 
 function AssetHome(props) {
   const [assetLists, setAsset] = React.useState([
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
-    { name: "Hello" },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
+    {
+      name: "Smoke Detector",
+      mfr: "Ignis",
+      location: "Floor 1, Room 102",
+      Tag: "SD1102",
+    },
   ]);
   return (
     <Box flex={1} padding={10}>
@@ -51,7 +88,20 @@ function AssetHome(props) {
       <VStack space={5} flex={1}>
         <HStack flex={1}>
           <Box flex={4} padding={5} rounded={10} bgColor={"white"}>
-            <Text fontSize="lg">Work Order</Text>
+            <VStack flex={3} space={3}>
+              <Text
+                style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
+              >
+                Work Order
+              </Text>
+              <Text style={{ color: "#99879D", fontWeight: "normal" }}>
+                Type: Asset Tagging
+              </Text>
+              <Text style={{ color: "#99879D", fontWeight: "normal" }}>
+                Property: Building XYZ
+              </Text>
+            </VStack>
+            {/* <Text fontSize="lg">Work Order</Text> */}
           </Box>
           <Center padding={10} flex={1}>
             <VStack width={"100%"} space={4}>
@@ -81,14 +131,15 @@ function AssetHome(props) {
                       <Text bold>Device: </Text>
                       <Text>{item.name}</Text>
                     </Text>
+
                     <Text>
                       <Text bold>Location: </Text>
-                      <Text>{item.name}</Text>
+                      <Text>{item.location}</Text>
                     </Text>
 
                     <Text>
                       <Text bold>Tag: </Text>
-                      <Text>{item.name}</Text>
+                      <Text>{item.Tag}</Text>
                     </Text>
                     <Spacer />
                     <HStack space={2}>
