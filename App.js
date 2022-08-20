@@ -21,6 +21,7 @@ import {
   Icon,
 } from "native-base";
 import AssetTagging from "./app/screens/AssetTagging";
+import LoginScreen from "./app/screens/Login";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -154,7 +155,7 @@ function MyDrawer() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen name="Inbox" component={AssetTagging} />
-        <Drawer.Screen name="Outbox" component={Component} />
+        <Drawer.Screen name="Outbox" component={LoginScreen} />
         <Drawer.Screen name="Favorites" component={Component} />
         <Drawer.Screen name="Archive" component={Component} />
         <Drawer.Screen name="Trash" component={Component} />

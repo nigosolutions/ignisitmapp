@@ -42,6 +42,12 @@ function AssetHome(props) {
   ]);
   return (
     <Box flex={1} padding={10}>
+      <Fab
+        renderInPortal={false}
+        onPress={() => props.navigation.navigate("PhotoScreen")}
+        icon={<AddIcon />}
+        label={"Add Asset"}
+      />
       <VStack space={5} flex={1}>
         <HStack flex={1}>
           <Box flex={4} padding={5} rounded={10} bgColor={"white"}>
@@ -62,11 +68,6 @@ function AssetHome(props) {
         <Box flex={3}>
           <ScrollView>
             <VStack space={3}>
-              <Fab
-                onPress={() => props.navigation.navigate("PhotoScreen")}
-                icon={<AddIcon />}
-                label={"Add Asset"}
-              />
               {assetLists.map((item) => (
                 <Box padding={4} rounded={10} bgColor={"white"}>
                   <HStack alignItems={"center"} space={10}>
