@@ -19,6 +19,7 @@ import {
   VStack,
 } from "native-base";
 import React from "react";
+import { getUser } from "../../auth/auth";
 
 function AssetHome(props) {
   const [assetLists, setAsset] = React.useState([
@@ -77,6 +78,12 @@ function AssetHome(props) {
       Tag: "SD1102",
     },
   ]);
+
+  React.useEffect(async () => {
+    let user = await getUser();
+    console.log("Final Data: ", user);
+  }, []);
+
   return (
     <Box flex={1} padding={10}>
       <Fab

@@ -15,6 +15,7 @@ import {
 import { useState, useEffect } from "react";
 import api from "../../../axiosConfig";
 import { setUserSession, getUser } from "../../auth/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function LoginScreen(props) {
   const [formData, setFormData] = useState({});
@@ -32,13 +33,13 @@ function LoginScreen(props) {
 
     api
       .post("/auth/login", { userInfo: { email, password } })
-      .then((res) => {
+      .then(async (res) => {
         setLoading(false);
         console.log(res);
         if (res.status === 200) {
           const user = res.data.message.user;
           const token = res.data.message.token;
-          setUserSession({ user, token });
+          await setUserSession({ user, token });
           props.navigation.navigate("Drawer");
           // if (user.first_login) {
           // 	navigate("/resetpassword");

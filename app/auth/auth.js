@@ -1,18 +1,19 @@
-const AsyncStorage = require("@react-native-async-storage/async-storage");
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 module.exports = {
-  getUser: function () {
+  getUser: async function () {
     try {
-      const user = AsyncStorage.getItem("ignis-user");
+      const user = await AsyncStorage.getItem("ignis-user");
       if (!user || user === "undefined") return null;
       else return JSON.parse(user);
     } catch (e) {
       // save error
+      console.log(e);
     }
   },
 
-  getToken: function () {
-    const token = AsyncStorage.getItem("ignis-token");
+  getToken: async function () {
+    const token = await AsyncStorage.getItem("ignis-token");
     if (!token || token === "undefined") return null;
     else return token;
   },
@@ -23,6 +24,8 @@ module.exports = {
       await AsyncStorage.setItem("ignis-token", token);
     } catch (e) {
       // save error
+      alert(e);
+      console.log(e);
     }
   },
 
