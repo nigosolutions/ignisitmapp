@@ -22,6 +22,10 @@ import AssetTagging from "./app/screens/AssetTagging";
 import LoginScreen from "./app/screens/Login";
 import AssetDetails from "./app/screens/AssetTagging/AssetDetails";
 import ITMWorkOrder from "./app/screens/ITMWorkOrder";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const MainNav = createNativeStackNavigator();
+
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -152,7 +156,10 @@ export default function Example() {
   return (
     <NavigationContainer>
       <NativeBaseProvider>
-        <MyDrawer />
+        <MainNav.Navigator>
+          <MainNav.Screen name="Login" component={LoginScreen} options={{}} />
+          <MainNav.Screen name="Drawer" component={MyDrawer} />
+        </MainNav.Navigator>
       </NativeBaseProvider>
     </NavigationContainer>
   );

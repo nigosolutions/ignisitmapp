@@ -10,10 +10,52 @@ import {
   Link,
   Text,
   VStack,
+  Icon,
 } from "native-base";
-import React from "react";
+import { useState, useEffect } from "react";
+import api from "../../../axiosConfig";
+import { setUserSession, getUser } from "../../auth/auth";
 
 function LoginScreen(props) {
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let user = getUser();
+    console.log("user : ", user);
+  }, []);
+
+  const onFinish = () => {
+    setLoading(true);
+    let { email, password } = formData;
+    console.log(formData);
+
+    api
+      .post("/auth/login", { userInfo: { email, password } })
+      .then((res) => {
+        setLoading(false);
+        console.log(res);
+        if (res.status === 200) {
+          const user = res.data.message.user;
+          const token = res.data.message.token;
+          setUserSession({ user, token });
+          props.navigation.navigate("Login");
+          // if (user.first_login) {
+          // 	navigate("/resetpassword");
+          // } else {
+          // 	navigate("/");
+          // }
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+        if (err.response && err.response.data && err.response.data.message)
+          alert(err.response.data.message);
+        else alert("Server Error");
+      });
+  };
+
   return (
     <Center flex={1} w="100%">
       <Box padding={10} bgColor={"white"} p="2" w="90%" maxW="290">
@@ -26,11 +68,20 @@ function LoginScreen(props) {
           />
           <FormControl>
             <FormControl.Label>Email ID</FormControl.Label>
-            <Input />
+            <Input
+              onChangeText={(value) =>
+                setFormData({ ...formData, email: value })
+              }
+            />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password" />
+            <Input
+              type="password"
+              onChangeText={(value) =>
+                setFormData({ ...formData, password: value })
+              }
+            />
             <Link
               _text={{
                 fontSize: "xs",
@@ -43,8 +94,13 @@ function LoginScreen(props) {
               Forget Password?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="blue">
-            Sign in
+          <Button
+            mt="2"
+            colorScheme="blue"
+            onPress={onFinish}
+            isLoading={loading}
+          >
+            Sign In
           </Button>
         </VStack>
       </Box>
