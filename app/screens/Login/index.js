@@ -39,7 +39,7 @@ function LoginScreen(props) {
           const user = res.data.message.user;
           const token = res.data.message.token;
           setUserSession({ user, token });
-          props.navigation.navigate("Login");
+          props.navigation.navigate("Drawer");
           // if (user.first_login) {
           // 	navigate("/resetpassword");
           // } else {
