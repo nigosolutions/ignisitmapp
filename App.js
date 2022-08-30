@@ -22,7 +22,9 @@ import AssetTagging from "./app/screens/AssetTagging";
 import LoginScreen from "./app/screens/Login";
 import AssetDetails from "./app/screens/AssetTagging/AssetDetails";
 import ITMWorkOrder from "./app/screens/ITMWorkOrder";
+import WOScreen from "./app/screens/WorkOrder";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import WorkOrder from "./app/screens/WorkOrder";
 
 const MainNav = createNativeStackNavigator();
 
@@ -145,7 +147,7 @@ function MyDrawer() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen name="Dashboard" component={LoginScreen} />
-        <Drawer.Screen name="Work Orders" component={AssetTagging} />
+        <Drawer.Screen name="Work Orders" component={WorkOrder} />
         <Drawer.Screen name="Schedule" component={ITMWorkOrder} />
         <Drawer.Screen name="Requests" component={LoginScreen} />
       </Drawer.Navigator>
@@ -157,8 +159,16 @@ export default function Example() {
     <NavigationContainer>
       <NativeBaseProvider>
         <MainNav.Navigator>
-          <MainNav.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
-          <MainNav.Screen name="Drawer" component={MyDrawer} options={{headerShown: false}}/>
+          <MainNav.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <MainNav.Screen
+            name="Drawer"
+            component={MyDrawer}
+            options={{ headerShown: false }}
+          />
         </MainNav.Navigator>
       </NativeBaseProvider>
     </NavigationContainer>
