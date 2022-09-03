@@ -16,6 +16,7 @@ import {
   Menu,
   Popover,
   Pressable,
+  Progress,
   ScrollView,
   Spacer,
   Text,
@@ -25,7 +26,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { getUser } from "../../auth/auth";
 
-function AssetHome(props) {
+function ITMHome(props) {
   const [assetLists, setAsset] = React.useState([
     {
       name: "Smoke Detector",
@@ -90,12 +91,6 @@ function AssetHome(props) {
 
   return (
     <Box flex={1} padding={5}>
-      <Fab
-        renderInPortal={false}
-        onPress={() => props.navigation.navigate("PhotoScreen")}
-        icon={<AddIcon />}
-        label={"Add Asset"}
-      />
       <VStack space={5} flex={1}>
         <HStack
           rounded={15}
@@ -104,7 +99,7 @@ function AssetHome(props) {
           height={150}
           padding={5}
         >
-          <Box flex={1}>
+          <Box>
             <VStack space={3}>
               <Text
                 style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
@@ -118,14 +113,25 @@ function AssetHome(props) {
                 Property: Building XYZ
               </Text>
             </VStack>
-            <Center>
-              <FAB color="black" title={"Submit"} placement="right" />
-            </Center>
           </Box>
+          <Spacer />
+          <VStack space={5}>
+            <Text>Progress</Text>
+            <Progress width={200} value={45} />
+            <Button variant={"outline"} rounded={100}>
+              Requests
+            </Button>
+          </VStack>
+          <Spacer />
+          <VStack width={100} space={3}>
+            <Button rounded={100}>Start</Button>
+            <Button rounded={100}>Submit</Button>
+          </VStack>
         </HStack>
         <Text bold fontSize={"lg"}>
           Assets
         </Text>
+
         <Divider></Divider>
         <Box>
           <ScrollView>
@@ -190,4 +196,4 @@ function AssetHome(props) {
   );
 }
 
-export default AssetHome;
+export default ITMHome;

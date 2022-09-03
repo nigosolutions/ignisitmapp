@@ -25,6 +25,7 @@ import ITMWorkOrder from "./app/screens/ITMWorkOrder";
 import WOScreen from "./app/screens/WorkOrder";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkOrder from "./app/screens/WorkOrder";
+import ITMHome from "./app/screens/ITMWorkOrder/ITMHome";
 
 const MainNav = createNativeStackNavigator();
 
@@ -149,7 +150,7 @@ function MyDrawer() {
         <Drawer.Screen name="Dashboard" component={LoginScreen} />
         <Drawer.Screen name="Work Orders" component={WorkOrder} />
         <Drawer.Screen name="Schedule" component={ITMWorkOrder} />
-        <Drawer.Screen name="Requests" component={LoginScreen} />
+        <Drawer.Screen name="Requests" component={ITMHome} />
       </Drawer.Navigator>
     </Box>
   );

@@ -7,7 +7,9 @@ const ITMNav = createNativeStackNavigator();
 function ITMWorkOrder(props) {
   return (
     <NavigationContainer independent={true}>
-      <ITMNav.Navigator></ITMNav.Navigator>
+      <ITMNav.Navigator>
+        <ITMNav.Screen></ITMNav.Screen>
+      </ITMNav.Navigator>
     </NavigationContainer>
   );
 }
