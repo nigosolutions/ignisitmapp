@@ -149,8 +149,8 @@ function MyDrawer() {
       >
         <Drawer.Screen name="Dashboard" component={LoginScreen} />
         <Drawer.Screen name="Work Orders" component={WorkOrder} />
-        <Drawer.Screen name="Schedule" component={ITMWorkOrder} />
-        <Drawer.Screen name="Requests" component={ITMHome} />
+        <Drawer.Screen name="Schedule" component={ITMHome} />
+        <Drawer.Screen name="Requests" component={ITMWorkOrder} />
       </Drawer.Navigator>
     </Box>
   );

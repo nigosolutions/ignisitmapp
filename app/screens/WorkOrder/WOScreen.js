@@ -183,7 +183,7 @@ function WOScreen(props) {
       />
 
       <FlatList
-        data={data}
+        data={wo}
         renderItem={({ item }) => (
           <Box
             borderBottomWidth="1"
@@ -196,12 +196,12 @@ function WOScreen(props) {
             py="2"
           >
             <HStack space={[2, 3]} justifyContent="space-between">
-              <Avatar
+              {/* <Avatar
                 size="48px"
                 source={{
                   uri: item.avatarUrl,
                 }}
-              />
+              /> */}
               <VStack>
                 <Text
                   _dark={{

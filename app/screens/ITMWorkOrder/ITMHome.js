@@ -127,7 +127,12 @@ function ITMHome(props) {
           </VStack>
           <Spacer />
           <VStack width={100} space={3}>
-            <Button rounded={100}>Start</Button>
+            <Button
+              onPress={() => props.navigation.navigate("ExecutionScreen")}
+              rounded={100}
+            >
+              Start
+            </Button>
             <Button rounded={100}>Submit</Button>
           </VStack>
         </HStack>
