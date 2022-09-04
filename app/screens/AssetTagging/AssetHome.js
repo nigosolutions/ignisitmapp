@@ -96,7 +96,7 @@ function AssetHome(props) {
         icon={<AddIcon />}
         label={"Add Asset"}
       />
-      <VStack space={5} flex={1}>
+      <VStack space={3} flex={1}>
         <HStack
           rounded={15}
           bgColor={"white"}
@@ -104,35 +104,39 @@ function AssetHome(props) {
           height={150}
           padding={5}
         >
-          <Box flex={1}>
-            <VStack space={3}>
-              <Text
-                style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
-              >
-                Work Order
-              </Text>
-              <Text style={{ color: "#99879D", fontWeight: "normal" }}>
-                Type: Asset Tagging
-              </Text>
-              <Text style={{ color: "#99879D", fontWeight: "normal" }}>
-                Property: Building XYZ
-              </Text>
-            </VStack>
-            <Center>
-              <FAB color="black" title={"Submit"} placement="right" />
-            </Center>
-          </Box>
+          <VStack space={3}>
+            <Text
+              style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
+            >
+              Work Order
+            </Text>
+            <Text style={{ color: "#99879D", fontWeight: "normal" }}>
+              Type: Asset Tagging
+            </Text>
+            <Text style={{ color: "#99879D", fontWeight: "normal" }}>
+              Property: Building XYZ
+            </Text>
+          </VStack>
+          <Spacer />
+          <VStack space={3}>
+            <Button width={150} rounded={100}>
+              Submit
+            </Button>
+            <Button bgColor={"coolGray.500"} width={150} rounded={100}>
+              Cancel
+            </Button>
+          </VStack>
         </HStack>
-        <Text bold fontSize={"lg"}>
+        <Text mx={3} my={3} bold fontSize={"lg"}>
           Assets
         </Text>
-        <Divider></Divider>
-        <Box>
+
+        <Box rounded={15} padding={1} bgColor={"white"}>
           <ScrollView>
-            <HStack justifyContent={"center"} flexWrap={"wrap"}>
+            <HStack justifyContent={"space-around"} flexWrap={"wrap"}>
               {assetLists.map((item) => (
                 <Box padding={3}>
-                  <Box padding={4} rounded={10} bgColor={"white"}>
+                  <Box padding={4} rounded={10} bgColor={"coolGray.100"}>
                     <HStack alignItems={"center"} space={5}>
                       <Avatar
                         bg="green.500"

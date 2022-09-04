@@ -161,13 +161,13 @@ export default function Example() {
       <NativeBaseProvider>
         <MainNav.Navigator>
           <MainNav.Screen
-            name="Login"
-            component={LoginScreen}
+            name="Drawer"
+            component={MyDrawer}
             options={{ headerShown: false }}
           />
           <MainNav.Screen
-            name="Drawer"
-            component={MyDrawer}
+            name="Login"
+            component={LoginScreen}
             options={{ headerShown: false }}
           />
         </MainNav.Navigator>

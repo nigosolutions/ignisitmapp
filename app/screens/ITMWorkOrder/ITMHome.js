@@ -1,4 +1,4 @@
-import { FAB } from "@rneui/themed";
+import { FAB, SearchBar } from "@rneui/themed";
 import {
   AddIcon,
   Avatar,
@@ -6,6 +6,8 @@ import {
   Box,
   Button,
   Center,
+  CheckIcon,
+  Container,
   DeleteIcon,
   Divider,
   Fab,
@@ -18,6 +20,7 @@ import {
   Pressable,
   Progress,
   ScrollView,
+  Select,
   Spacer,
   Text,
   VStack,
@@ -128,68 +131,85 @@ function ITMHome(props) {
             <Button rounded={100}>Submit</Button>
           </VStack>
         </HStack>
-        <Text bold fontSize={"lg"}>
-          Assets
-        </Text>
 
-        <Divider></Divider>
-        <Box>
-          <ScrollView>
-            <HStack justifyContent={"center"} flexWrap={"wrap"}>
-              {assetLists.map((item) => (
-                <Box padding={3}>
-                  <Box padding={4} rounded={10} bgColor={"white"}>
-                    <HStack alignItems={"center"} space={5}>
-                      <Avatar
-                        bg="green.500"
-                        source={{
-                          uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                        }}
-                      />
-                      <VStack>
-                        <Text>
-                          <Text bold>Device: </Text>
-                          <Text>{item.name}</Text>
-                        </Text>
+        <Box padding={1} rounded={15} flex={1} bgColor={"white"}>
+          <VStack space={2}>
+            <HStack paddingY={1} paddingX={3} alignItems={"center"}>
+              <SearchBar
+                placeholder="Enter Search Text"
+                round
+                containerStyle={{
+                  width: 300,
+                  borderTopColor: "white",
+                  borderBottomColor: "white",
+                  backgroundColor: "white",
+                }}
+                inputContainerStyle={{
+                  height: 40,
+                  backgroundColor: "#e5e5e5",
+                }}
+                lightTheme
+              />
 
-                        <Text>
-                          <Text bold>Location: </Text>
-                          <Text>{item.location}</Text>
-                        </Text>
-
-                        <Text>
-                          <Text bold>Tag: </Text>
-                          <Text>{item.Tag}</Text>
-                        </Text>
-                        <Spacer />
-                      </VStack>
-                      <Menu
-                        w="190"
-                        trigger={(triggerProps) => {
-                          return (
-                            <Pressable
-                              accessibilityLabel="More options menu"
-                              {...triggerProps}
-                            >
-                              <Icon
-                                size={4}
-                                as={
-                                  <MaterialCommunityIcons name="dots-vertical" />
-                                }
-                              />
-                            </Pressable>
-                          );
-                        }}
-                      >
-                        <Menu.Item>Edit</Menu.Item>
-                        <Menu.Item>Delete</Menu.Item>
-                      </Menu>
-                    </HStack>
-                  </Box>
-                </Box>
-              ))}
+              <Spacer />
+              <HStack space={3}>
+                <Select width={200} placeholder="Choose Service">
+                  <Select.Item label="UX Research" value="ux" />
+                  <Select.Item label="Web Development" value="web" />
+                  <Select.Item
+                    label="Cross Platform Development"
+                    value="cross"
+                  />
+                  <Select.Item label="UI Designing" value="ui" />
+                  <Select.Item label="Backend Development" value="backend" />
+                </Select>
+                <Select width={200} placeholder="Choose Service">
+                  <Select.Item label="UX Research" value="ux" />
+                  <Select.Item label="Web Development" value="web" />
+                  <Select.Item
+                    label="Cross Platform Development"
+                    value="cross"
+                  />
+                  <Select.Item label="UI Designing" value="ui" />
+                  <Select.Item label="Backend Development" value="backend" />
+                </Select>
+              </HStack>
             </HStack>
-          </ScrollView>
+            <Divider />
+
+            <ScrollView>
+              <Box
+                justifyContent={"space-around"}
+                flexDirection={"row"}
+                flexWrap={"wrap"}
+              >
+                {assetLists.map((item) => (
+                  <Box minWidth={"25%"} padding={3}>
+                    <Box padding={4} rounded={10} bgColor={"blueGray.100"}>
+                      <HStack alignItems={"center"} space={5}>
+                        <VStack>
+                          <Text>
+                            <Text bold>{item.name}</Text>
+                          </Text>
+
+                          <Text>
+                            <Text bold>Location: </Text>
+                            <Text>{item.location}</Text>
+                          </Text>
+
+                          <Text>
+                            <Text bold>Tag: </Text>
+                            <Text>{item.Tag}</Text>
+                          </Text>
+                          <Spacer />
+                        </VStack>
+                      </HStack>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </ScrollView>
+          </VStack>
         </Box>
       </VStack>
     </Box>
