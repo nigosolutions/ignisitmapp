@@ -9,18 +9,22 @@ import {
   Text,
   View,
   VStack,
+  FlatList,
+  Spacer
 } from "native-base";
 import React from "react";
 import { useWindowDimensions, StyleSheet } from "react-native";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
-// import { Marker } from "react-native-svg";
+// import { TouchableOpacity } from "react-native-gesture-handler";
+
 
 var styles = StyleSheet.create({
   title: {
     color: "#4e5d78",
     fontWeight: "bold",
+    fontSize: 15,
   },
   desc_title: {
     color: "#4e5d78",
@@ -69,6 +73,7 @@ function WOScreen(props) {
     setWO([
       {
         name: "Asset tagging",
+        type: "Asset Tagging",
         id: "AT3224",
         details: "Details of Asset tagging",
         date: "10 Jan",
@@ -80,6 +85,7 @@ function WOScreen(props) {
       },
       {
         name: "Asset tagging",
+        type: "Asset Tagging",
         id: 2,
         details: "Details of Asset tagging",
         date: "11 Jan",
@@ -101,8 +107,8 @@ function WOScreen(props) {
         status: "pending",
       },
       {
-        name: "Asset tagging",
-        id: 3,
+        name: "ITM Work Order",
+        type: "ITM",
         details: "Details of Asset tagging",
         date: "12 Jan",
         building: {
@@ -112,18 +118,44 @@ function WOScreen(props) {
         status: "pending",
       },
       {
-        name: "Asset tagging",
-        id: 3,
+        name: "ITM Work Order",
+        type: "ITM",
+        id: 5,
         details: "Details of Asset tagging",
         date: "12 Jan",
         building: {
           name: "Building 3",
           location: { address: "XYZ street", coords: [25.1659, 51.5976] },
         },
-        status: "completed",
+        status: "pending",
       },
     ]);
   }, []);
+
+  const completedWO = [
+    {
+      name: "Asset tagging",
+      id: 3,
+      details: "Details of Asset tagging",
+      date: "12 Jan",
+      building: {
+        name: "Building 3",
+        location: { address: "XYZ street", coords: [24.9909, 51.5493] },
+      },
+      status: "completed",
+    },
+    {
+      name: "Asset tagging",
+      id: 5,
+      details: "Details of Asset tagging",
+      date: "12 Jan",
+      building: {
+        name: "Building 3",
+        location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+      },
+      status: "completed",
+    },
+  ];
 
   React.useEffect(() => {}, [selectedWo]);
 
@@ -183,59 +215,59 @@ function WOScreen(props) {
       />
 
       <FlatList
-        data={wo}
-        renderItem={({ item }) => (
-          <Box
-            borderBottomWidth="1"
-            _dark={{
-              borderColor: "muted.50",
-            }}
-            borderColor="muted.800"
-            pl={["0", "4"]}
-            pr={["0", "5"]}
-            py="2"
-          >
-            <HStack space={[2, 3]} justifyContent="space-between">
-              {/* <Avatar
-                size="48px"
-                source={{
-                  uri: item.avatarUrl,
-                }}
-              /> */}
-              <VStack>
+        data={completedWO}
+        renderItem={({ item }) => {
+          const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
+          
+          return (
+          <Pressable onPress={()=>{setselectedWo(item);}}>
+            <Box
+              backgroundColor={color}
+              borderRadius={10}
+              padding={2}
+              margin={2}
+            >
+              <HStack space={[2, 3]} justifyContent="space-between">
+                <VStack alignItems={"center"}>
+                  <Icon size={40} name="done" type="material" color="grey" />
+                  <Text fontSize={10}>Completed</Text>
+                </VStack>
+                
+                <VStack justifyContent={'center'}>
+                  <Text
+                    _dark={{
+                      color: "warmGray.50",
+                    }}
+                    style={styles.title}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text
+                    _dark={{
+                      color: "warmGray.200",
+                    }}
+                    style={styles.subtext}
+                  >
+                    {item.id}
+                  </Text>
+                </VStack>
+                <Spacer />
                 <Text
+                  fontSize="xs"
                   _dark={{
                     color: "warmGray.50",
                   }}
                   color="coolGray.800"
-                  bold
+                  alignSelf="center"
                 >
-                  {item.fullName}
+                  {item.date}
                 </Text>
-                <Text
-                  color="coolGray.600"
-                  _dark={{
-                    color: "warmGray.200",
-                  }}
-                >
-                  {item.recentText}
-                </Text>
-              </VStack>
-              <Spacer />
-              <Text
-                fontSize="xs"
-                _dark={{
-                  color: "warmGray.50",
-                }}
-                color="coolGray.800"
-                alignSelf="flex-start"
-              >
-                {item.timeStamp}
-              </Text>
-            </HStack>
-          </Box>
-        )}
-        keyExtractor={(item) => item.id}
+              </HStack>
+            </Box>
+          </Pressable>
+        )}}
+        keyExtractor={(item) => item.id} 
+        // extraData={selectedWo}
       />
 
       {/* <ScrollView>
@@ -376,7 +408,7 @@ function WOScreen(props) {
                       color="#377DFF"
                       onPress={() => {
                         // setselectedWo(0);
-                        props.navigation.navigate("AssetTagging");
+                        selectedWo.type === "Asset Tagging" ? props.navigation.navigate("AssetTagging") : props.navigation.navigate("ITM")
                       }}
                     />
                   </Box>

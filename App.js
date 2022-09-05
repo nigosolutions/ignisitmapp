@@ -26,19 +26,24 @@ import WOScreen from "./app/screens/WorkOrder";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkOrder from "./app/screens/WorkOrder";
 import ITMHome from "./app/screens/ITMWorkOrder/ITMHome";
+// import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+
+
 
 const MainNav = createNativeStackNavigator();
+const sideMenuDisabledScreens = ['AssetTagging'];
 
 const Drawer = createDrawerNavigator();
-function Component(props) {
-  return (
-    <Center>
-      <Text mt="12" fontSize="18">
-        This is {props.route.name} page.
-      </Text>
-    </Center>
-  );
-}
+// function Component(props) {
+//   return (
+//     <Center>
+//       <Text mt="12" fontSize="18">
+//         This is {props.route.name} page.
+//       </Text>
+//     </Center>
+//   );
+// }
 
 const getIcon = (screenName) => {
   switch (screenName) {
@@ -141,7 +146,14 @@ function CustomDrawerContent(props) {
     </>
   );
 }
+
+
+
+
+
 function MyDrawer() {
+  const route = useRoute();
+  console.log(route.name);
   return (
     <Box safeArea flex={1}>
       <Drawer.Navigator
