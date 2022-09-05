@@ -10,7 +10,7 @@ import {
   View,
   VStack,
   FlatList,
-  Spacer
+  Spacer,
 } from "native-base";
 import React from "react";
 import { useWindowDimensions, StyleSheet } from "react-native";
@@ -18,7 +18,6 @@ import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 // import { TouchableOpacity } from "react-native-gesture-handler";
-
 
 var styles = StyleSheet.create({
   title: {
@@ -133,6 +132,68 @@ function WOScreen(props) {
     ]);
   }, []);
 
+  const pendingWO = [
+    {
+      name: "Asset tagging",
+      type: "Asset Tagging",
+      id: "AT3224",
+      details: "Details of Asset tagging",
+      date: "10 Jan",
+      building: {
+        name: "Building 1",
+        location: { address: "XYZ street", coords: [25.2854, 51.531] },
+      },
+      status: "pending",
+    },
+    {
+      name: "Asset tagging",
+      type: "Asset Tagging",
+      id: 2,
+      details: "Details of Asset tagging",
+      date: "11 Jan",
+      building: {
+        name: "Building 2",
+        location: { address: "XYZ street", coords: [25, 55] },
+      },
+      status: "pending",
+    },
+    {
+      name: "Asset tagging",
+      type: "Asset Tagging",
+      id: 3,
+      details: "Details of Asset tagging",
+      date: "12 Jan",
+      building: {
+        name: "Building 3",
+        location: { address: "XYZ street", coords: [24.9909, 51.5493] },
+      },
+      status: "pending",
+    },
+    {
+      name: "ITM Work Order",
+      type: "ITM",
+      details: "Details of Asset tagging",
+      date: "12 Jan",
+      building: {
+        name: "Building 3",
+        location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+      },
+      status: "pending",
+    },
+    {
+      name: "ITM Work Order",
+      type: "ITM",
+      id: 5,
+      details: "Details of Asset tagging",
+      date: "12 Jan",
+      building: {
+        name: "Building 3",
+        location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+      },
+      status: "pending",
+    },
+  ];
+
   const completedWO = [
     {
       name: "Asset tagging",
@@ -173,7 +234,71 @@ function WOScreen(props) {
         lightTheme
       />
 
-      <ScrollView>
+      <FlatList
+        data={pendingWO}
+        renderItem={({ item }) => {
+          const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
+          return (
+            <Pressable
+              onPress={() => {
+                setselectedWo(item);
+              }}
+            >
+              <Box
+                backgroundColor={color}
+                borderRadius={10}
+                padding={2}
+                margin={2}
+              >
+                <HStack space={[2, 3]} justifyContent="space-between">
+                  <VStack alignItems={"center"}>
+                    <Icon
+                      size={40}
+                      name="pending"
+                      type="material"
+                      color="grey"
+                    />
+                    <Text fontSize={10}>{item.status}</Text>
+                  </VStack>
+
+                  <VStack justifyContent={"center"}>
+                    <Text
+                      _dark={{
+                        color: "warmGray.50",
+                      }}
+                      style={styles.title}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      _dark={{
+                        color: "warmGray.200",
+                      }}
+                      style={styles.subtext}
+                    >
+                      {item.id}
+                    </Text>
+                  </VStack>
+                  <Spacer />
+                  <Text
+                    fontSize="xs"
+                    _dark={{
+                      color: "warmGray.50",
+                    }}
+                    color="coolGray.800"
+                    alignSelf="center"
+                  >
+                    {item.date}
+                  </Text>
+                </HStack>
+              </Box>
+            </Pressable>
+          );
+        }}
+        keyExtractor={(item) => item.id}
+      />
+
+      {/* <ScrollView>
         <VStack space={3} padding={3}>
           {wo.map((item) =>
             item.status != "completed" ? (
@@ -203,7 +328,7 @@ function WOScreen(props) {
             ) : null
           )}
         </VStack>
-      </ScrollView>
+      </ScrollView> */}
     </Box>
   );
 
@@ -221,89 +346,61 @@ function WOScreen(props) {
         data={completedWO}
         renderItem={({ item }) => {
           const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
-          
           return (
-          <Pressable onPress={()=>{setselectedWo(item);}}>
-            <Box
-              backgroundColor={color}
-              borderRadius={10}
-              padding={2}
-              margin={2}
+            <Pressable
+              onPress={() => {
+                setselectedWo(item);
+              }}
             >
-              <HStack space={[2, 3]} justifyContent="space-between">
-                <VStack alignItems={"center"}>
-                  <Icon size={40} name="done" type="material" color="grey" />
-                  <Text fontSize={10}>Completed</Text>
-                </VStack>
-                
-                <VStack justifyContent={'center'}>
+              <Box
+                backgroundColor={color}
+                borderRadius={10}
+                padding={2}
+                margin={2}
+              >
+                <HStack space={[2, 3]} justifyContent="space-between">
+                  <VStack alignItems={"center"}>
+                    <Icon size={40} name="done" type="material" color="grey" />
+                    <Text fontSize={10}>Completed</Text>
+                  </VStack>
+
+                  <VStack justifyContent={"center"}>
+                    <Text
+                      _dark={{
+                        color: "warmGray.50",
+                      }}
+                      style={styles.title}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      _dark={{
+                        color: "warmGray.200",
+                      }}
+                      style={styles.subtext}
+                    >
+                      {item.id}
+                    </Text>
+                  </VStack>
+                  <Spacer />
                   <Text
+                    fontSize="xs"
                     _dark={{
                       color: "warmGray.50",
                     }}
-                    style={styles.title}
+                    color="coolGray.800"
+                    alignSelf="center"
                   >
-                    {item.name}
+                    {item.date}
                   </Text>
-                  <Text
-                    _dark={{
-                      color: "warmGray.200",
-                    }}
-                    style={styles.subtext}
-                  >
-                    {item.id}
-                  </Text>
-                </VStack>
-                <Spacer />
-                <Text
-                  fontSize="xs"
-                  _dark={{
-                    color: "warmGray.50",
-                  }}
-                  color="coolGray.800"
-                  alignSelf="center"
-                >
-                  {item.date}
-                </Text>
-              </HStack>
-            </Box>
-          </Pressable>
-        )}}
-        keyExtractor={(item) => item.id} 
+                </HStack>
+              </Box>
+            </Pressable>
+          );
+        }}
+        keyExtractor={(item) => item.id}
         // extraData={selectedWo}
       />
-
-      {/* <ScrollView>
-        <VStack space={3} padding={3}>
-          {wo.map((item) =>
-            item.status == "completed" ? (
-              <ListItem
-                containerStyle={
-                  item === selectedWo ? styles.selectedLC : styles.listContainer
-                }
-                onPress={() => {
-                  setselectedWo(item);
-                }}
-              >
-                <VStack alignItems={"center"}>
-                  <Icon size={40} name="pending" type="material" color="grey" />
-                  <Text fontSize={10}>Completed</Text>
-                </VStack>
-                <ListItem.Content>
-                  <ListItem.Title style={styles.title}>
-                    {item.name}
-                  </ListItem.Title>
-                  <ListItem.Subtitle style={styles.subtitleView}>
-                    {"WO: "}
-                    {item.id}
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-                <Text>{item.date}</Text>
-              </ListItem>
-            ) : null
-          )}
-        </VStack>
-      </ScrollView> */}
     </Box>
   );
 
@@ -411,7 +508,9 @@ function WOScreen(props) {
                       color="#377DFF"
                       onPress={() => {
                         // setselectedWo(0);
-                        selectedWo.type === "Asset Tagging" ? props.navigation.navigate("AssetTagging") : props.navigation.navigate("ITM")
+                        selectedWo.type === "Asset Tagging"
+                          ? props.navigation.navigate("AssetTagging")
+                          : props.navigation.navigate("ITM");
                       }}
                     />
                   </Box>
