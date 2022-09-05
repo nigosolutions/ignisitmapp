@@ -26,8 +26,7 @@ import WOScreen from "./app/screens/WorkOrder";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkOrder from "./app/screens/WorkOrder";
 import ITMHome from "./app/screens/ITMWorkOrder/ITMHome";
-// import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { useRoute } from '@react-navigation/native';
+
 
 
 
@@ -152,15 +151,14 @@ function CustomDrawerContent(props) {
 
 
 function MyDrawer() {
-  const route = useRoute();
-  console.log(route.name);
   return (
     <Box safeArea flex={1}>
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
+        id="Drawer"
       >
         <Drawer.Screen name="Dashboard" component={LoginScreen} />
-        <Drawer.Screen name="Work Orders" component={WorkOrder} />
+        <Drawer.Screen name="Work Orders" component={WorkOrder} options={({})}/>
         <Drawer.Screen name="Schedule" component={ITMHome} />
         <Drawer.Screen name="Requests" component={ITMWorkOrder} />
       </Drawer.Navigator>

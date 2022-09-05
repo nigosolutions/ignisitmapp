@@ -97,6 +97,7 @@ function WOScreen(props) {
       },
       {
         name: "Asset tagging",
+        type: "Asset Tagging",
         id: 3,
         details: "Details of Asset tagging",
         date: "12 Jan",
@@ -135,6 +136,7 @@ function WOScreen(props) {
   const completedWO = [
     {
       name: "Asset tagging",
+      type: "Asset Tagging",
       id: 3,
       details: "Details of Asset tagging",
       date: "12 Jan",
@@ -146,6 +148,7 @@ function WOScreen(props) {
     },
     {
       name: "Asset tagging",
+      type: "Asset Tagging",
       id: 5,
       details: "Details of Asset tagging",
       date: "12 Jan",
@@ -157,7 +160,7 @@ function WOScreen(props) {
     },
   ];
 
-  React.useEffect(() => {}, [selectedWo]);
+  // React.useEffect(() => {}, [selectedWo]);
 
   //Tab
   const FirstRoute = () => (

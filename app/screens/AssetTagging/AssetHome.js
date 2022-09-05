@@ -122,8 +122,8 @@ function AssetHome(props) {
             <Button width={150} rounded={100}>
               Submit
             </Button>
-            <Button bgColor={"coolGray.500"} width={150} rounded={100}>
-              Cancel
+            <Button bgColor={"coolGray.500"} width={150} rounded={100} onPress={()=>{props.navigation.navigate('WOHome')}}>
+              Save & Exit
             </Button>
           </VStack>
         </HStack>

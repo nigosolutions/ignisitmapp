@@ -154,7 +154,7 @@ function AssetDetails(props) {
           </VStack>
         </HStack>
         <Button.Group alignSelf={"center"}>
-          <Button colorScheme={"coolGray"} onPress={()=>props.navigation.navigate("Home")}>Cancel</Button>
+          <Button colorScheme={"coolGray"} onPress={()=>props.navigation.navigate("ATHome")}>Cancel</Button>
           {/* <Button onPress={()=>{console.log(formData)}}>Submit</Button> */}
           <Button onPress={submit}>Submit</Button>
         </Button.Group>

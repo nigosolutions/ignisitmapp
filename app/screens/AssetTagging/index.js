@@ -7,12 +7,38 @@ import AssetDetails from "./AssetDetails";
 
 const ATNav = createNativeStackNavigator();
 
-function AssetTagging(props) {
+function AssetTagging({navigation,route}) {
+  React.useLayoutEffect(() => {
+    if (!navigation || !route) return
+
+    // Get parent by id
+    const drawerNavigator = navigation.getParent('Drawer')
+
+    if (drawerNavigator) {
+      // Make sure the route name is C before turn header off
+      if (route.name === 'AssetTagging') { 
+        drawerNavigator.setOptions({
+          headerShown: false,
+          swipeEnabled: false,
+        })
+      }
+    }
+
+    // Turn header back on when unmount
+    return drawerNavigator
+      ? () => {
+          drawerNavigator.setOptions({
+            headerShown: true,
+            swipeEnabled: true,
+          })
+        }
+      : undefined
+  }, [navigation, route])
   return (
-    <NavigationContainer independent={true}>
+    // <NavigationContainer independent={true}>
       <ATNav.Navigator>
         <ATNav.Screen
-          name="Home"
+          name="ATHome"
           component={AssetHome}
           options={{ title: "Asset Tagging", headerShown: false }}
         />
@@ -27,7 +53,7 @@ function AssetTagging(props) {
           options={{ title: "Asset Details" }}
         />
       </ATNav.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }
 
