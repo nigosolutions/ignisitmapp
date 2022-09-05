@@ -509,7 +509,9 @@ function WOScreen(props) {
                       onPress={() => {
                         // setselectedWo(0);
                         selectedWo.type === "Asset Tagging"
-                          ? props.navigation.navigate("AssetTagging")
+                          ? props.navigation.navigate("AssetTagging", {
+                              WoID: selectedWo.id,
+                            })
                           : props.navigation.navigate("ITM");
                       }}
                     />

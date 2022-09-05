@@ -26,12 +26,11 @@ import WOScreen from "./app/screens/WorkOrder";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkOrder from "./app/screens/WorkOrder";
 import ITMHome from "./app/screens/ITMWorkOrder/ITMHome";
-
-
-
+import DashboardScreen from "./app/screens/Dashboard";
+import ScheduleScreen from "./app/screens/Schedule";
 
 const MainNav = createNativeStackNavigator();
-const sideMenuDisabledScreens = ['AssetTagging'];
+const sideMenuDisabledScreens = ["AssetTagging"];
 
 const Drawer = createDrawerNavigator();
 // function Component(props) {
@@ -146,10 +145,6 @@ function CustomDrawerContent(props) {
   );
 }
 
-
-
-
-
 function MyDrawer() {
   return (
     <Box safeArea flex={1}>
@@ -157,9 +152,9 @@ function MyDrawer() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
         id="Drawer"
       >
-        <Drawer.Screen name="Dashboard" component={LoginScreen} />
-        <Drawer.Screen name="Work Orders" component={WorkOrder} options={({})}/>
-        <Drawer.Screen name="Schedule" component={ITMHome} />
+        <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+        <Drawer.Screen name="Work Orders" component={WorkOrder} options={{}} />
+        <Drawer.Screen name="Schedule" component={ScheduleScreen} />
         <Drawer.Screen name="Requests" component={ITMWorkOrder} />
       </Drawer.Navigator>
     </Box>

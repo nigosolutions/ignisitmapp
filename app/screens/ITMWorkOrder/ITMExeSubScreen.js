@@ -1,5 +1,6 @@
-import { FAB, Text } from "@rneui/base";
+import { FAB } from "@rneui/base";
 import {
+  Text,
   Box,
   HStack,
   VStack,
@@ -9,6 +10,8 @@ import {
   Button,
   Input,
   Spacer,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "native-base";
 import * as React from "react";
 import { View, StyleSheet, Dimensions, StatusBar } from "react-native";
@@ -284,13 +287,9 @@ export default function ITMExeSubScreen() {
     </Box>
   );
 
-  const SecondRoute = () => (
-    <View style={[styles.scene, { backgroundColor: "#673ab7" }]} />
-  );
+  const SecondRoute = () => <FirstRoute />;
 
-  const ThirdRoute = () => (
-    <View style={[styles.scene, { backgroundColor: "#673ab7" }]} />
-  );
+  const ThirdRoute = () => <FirstRoute />;
 
   const initialLayout = { width: Dimensions.get("window").width };
 
@@ -312,21 +311,31 @@ export default function ITMExeSubScreen() {
   );
 
   return (
-    <VStack space={5} padding={5} flex={1}>
+    <VStack space={5} padding={3} flex={1}>
       <HStack
         padding={2}
         alignItems={"center"}
         rounded={10}
-        bgColor={"lightgrey"}
+        bgColor={"gray.200"}
       >
-        <Button variant={"ghost"} rounded={100}>
+        <Button
+          width={100}
+          leftIcon={<ChevronLeftIcon />}
+          variant={"ghost"}
+          rounded={100}
+        >
           Previous
         </Button>
 
         <Spacer />
         <Text>Device 1/30</Text>
         <Spacer />
-        <Button variant={"ghost"} rounded={100}>
+        <Button
+          width={100}
+          endIcon={<ChevronRightIcon />}
+          variant={"ghost"}
+          rounded={100}
+        >
           Next
         </Button>
       </HStack>
@@ -334,7 +343,7 @@ export default function ITMExeSubScreen() {
         <Box padding={5} rounded={10} bgColor={"white"} flex={3}>
           <HStack>
             <VStack flex={2} space={2}>
-              <Text>Control Valve</Text>
+              <Text bold>Control Valve</Text>
               <Text>Location:</Text>
               <Text>Room No:</Text>
               <Text>Floor No:</Text>
