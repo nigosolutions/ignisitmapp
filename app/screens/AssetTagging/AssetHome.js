@@ -85,10 +85,13 @@ function AssetHome(props) {
 
   React.useEffect(async () => {
     let user = await getUser();
-    console.log("Final Data: ", user);
+    // console.log("Final Data: ", user);
   }, []);
 
+  // const parentNavigator= props.navigation.getParent();
+  // console.log(parentNavigator.getState())
   const { WoID } = props.route.params;
+  // console.log(WoID);
 
   return (
     <Box flex={1} padding={5}>
@@ -110,7 +113,10 @@ function AssetHome(props) {
             <Text
               style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
             >
-              Work Order {WoID}
+              Work Order
+            </Text>
+            <Text style={{ color: "#99879D", fontWeight: "normal" }}>
+              WO#: {WoID}
             </Text>
             <Text style={{ color: "#99879D", fontWeight: "normal" }}>
               Type: Asset Tagging

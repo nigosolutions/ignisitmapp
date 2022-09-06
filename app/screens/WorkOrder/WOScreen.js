@@ -172,6 +172,7 @@ function WOScreen(props) {
     {
       name: "ITM Work Order",
       type: "ITM",
+      id: 4,
       details: "Details of Asset tagging",
       date: "12 Jan",
       building: {
@@ -510,7 +511,8 @@ function WOScreen(props) {
                         // setselectedWo(0);
                         selectedWo.type === "Asset Tagging"
                           ? props.navigation.navigate("AssetTagging", {
-                              WoID: selectedWo.id,
+                              screen: 'ATHome',
+                              params: {WoID: selectedWo.id},
                             })
                           : props.navigation.navigate("ITM");
                       }}
