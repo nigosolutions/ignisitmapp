@@ -28,6 +28,7 @@ import WorkOrder from "./app/screens/WorkOrder";
 import ITMHome from "./app/screens/ITMWorkOrder/ITMHome";
 import DashboardScreen from "./app/screens/Dashboard";
 import ScheduleScreen from "./app/screens/Schedule";
+import Requests from "./app/screens/ITMWorkOrder/Requests";
 
 const MainNav = createNativeStackNavigator();
 const sideMenuDisabledScreens = ["AssetTagging"];
@@ -155,7 +156,7 @@ function MyDrawer() {
         <Drawer.Screen name="Dashboard" component={DashboardScreen} />
         <Drawer.Screen name="Work Orders" component={WorkOrder} options={{}} />
         <Drawer.Screen name="Schedule" component={ScheduleScreen} />
-        <Drawer.Screen name="Requests" component={ITMWorkOrder} />
+        <Drawer.Screen name="Requests" component={Requests} />
       </Drawer.Navigator>
     </Box>
   );

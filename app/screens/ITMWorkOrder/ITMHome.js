@@ -1,33 +1,25 @@
 import { FAB, SearchBar } from "@rneui/themed";
 import {
-  AddIcon,
-  Avatar,
-  Badge,
   Box,
   Button,
-  Center,
   CheckIcon,
-  Container,
-  DeleteIcon,
   Divider,
-  Fab,
-  HamburgerIcon,
+  FormControl,
   HStack,
-  Icon,
-  InfoIcon,
-  Menu,
-  Popover,
-  Pressable,
+  Input,
+  Modal,
   Progress,
   ScrollView,
   Select,
   Spacer,
   Text,
   VStack,
+  WarningOutlineIcon,
 } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { getUser } from "../../auth/auth";
+import { TabBar } from "react-native-tab-view";
 
 function ITMHome(props) {
   const [assetLists, setAsset] = React.useState([
@@ -121,6 +113,7 @@ function ITMHome(props) {
           <VStack space={5}>
             <Text>Progress</Text>
             <Progress width={200} value={45} />
+
             <Button variant={"outline"} rounded={100}>
               Requests
             </Button>
@@ -158,7 +151,7 @@ function ITMHome(props) {
 
               <Spacer />
               <HStack space={3}>
-                <Select width={200} placeholder="Choose Service">
+                <Select width={200} placeholder="Select Category">
                   <Select.Item label="UX Research" value="ux" />
                   <Select.Item label="Web Development" value="web" />
                   <Select.Item
@@ -168,7 +161,7 @@ function ITMHome(props) {
                   <Select.Item label="UI Designing" value="ui" />
                   <Select.Item label="Backend Development" value="backend" />
                 </Select>
-                <Select width={200} placeholder="Choose Service">
+                <Select width={200} placeholder="Select Category">
                   <Select.Item label="UX Research" value="ux" />
                   <Select.Item label="Web Development" value="web" />
                   <Select.Item
