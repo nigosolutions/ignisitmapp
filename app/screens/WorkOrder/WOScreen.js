@@ -502,21 +502,20 @@ function WOScreen(props) {
                     borderTopWidth={"1"}
                     paddingTop={3}
                   >
-                    <FAB
-                      title={
-                        selectedWo.status === "pending" ? "Continue" : "View"
-                      }
-                      color="#377DFF"
+                    <Button
+                      colorScheme={"lightBlue"}
                       onPress={() => {
                         // setselectedWo(0);
                         selectedWo.type === "Asset Tagging"
                           ? props.navigation.navigate("AssetTagging", {
-                              screen: 'ATHome',
-                              params: {WoID: selectedWo.id},
+                              screen: "ATHome",
+                              params: { WoID: selectedWo.id },
                             })
                           : props.navigation.navigate("ITM");
                       }}
-                    />
+                    >
+                      {selectedWo.status === "pending" ? "Continue" : "View"}
+                    </Button>
                   </Box>
                 </>
               )}

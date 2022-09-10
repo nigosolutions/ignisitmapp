@@ -96,6 +96,7 @@ function AssetHome(props) {
   return (
     <Box flex={1} padding={5}>
       <Fab
+        colorScheme={"lightBlue"}
         renderInPortal={false}
         onPress={() => props.navigation.navigate("PhotoScreen")}
         icon={<AddIcon />}
@@ -127,11 +128,11 @@ function AssetHome(props) {
           </VStack>
           <Spacer />
           <VStack space={3}>
-            <Button width={150} rounded={100}>
+            <Button colorScheme={"lightBlue"} width={150} rounded={100}>
               Submit
             </Button>
             <Button
-              bgColor={"coolGray.500"}
+              colorScheme={"coolGray"}
               width={150}
               rounded={100}
               onPress={() => {

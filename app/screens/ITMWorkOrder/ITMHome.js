@@ -20,8 +20,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { getUser } from "../../auth/auth";
 import { TabBar } from "react-native-tab-view";
+import Requests from "./Requests";
 
 function ITMHome(props) {
+  const [showModal, setShowModal] = React.useState(false);
   const [assetLists, setAsset] = React.useState([
     {
       name: "Smoke Detector",
@@ -112,21 +114,36 @@ function ITMHome(props) {
           <Spacer />
           <VStack space={5}>
             <Text>Progress</Text>
-            <Progress width={200} value={45} />
+            <Progress colorScheme={"lightBlue"} width={200} value={45} />
 
-            <Button variant={"outline"} rounded={100}>
+            <Button
+              colorScheme={"coolGray"}
+              onPress={() => setShowModal(true)}
+              variant={"outline"}
+              rounded={100}
+            >
               Requests
             </Button>
+            <Modal
+              size={"lg"}
+              isOpen={showModal}
+              onClose={() => setShowModal(false)}
+            >
+              <Requests />
+            </Modal>
           </VStack>
           <Spacer />
           <VStack width={100} space={3}>
             <Button
+              colorScheme={"coolGray"}
               onPress={() => props.navigation.navigate("ExecutionScreen")}
               rounded={100}
             >
               Start
             </Button>
-            <Button rounded={100}>Submit</Button>
+            <Button colorScheme={"lightBlue"} rounded={100}>
+              Submit
+            </Button>
           </VStack>
         </HStack>
 

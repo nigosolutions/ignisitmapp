@@ -106,6 +106,7 @@ function DashboardScreen(props) {
             </ListItem>
             <Box justifyContent={"center"}>
               <Button
+                colorScheme={"lightBlue"}
                 rounded={100}
                 onPress={() => props.navigation.navigate("Work Orders")}
               >
