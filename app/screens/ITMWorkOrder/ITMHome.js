@@ -86,6 +86,9 @@ function ITMHome(props) {
     console.log("Final Data: ", user);
   }, []);
 
+  const { WoID } = props.route.params;
+  // console.log(props.route.params)
+
   return (
     <Box flex={1} padding={5}>
       <VStack space={5} flex={1}>
@@ -101,7 +104,7 @@ function ITMHome(props) {
               <Text
                 style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
               >
-                Work Order
+                {WoID}
               </Text>
               <Text style={{ color: "#99879D", fontWeight: "normal" }}>
                 Type: Asset Tagging

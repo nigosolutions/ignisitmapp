@@ -19,7 +19,7 @@ function WorkOrder() {
         <WONav.Screen
           name="AssetTagging"
           component={AssetTagging}
-          options={{ title: "Asset Tagging", headerBackVisible: false }}
+          options={{ title: "Asset Tagging", headerBackVisible: false, gestureEnabled: false}}
         />
         <WONav.Screen
           name="ITM"

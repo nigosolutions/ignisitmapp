@@ -25,8 +25,8 @@ function AssetDetails(props) {
   const [systems, setSystems] = React.useState(["Sys1", "Sys2", "Sys3", "Sys4"])
   // const { navigation } = props
   // const imagepath = navigation.getParam('imagepath',"../../assets/logo.png")
-  const {imagepath} = props.route.params;
-  console.log(imagepath)
+  const {imagepath, WoID} = props.route.params;
+  // console.log(WoID)
  
 
   const validate = () => {
@@ -154,7 +154,7 @@ function AssetDetails(props) {
           </VStack>
         </HStack>
         <Button.Group alignSelf={"center"}>
-          <Button colorScheme={"coolGray"} onPress={()=>props.navigation.navigate("ATHome")}>Cancel</Button>
+          <Button colorScheme={"coolGray"} onPress={()=>props.navigation.navigate("ATHome",{WoID:WoID})}>Cancel</Button>
           {/* <Button onPress={()=>{console.log(formData)}}>Submit</Button> */}
           <Button onPress={submit}>Submit</Button>
         </Button.Group>

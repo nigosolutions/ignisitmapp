@@ -15,7 +15,7 @@ function AssetTagging({navigation,route}) {
     const drawerNavigator = navigation.getParent('Drawer')
 
     if (drawerNavigator) {
-      // Make sure the route name is C before turn header off
+      // Make sure the route name is AssetTagging before turn header off
       if (route.name === 'AssetTagging') { 
         drawerNavigator.setOptions({
           headerShown: false,
@@ -34,6 +34,10 @@ function AssetTagging({navigation,route}) {
         }
       : undefined
   }, [navigation, route])
+
+  // const {WoID} = route.params;
+  // const [woid, setWoID] = React.useState(WoID);
+  // console.log(WoID)
   return (
     // <NavigationContainer independent={true}>
       <ATNav.Navigator>

@@ -98,7 +98,7 @@ function AssetHome(props) {
       <Fab
         colorScheme={"lightBlue"}
         renderInPortal={false}
-        onPress={() => props.navigation.navigate("PhotoScreen")}
+        onPress={() => props.navigation.navigate("PhotoScreen", {WoID: WoID})}
         icon={<AddIcon />}
         label={"Add Asset"}
       />

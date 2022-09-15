@@ -52,10 +52,13 @@ function AssetTaggingPhotoScreen(props) {
     }
   };
 
+  const { WoID } = props.route.params;
+  // console.log(props.route.params);
+
   return (
     <Box flex={1} padding={10}>
       <VStack space={10} flex={1}>
-        <Text style={styles.desc_title}>Work Order #3224</Text>
+        <Text style={styles.desc_title}>Work Order {WoID}</Text>
         <VStack flex={1}>
           <Text style={styles.desc_title}>Add Asset Photo</Text>
           {/* <HStack justifyContent={"space-around"} flex={1}>
@@ -134,7 +137,7 @@ function AssetTaggingPhotoScreen(props) {
                 </Box>
                <Button.Group alignItems="center">
                    <Button onPress={() => {setPickedImagePath("")}}>Change Photo</Button>
-                   <Button onPress={() => props.navigation.navigate("DetailScreen",{imagepath:pickedImagePath})}>Continue</Button>
+                   <Button onPress={() => props.navigation.navigate("DetailScreen",{imagepath:pickedImagePath, WoID:WoID})}>Continue</Button>
                 </Button.Group>
               </VStack> 
             )}

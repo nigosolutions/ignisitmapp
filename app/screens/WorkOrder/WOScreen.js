@@ -17,6 +17,7 @@ import { useWindowDimensions, StyleSheet } from "react-native";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
+import axios from "axios";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
 var styles = StyleSheet.create({
@@ -64,165 +65,198 @@ var styles = StyleSheet.create({
   },
 });
 
+
+
 function WOScreen(props) {
-  const [status, setStatus] = React.useState(0);
+  // const [status, setStatus] = React.useState(0);
   const [selectedWo, setselectedWo] = React.useState(0);
-  const [wo, setWO] = React.useState([]);
-  React.useEffect(() => {
-    setWO([
-      {
-        name: "Asset tagging",
-        type: "Asset Tagging",
-        id: "AT3224",
-        details: "Details of Asset tagging",
-        date: "10 Jan",
-        building: {
-          name: "Building 1",
-          location: { address: "XYZ street", coords: [25.2854, 51.531] },
-        },
-        status: "pending",
-      },
-      {
-        name: "Asset tagging",
-        type: "Asset Tagging",
-        id: 2,
-        details: "Details of Asset tagging",
-        date: "11 Jan",
-        building: {
-          name: "Building 2",
-          location: { address: "XYZ street", coords: [25, 55] },
-        },
-        status: "pending",
-      },
-      {
-        name: "Asset tagging",
-        type: "Asset Tagging",
-        id: 3,
-        details: "Details of Asset tagging",
-        date: "12 Jan",
-        building: {
-          name: "Building 3",
-          location: { address: "XYZ street", coords: [24.9909, 51.5493] },
-        },
-        status: "pending",
-      },
-      {
-        name: "ITM Work Order",
-        type: "ITM",
-        details: "Details of Asset tagging",
-        date: "12 Jan",
-        building: {
-          name: "Building 3",
-          location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-        },
-        status: "pending",
-      },
-      {
-        name: "ITM Work Order",
-        type: "ITM",
-        id: 5,
-        details: "Details of Asset tagging",
-        date: "12 Jan",
-        building: {
-          name: "Building 3",
-          location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-        },
-        status: "pending",
-      },
-    ]);
+  // const [wo, setWO] = React.useState([]);
+  const [pwo, setPWO] = React.useState([]);
+  const [cwo, setCWO] = React.useState([]);
+
+
+  // React.useEffect(() => {
+  //   setWO([
+  //     {
+  //       name: "Asset tagging",
+  //       type: "Asset Tagging",
+  //       id: "AT3224",
+  //       details: "Details of Asset tagging",
+  //       date: "10 Jan",
+  //       building: {
+  //         name: "Building 1",
+  //         location: { address: "XYZ street", coords: [25.2854, 51.531] },
+  //       },
+  //       status: "pending",
+  //     },
+  //     {
+  //       name: "Asset tagging",
+  //       type: "Asset Tagging",
+  //       id: 2,
+  //       details: "Details of Asset tagging",
+  //       date: "11 Jan",
+  //       building: {
+  //         name: "Building 2",
+  //         location: { address: "XYZ street", coords: [25, 55] },
+  //       },
+  //       status: "pending",
+  //     },
+  //     {
+  //       name: "Asset tagging",
+  //       type: "Asset Tagging",
+  //       id: 3,
+  //       details: "Details of Asset tagging",
+  //       date: "12 Jan",
+  //       building: {
+  //         name: "Building 3",
+  //         location: { address: "XYZ street", coords: [24.9909, 51.5493] },
+  //       },
+  //       status: "pending",
+  //     },
+  //     {
+  //       name: "ITM Work Order",
+  //       type: "ITM",
+  //       details: "Details of Asset tagging",
+  //       date: "12 Jan",
+  //       building: {
+  //         name: "Building 3",
+  //         location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+  //       },
+  //       status: "pending",
+  //     },
+  //     {
+  //       name: "ITM Work Order",
+  //       type: "ITM",
+  //       id: 5,
+  //       details: "Details of Asset tagging",
+  //       date: "12 Jan",
+  //       building: {
+  //         name: "Building 3",
+  //         location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+  //       },
+  //       status: "pending",
+  //     },
+  //   ]);
+  // }, []);
+
+
+
+  // const pendingWO = [
+  //   {
+  //     name: "Asset tagging",
+  //     type: "Asset Tagging",
+  //     id: "AT3224",
+  //     details: "Details of Asset tagging",
+  //     date: "10 Jan",
+  //     building: {
+  //       name: "Building 1",
+  //       location: { address: "XYZ street", coords: [25.2854, 51.531] },
+  //     },
+  //     status: "pending",
+  //   },
+  //   {
+  //     name: "Asset tagging",
+  //     type: "Asset Tagging",
+  //     id: 2,
+  //     details: "Details of Asset tagging",
+  //     date: "11 Jan",
+  //     building: {
+  //       name: "Building 2",
+  //       location: { address: "XYZ street", coords: [25, 55] },
+  //     },
+  //     status: "pending",
+  //   },
+  //   {
+  //     name: "Asset tagging",
+  //     type: "Asset Tagging",
+  //     id: 3,
+  //     details: "Details of Asset tagging",
+  //     date: "12 Jan",
+  //     building: {
+  //       name: "Building 3",
+  //       location: { address: "XYZ street", coords: [24.9909, 51.5493] },
+  //     },
+  //     status: "pending",
+  //   },
+  //   {
+  //     name: "ITM Work Order",
+  //     type: "ITM",
+  //     id: 4,
+  //     details: "Details of Asset tagging",
+  //     date: "12 Jan",
+  //     building: {
+  //       name: "Building 3",
+  //       location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+  //     },
+  //     status: "pending",
+  //   },
+  //   {
+  //     name: "ITM Work Order",
+  //     type: "ITM",
+  //     id: 5,
+  //     details: "Details of Asset tagging",
+  //     date: "12 Jan",
+  //     building: {
+  //       name: "Building 3",
+  //       location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+  //     },
+  //     status: "pending",
+  //   },
+  // ];
+
+  // const completedWO = [
+  //   {
+  //     name: "Asset tagging",
+  //     type: "Asset Tagging",
+  //     id: 3,
+  //     details: "Details of Asset tagging",
+  //     date: "12 Jan",
+  //     building: {
+  //       name: "Building 3",
+  //       location: { address: "XYZ street", coords: [24.9909, 51.5493] },
+  //     },
+  //     status: "completed",
+  //   },
+  //   {
+  //     name: "Asset tagging",
+  //     type: "Asset Tagging",
+  //     id: 5,
+  //     details: "Details of Asset tagging",
+  //     date: "12 Jan",
+  //     building: {
+  //       name: "Building 3",
+  //       location: { address: "XYZ street", coords: [25.1659, 51.5976] },
+  //     },
+  //     status: "completed",
+  //   },
+  // ];
+
+
+
+  const getWO = async (stat) => {
+    await axios
+    .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/workorders", {params: {status: stat}})
+    .then((res) => {
+      // console.log(res.data.data);
+      if (stat == "pending") {
+        setPWO([...pwo,...res.data.data]);
+      } else {
+        setCWO([...cwo,...res.data.data]);
+      }
+      // setWO(res.data.data);
+      // console.log(cwo)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  
+
+  React.useEffect(async () => {
+    getWO("completed");
+    getWO("pending");
   }, []);
-
-  const pendingWO = [
-    {
-      name: "Asset tagging",
-      type: "Asset Tagging",
-      id: "AT3224",
-      details: "Details of Asset tagging",
-      date: "10 Jan",
-      building: {
-        name: "Building 1",
-        location: { address: "XYZ street", coords: [25.2854, 51.531] },
-      },
-      status: "pending",
-    },
-    {
-      name: "Asset tagging",
-      type: "Asset Tagging",
-      id: 2,
-      details: "Details of Asset tagging",
-      date: "11 Jan",
-      building: {
-        name: "Building 2",
-        location: { address: "XYZ street", coords: [25, 55] },
-      },
-      status: "pending",
-    },
-    {
-      name: "Asset tagging",
-      type: "Asset Tagging",
-      id: 3,
-      details: "Details of Asset tagging",
-      date: "12 Jan",
-      building: {
-        name: "Building 3",
-        location: { address: "XYZ street", coords: [24.9909, 51.5493] },
-      },
-      status: "pending",
-    },
-    {
-      name: "ITM Work Order",
-      type: "ITM",
-      id: 4,
-      details: "Details of Asset tagging",
-      date: "12 Jan",
-      building: {
-        name: "Building 3",
-        location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-      },
-      status: "pending",
-    },
-    {
-      name: "ITM Work Order",
-      type: "ITM",
-      id: 5,
-      details: "Details of Asset tagging",
-      date: "12 Jan",
-      building: {
-        name: "Building 3",
-        location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-      },
-      status: "pending",
-    },
-  ];
-
-  const completedWO = [
-    {
-      name: "Asset tagging",
-      type: "Asset Tagging",
-      id: 3,
-      details: "Details of Asset tagging",
-      date: "12 Jan",
-      building: {
-        name: "Building 3",
-        location: { address: "XYZ street", coords: [24.9909, 51.5493] },
-      },
-      status: "completed",
-    },
-    {
-      name: "Asset tagging",
-      type: "Asset Tagging",
-      id: 5,
-      details: "Details of Asset tagging",
-      date: "12 Jan",
-      building: {
-        name: "Building 3",
-        location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-      },
-      status: "completed",
-    },
-  ];
-
-  // React.useEffect(() => {}, [selectedWo]);
 
   //Tab
   const FirstRoute = () => (
@@ -236,7 +270,7 @@ function WOScreen(props) {
       />
 
       <FlatList
-        data={pendingWO}
+        data={pwo}
         renderItem={({ item }) => {
           const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
           return (
@@ -344,7 +378,7 @@ function WOScreen(props) {
       />
 
       <FlatList
-        data={completedWO}
+        data={cwo}
         renderItem={({ item }) => {
           const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
           return (
@@ -511,10 +545,13 @@ function WOScreen(props) {
                               screen: "ATHome",
                               params: { WoID: selectedWo.id },
                             })
-                          : props.navigation.navigate("ITM");
+                          : props.navigation.navigate("ITM", {
+                            screen: "ITMHome",
+                            params: { WoID: selectedWo.id },
+                          });
                       }}
                     >
-                      {selectedWo.status === "pending" ? "Continue" : "View"}
+                      {selectedWo.status === "Pending" ? "Continue" : "View"}
                     </Button>
                   </Box>
                 </>
