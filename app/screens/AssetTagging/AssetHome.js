@@ -24,74 +24,96 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { getUser } from "../../auth/auth";
+import axios from "axios";
+import { set } from "react-native-reanimated";
 
 function AssetHome(props) {
-  const [assetLists, setAsset] = React.useState([
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-  ]);
+  // const [assetList, setAsset] = React.useState([
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  //   {
+  //     name: "Smoke Detector",
+  //     mfr: "Ignis",
+  //     location: "Floor 1, Room 102",
+  //     Tag: "SD1102",
+  //   },
+  // ]);
 
   React.useEffect(async () => {
     let user = await getUser();
     // console.log("Final Data: ", user);
   }, []);
 
+  const [assetList, setAsset] = React.useState([])
+
   // const parentNavigator= props.navigation.getParent();
   // console.log(parentNavigator.getState())
   const { WoID } = props.route.params;
   // console.log(WoID);
+
+  const getAssets = async (WoID) => {
+    await axios
+    .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/assets", {params: {WoID: WoID}})
+    .then((res) => {
+      console.log(res.data.data);
+      setAsset([...assetList,...res.data.data])
+      // setWO(res.data.data);
+      // console.log(cwo)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  React.useEffect(async () => {
+     getAssets(WoID);
+  }, []);
 
   return (
     <Box flex={1} padding={5}>
@@ -150,7 +172,7 @@ function AssetHome(props) {
         <Box rounded={15} padding={1} bgColor={"white"}>
           <ScrollView>
             <HStack justifyContent={"space-around"} flexWrap={"wrap"}>
-              {assetLists.map((item) => (
+              {assetList.map((item) => (
                 <Box padding={3}>
                   <Box padding={4} rounded={10} bgColor={"coolGray.100"}>
                     <HStack alignItems={"center"} space={5}>

@@ -16,13 +16,18 @@ import {
 } from "native-base";
 import React from "react";
 import QRCode from "react-native-qrcode-svg";
+import axios from "axios";
 
 
 function AssetDetails(props) {
 
   const [formData, setData] = React.useState({device:"",system:"",mfname:"",mfptno:"",spec:"",drawno:"",floorno:"",roomno:""});
-  const [devTypes, setDevTypes] = React.useState(["Dev1", "Dev2", "Dev3", "Dev4"])
-  const [systems, setSystems] = React.useState(["Sys1", "Sys2", "Sys3", "Sys4"])
+  // const [devTypes, setDevTypes] = React.useState(["Dev1", "Dev2", "Dev3", "Dev4"])
+  // const [systems, setSystems] = React.useState(["Sys1", "Sys2", "Sys3", "Sys4"])
+  const [devTypes, setDevTypes] = React.useState([]);
+  const [systems, setSystems] = React.useState([]);
+  const [showModal, setShowModal] = React.useState(false);
+  const [assTag, setAssTag] = React.useState();
   // const { navigation } = props
   // const imagepath = navigation.getParam('imagepath',"../../assets/logo.png")
   const {imagepath, WoID} = props.route.params;
@@ -45,56 +50,105 @@ function AssetDetails(props) {
     return ret;
   };
 
-  const getDeviceData = () => {
-    setLoading(true);
-    api
-      .get("/addAsset")
-      .then((res) => {
-        setDevTypes(res.data.message.Items.device);
-        setSystems(res.data.message.Items.system);
-        console.log(res.data.message.Items);
-      })
-      .catch((err) => {
-        alert("Error in fetching device details!");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const getDeviceData = async () => {
+    // setLoading(true);
+    // api
+    //   .get("/addAsset")
+    //   .then((res) => {
+    //     setDevTypes(res.data.message.Items.device);
+    //     setSystems(res.data.message.Items.system);
+    //     console.log(res.data.message.Items);
+    //   })
+    //   .catch((err) => {
+    //     alert("Error in fetching device details!");
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
+    await axios
+    .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/devices")
+    .then((res) => {
+      // console.log(res.data.systems);
+      setDevTypes(res.data.devTypes);
+      setSystems(res.data.systems);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
-  const onFinish = (values) => {
-		setAALoading(true);
-		console.log("Success:", values);
-		api
-			.post("/addAsset", { project: values })
-			.then((res) => {
-				console.log(res);
-				alert("Asset added Successfully!");
-			})
-			.catch((err) => {
-				message.error("Error!");
-			})
-			.finally(() => {
-				setAPLoading(false);
-			});
+  const onFinish = async () => {
+		// setAALoading(true);
+		// console.log("Success:", values);
+		// api
+		// 	.post("/addAsset", { project: values })
+		// 	.then((res) => {
+		// 		console.log(res);
+		// 		alert("Asset added Successfully!");
+		// 	})
+		// 	.catch((err) => {
+		// 		message.error("Error!");
+		// 	})
+		// 	.finally(() => {
+		// 		setAPLoading(false);
+		// 	});
+
+
+    // let data = {"formData":formData,"assetTag":assTag,"image":imagepath};
+    // await axios
+    // .push("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/addAsset", {data: {formData:"Checking"}})
+    // .then((res) => {
+    //   // console.log(res.data.systems);
+    //   console.log(res);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
+
+    await axios({
+      method: 'post',
+      url: "https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/addAsset",
+      data: {
+        formData: 'formdata',
+        assetTag: 'assettag',
+        image: 'image'
+      }
+    })
+    .then((res) => {
+        console.log(res.status);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
 	};
 
-  const [showModal, setShowModal] = React.useState(false);
   
 
-  const submit = () => {
+  const generateTag = () => {
+    return Math.floor(Math.random() * 1000) 
+  }
+  
+
+  const submit = async () => {
     // console.log(validate())
     if (validate() == true) {
       console.log('All filled');
+      let tag = generateTag();
+      // console.log(tag);
+      setAssTag(tag.toString());
+      await onFinish();
       setShowModal(true);
-
-
     }
     else {
       // console.log('Fill all values')
       alert('Fill all required values')
     }
   };
+
+  React.useEffect(async () => {
+    getDeviceData();
+  },[]);
 
   return (
     <Box padding={5} flex={1}>
@@ -164,8 +218,8 @@ function AssetDetails(props) {
             <Modal.Header alignItems={"center"}>Asset Tag Generated</Modal.Header>
             <Modal.Footer>
               <VStack flex={1} alignItems={'center'} space={5}>
-                <QRCode value="Device100"/>
-                <Text>Device100</Text>
+                <QRCode value={assTag}/>
+                <Text>{assTag}</Text>
                 <Button style={{backgroundColor:'grey'}} onPress={() => {
                 setShowModal(false);
               }}>
