@@ -28,6 +28,9 @@ function Requests(props) {
     { key: "second", title: "Spare Parts" },
     { key: "third", title: "Resources" },
   ]);
+  const [tools, setTools] = React.useState([]);
+  const [item, setItem] = React.useState({tool:"", qty:""});
+  const [qnty, setQty] = React.useState();
   const data = [
     {
       id: "1",
@@ -107,7 +110,7 @@ function Requests(props) {
       <HStack alignItems={"center"} space={3}>
         <FormControl flex={1}>
           <FormControl.Label>Select Item</FormControl.Label>
-          <Select accessibilityLabel="Select Item" placeholder="Select Item">
+          <Select accessibilityLabel="Select Item" placeholder="Select Item" selectedValue={item.tool} onValueChange={value => setItem({...item, tool:value})}>
             <Select.Item label="UX Research" value="ux" />
             <Select.Item label="Web Development" value="web" />
             <Select.Item label="Cross Platform Development" value="cross" />
@@ -118,12 +121,12 @@ function Requests(props) {
         </FormControl>
         <FormControl flex={1}>
           <FormControl.Label>Quantity</FormControl.Label>
-          <Input />
+          <Input placeholder="Enter Quantity"  onChangeText={value => setQty(value)}/>
           <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
             Please enter Quantity!
           </FormControl.ErrorMessage>
         </FormControl>
-        <Button flex={1 / 4} rounded={100}>
+        <Button flex={1 / 4} rounded={100} onPress={() => {setTools([...tools,{item:item.tool, qty:item.qty}])}}>
           Add
         </Button>
       </HStack>
@@ -133,6 +136,7 @@ function Requests(props) {
           <Spacer />
           <Text bold>Quantity</Text>
         </HStack>
+        
         <FlatList
           data={data}
           renderItem={({ item }) => (
@@ -151,6 +155,7 @@ function Requests(props) {
           )}
           keyExtractor={(item) => item.id}
         />
+        
       </VStack>
 
       <Box

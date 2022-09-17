@@ -222,11 +222,13 @@ function AssetDetails(props) {
                 <Text>{assTag}</Text>
                 <Button style={{backgroundColor:'grey'}} onPress={() => {
                 setShowModal(false);
+                props.navigation.navigate("ATHome",{WoID:WoID});
               }}>
                   PRINT TAG
                 </Button>
                 <Button style={{backgroundColor:'black'}} onPress={() => {
                 setShowModal(false);
+                props.navigation.navigate("ATHome",{WoID:WoID});
               }}>
                   CONTINUE
                 </Button>
