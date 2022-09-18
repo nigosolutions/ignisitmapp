@@ -234,17 +234,30 @@ function WOScreen(props) {
 
 
   const getWO = async (stat) => {
+    // await axios
+    // .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/workorders", {params: {status: stat}})
+    // .then((res) => {
+    //   // console.log(res.data.data);
+    //   if (stat == "pending") {
+    //     setPWO([...pwo,...res.data.data]);
+    //   } else {
+    //     setCWO([...cwo,...res.data.data]);
+    //   }
+    //   // setWO(res.data.data);
+    //   // console.log(cwo)
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
+
     await axios
-    .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/workorders", {params: {status: stat}})
+    .get("https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders", {params: {status: stat}})
     .then((res) => {
-      // console.log(res.data.data);
-      if (stat == "pending") {
-        setPWO([...pwo,...res.data.data]);
+      if (stat == "Pending") {
+        setPWO([...pwo,...res.data.message]);
       } else {
-        setCWO([...cwo,...res.data.data]);
+        setCWO([...cwo,...res.data.message]);
       }
-      // setWO(res.data.data);
-      // console.log(cwo)
     })
     .catch((err) => {
       console.log(err);
@@ -254,8 +267,8 @@ function WOScreen(props) {
   
 
   React.useEffect(async () => {
-    getWO("completed");
-    getWO("pending");
+    getWO("Completed");
+    getWO("Pending");
   }, []);
 
   //Tab
@@ -272,7 +285,7 @@ function WOScreen(props) {
       <FlatList
         data={pwo}
         renderItem={({ item }) => {
-          const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
+          const color = item.wo_id === selectedWo.wo_id ? "#ebf2ff" : "#e5e5e5";
           return (
             <Pressable
               onPress={() => {
@@ -303,7 +316,7 @@ function WOScreen(props) {
                       }}
                       style={styles.title}
                     >
-                      {item.name}
+                      {item.type}
                     </Text>
                     <Text
                       _dark={{
@@ -311,7 +324,7 @@ function WOScreen(props) {
                       }}
                       style={styles.subtext}
                     >
-                      {item.id}
+                      {item.full_id}
                     </Text>
                   </VStack>
                   <Spacer />
@@ -323,14 +336,14 @@ function WOScreen(props) {
                     color="coolGray.800"
                     alignSelf="center"
                   >
-                    {item.date}
+                    {new Date(item.date).toDateString()}
                   </Text>
                 </HStack>
               </Box>
             </Pressable>
           );
         }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.wo_id}
       />
 
       {/* <ScrollView>
@@ -380,7 +393,7 @@ function WOScreen(props) {
       <FlatList
         data={cwo}
         renderItem={({ item }) => {
-          const color = item.id === selectedWo.id ? "#ebf2ff" : "#e5e5e5";
+          const color = item.wo_id === selectedWo.wo_id ? "#ebf2ff" : "#e5e5e5";
           return (
             <Pressable
               onPress={() => {
@@ -406,7 +419,7 @@ function WOScreen(props) {
                       }}
                       style={styles.title}
                     >
-                      {item.name}
+                      {item.type}
                     </Text>
                     <Text
                       _dark={{
@@ -414,7 +427,7 @@ function WOScreen(props) {
                       }}
                       style={styles.subtext}
                     >
-                      {item.id}
+                      {item.full_id}
                     </Text>
                   </VStack>
                   <Spacer />
@@ -426,14 +439,14 @@ function WOScreen(props) {
                     color="coolGray.800"
                     alignSelf="center"
                   >
-                    {item.date}
+                    {new Date(item.date).toDateString()}
                   </Text>
                 </HStack>
               </Box>
             </Pressable>
           );
         }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.wo_id}
         // extraData={selectedWo}
       />
     </Box>
@@ -495,37 +508,37 @@ function WOScreen(props) {
               ) : (
                 <>
                   <VStack borderBottomWidth={1} borderColor={"#e5e5e5"}>
-                    <Text style={styles.desc_title}>{selectedWo.name}</Text>
-                    <Text style={styles.subtext}>WO#: {selectedWo.id}</Text>
+                    <Text style={styles.desc_title}>{selectedWo.type}</Text>
+                    <Text style={styles.subtext}>WO#: {selectedWo.wo_id}</Text>
                   </VStack>
                   <ScrollView>
                     <Text style={styles.desc_title}>Details:</Text>
                     <Text></Text>
                     <Text>{selectedWo.details}</Text>
-                    <Text>{selectedWo.building.name}</Text>
+                    <Text>{selectedWo.building_name}</Text>
                     <Text></Text>
                     <Text style={styles.desc_title}>Location:</Text>
                     <Text></Text>
-                    <Text>{selectedWo.building.location.address}</Text>
+                    <Text>{selectedWo.building_area}</Text>
                     <Text></Text>
                     <Box flex={1} alignItems={"center"}>
                       <MapView
                         width={"75%"}
                         height={300}
                         region={{
-                          latitude: selectedWo.building.location.coords[0],
-                          longitude: selectedWo.building.location.coords[1],
+                          latitude: selectedWo.building_loc[0],
+                          longitude: selectedWo.building_loc[1],
                           latitudeDelta: 0.0922,
                           longitudeDelta: 0.0421,
                         }}
                       >
                         <Marker
                           coordinate={{
-                            latitude: selectedWo.building.location.coords[0],
-                            longitude: selectedWo.building.location.coords[1],
+                            latitude: selectedWo.building_loc[0],
+                            longitude: selectedWo.building_loc[1],
                           }}
-                          title={selectedWo.building.name}
-                          description={selectedWo.building.location.address}
+                          title={selectedWo.building_name}
+                          description={selectedWo.building_area}
                         />
                       </MapView>
                     </Box>
@@ -543,11 +556,11 @@ function WOScreen(props) {
                         selectedWo.type === "Asset Tagging"
                           ? props.navigation.navigate("AssetTagging", {
                               screen: "ATHome",
-                              params: { WoID: selectedWo.id },
+                              params: { WoID: selectedWo.wo_id },
                             })
                           : props.navigation.navigate("ITM", {
                             screen: "ITMHome",
-                            params: { WoID: selectedWo.id },
+                            params: { WoID: selectedWo.wo_id },
                           });
                       }}
                     >
