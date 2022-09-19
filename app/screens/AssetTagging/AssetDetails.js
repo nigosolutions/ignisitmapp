@@ -21,13 +21,13 @@ import axios from "axios";
 
 function AssetDetails(props) {
 
-  const [formData, setData] = React.useState({device:"",system:"",mfname:"",mfptno:"",spec:"",drawno:"",floorno:"",roomno:""});
+  const [formData, setData] = React.useState({device:"",system:"",mfname:"",mfptno:"",spec:"",drawno:"",floorno:"",roomno:"",tag:""});
   // const [devTypes, setDevTypes] = React.useState(["Dev1", "Dev2", "Dev3", "Dev4"])
   // const [systems, setSystems] = React.useState(["Sys1", "Sys2", "Sys3", "Sys4"])
   const [devTypes, setDevTypes] = React.useState([]);
   const [systems, setSystems] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
-  const [assTag, setAssTag] = React.useState();
+  // const [assTag, setAssTag] = React.useState();
   // const { navigation } = props
   // const imagepath = navigation.getParam('imagepath',"../../assets/logo.png")
   const {imagepath, WoID} = props.route.params;
@@ -93,18 +93,6 @@ function AssetDetails(props) {
 		// 		setAPLoading(false);
 		// 	});
 
-
-    // let data = {"formData":formData,"assetTag":assTag,"image":imagepath};
-    // await axios
-    // .push("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/addAsset", {data: {formData:"Checking"}})
-    // .then((res) => {
-    //   // console.log(res.data.systems);
-    //   console.log(res);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
-
     await axios({
       method: 'post',
       url: "https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/addAsset",
@@ -121,23 +109,57 @@ function AssetDetails(props) {
         console.log(err);
       });
 
+
+    // console.log(assTag);
+    console.log(formData);
+
+    await axios({
+      method: 'post',
+      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
+      data: {
+        formData: formData,
+        image: imagepath
+      }
+    })
+    .then((res) => {
+      console.log(res.status);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
 	};
 
   
 
   const generateTag = () => {
-    return Math.floor(Math.random() * 1000) 
+    let tag = Math.floor(Math.random() * 1000);
+    tag = tag.toString();
+    tag = "AS".concat(tag);
+
+    //Updating formData with tag value
+    // setAssTag(tag);
+    setData({...formData,tag: tag})
+
+    //Adding asset tag and imagepath to formData
+    // let temp = {assetTag: tag,image: imagepath}
+    // console.log(temp)
+    // setData({...formData,...temp});
+    // console.log(formData);
   }
   
 
-  const submit = async () => {
+  const submit =  () => {
     // console.log(validate())
     if (validate() == true) {
       console.log('All filled');
-      let tag = generateTag();
+
+      //Generating asset tag
+      // generateTag();
       // console.log(tag);
-      setAssTag(tag.toString());
-      await onFinish();
+      // console.log(assTag);
+
+      //Display asset tag QR code
       setShowModal(true);
     }
     else {
@@ -188,6 +210,11 @@ function AssetDetails(props) {
                 <Input mb={2} placeholder="Enter the floor no." onChangeText={value => setData({...formData,floorno: value})}/>
                 <FormControl.Label>Room No.</FormControl.Label>
                 <Input mb={2} placeholder="Enter the room no." onChangeText={value => setData({...formData,roomno: value})}/>
+                <FormControl.Label>Tag</FormControl.Label>
+                <HStack alignItems={"center"} flex={1} space={2}>
+                <Input value={formData.tag} flex={2} placeholder="Enter tag no. or generate new" onChangeText={value => setData({...formData,tag: value})}/>
+                <Button size={"sm"} flex={1} onPress={generateTag}>Generate</Button>
+                </HStack>
               </FormControl>
             </ScrollView>
             {/* <Button.Group alignSelf={"center"}>
@@ -215,14 +242,14 @@ function AssetDetails(props) {
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
           <Modal.Content maxWidth="300px">
             <Modal.CloseButton />
-            <Modal.Header alignItems={"center"}>Asset Tag Generated</Modal.Header>
+            <Modal.Header alignItems={"center"}>Asset Tag QR Code</Modal.Header>
             <Modal.Footer>
               <VStack flex={1} alignItems={'center'} space={5}>
-                <QRCode value={assTag}/>
-                <Text>{assTag}</Text>
+                <QRCode value={formData.tag == "" ? ("NoTagGiven"):(formData.tag)}/>
+                <Text>{formData.tag}</Text>
                 <Button style={{backgroundColor:'grey'}} onPress={() => {
+                onFinish();
                 setShowModal(false);
-                props.navigation.navigate("ATHome",{WoID:WoID});
               }}>
                   PRINT TAG
                 </Button>
