@@ -94,17 +94,17 @@ function AssetHome(props) {
 
   // const parentNavigator= props.navigation.getParent();
   // console.log(parentNavigator.getState())
-  const { WoID } = props.route.params;
+  const { WoID, wo } = props.route.params;
   // console.log(WoID);
 
   const getAssets = async (WoID) => {
-    await axios
-    .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/assets", {params: {WoID: WoID}})
+    await axios({
+      method: 'get',
+      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets"})
     .then((res) => {
-      console.log(res.data.data);
-      setAsset([...assetList,...res.data.data])
-      // setWO(res.data.data);
-      // console.log(cwo)
+      console.log(res.data.message);
+      setAsset([...assetList,...res.data.message])
+
     })
     .catch((err) => {
       console.log(err);
@@ -120,7 +120,7 @@ function AssetHome(props) {
       <Fab
         colorScheme={"lightBlue"}
         renderInPortal={false}
-        onPress={() => props.navigation.navigate("PhotoScreen", {WoID: WoID})}
+        onPress={() => props.navigation.navigate("PhotoScreen", {WoID: WoID, wo: wo})}
         icon={<AddIcon />}
         label={"Add Asset"}
       />
@@ -142,10 +142,10 @@ function AssetHome(props) {
               WO#: {WoID}
             </Text>
             <Text style={{ color: "#99879D", fontWeight: "normal" }}>
-              Type: Asset Tagging
+              Type: {wo.type}
             </Text>
             <Text style={{ color: "#99879D", fontWeight: "normal" }}>
-              Property: Building XYZ
+              Property: {wo.building_name}
             </Text>
           </VStack>
           <Spacer />
@@ -169,7 +169,9 @@ function AssetHome(props) {
           Assets
         </Text>
 
-        <Box rounded={15} padding={1} bgColor={"white"}>
+        <Box flex={1} rounded={15} padding={1} bgColor={"white"}>
+          {assetList.length === 0 ? (<Center flex={1}><Text color={"coolGray.500"}>No Assets to View!</Text>
+          <Text color={"coolGray.400"}>Click + Add Asset to add a new asset</Text></Center>) : (
           <ScrollView>
             <HStack justifyContent={"space-around"} flexWrap={"wrap"}>
               {assetList.map((item) => (
@@ -225,7 +227,7 @@ function AssetHome(props) {
                 </Box>
               ))}
             </HStack>
-          </ScrollView>
+          </ScrollView>)}
         </Box>
       </VStack>
     </Box>

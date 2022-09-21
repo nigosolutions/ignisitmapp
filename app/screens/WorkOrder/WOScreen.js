@@ -556,7 +556,7 @@ function WOScreen(props) {
                         selectedWo.type === "Asset Tagging"
                           ? props.navigation.navigate("AssetTagging", {
                               screen: "ATHome",
-                              params: { WoID: selectedWo.wo_id },
+                              params: { WoID: selectedWo.wo_id,wo: selectedWo },
                             })
                           : props.navigation.navigate("ITM", {
                             screen: "ITMHome",

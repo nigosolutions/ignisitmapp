@@ -52,7 +52,7 @@ function AssetTaggingPhotoScreen(props) {
     }
   };
 
-  const { WoID } = props.route.params;
+  const { WoID, wo } = props.route.params;
   // console.log(props.route.params);
 
   return (
@@ -137,7 +137,7 @@ function AssetTaggingPhotoScreen(props) {
                 </Box>
                <Button.Group alignItems="center">
                    <Button onPress={() => {setPickedImagePath("")}}>Change Photo</Button>
-                   <Button onPress={() => props.navigation.navigate("DetailScreen",{imagepath:pickedImagePath, WoID:WoID})}>Continue</Button>
+                   <Button onPress={() => props.navigation.navigate("DetailScreen",{imagepath:pickedImagePath, WoID:WoID, wo:wo})}>Continue</Button>
                 </Button.Group>
               </VStack> 
             )}

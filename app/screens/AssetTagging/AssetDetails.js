@@ -21,7 +21,7 @@ import axios from "axios";
 
 function AssetDetails(props) {
 
-  const [formData, setData] = React.useState({device:"",system:"",mfname:"",mfptno:"",spec:"",drawno:"",floorno:"",roomno:"",tag:""});
+  const [formData, setData] = React.useState({device:"",system:"",mfr_name:"",mfr_pn:"",specification:"",drawing_no:"",floor_no:"",room_no:"",asset_tag:""});
   // const [devTypes, setDevTypes] = React.useState(["Dev1", "Dev2", "Dev3", "Dev4"])
   // const [systems, setSystems] = React.useState(["Sys1", "Sys2", "Sys3", "Sys4"])
   const [devTypes, setDevTypes] = React.useState([]);
@@ -30,7 +30,7 @@ function AssetDetails(props) {
   // const [assTag, setAssTag] = React.useState();
   // const { navigation } = props
   // const imagepath = navigation.getParam('imagepath',"../../assets/logo.png")
-  const {imagepath, WoID} = props.route.params;
+  const {imagepath, WoID, wo} = props.route.params;
   // console.log(WoID)
  
 
@@ -93,22 +93,7 @@ function AssetDetails(props) {
 		// 		setAPLoading(false);
 		// 	});
 
-    await axios({
-      method: 'post',
-      url: "https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/addAsset",
-      data: {
-        formData: 'formdata',
-        assetTag: 'assettag',
-        image: 'image'
-      }
-    })
-    .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
+    
 
     // console.log(assTag);
     console.log(formData);
@@ -118,14 +103,18 @@ function AssetDetails(props) {
       url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
       data: {
         formData: formData,
-        image: imagepath
+        otherData: { 
+          image: "imagepath",
+          building_id: wo.building_id,
+          wo_id: wo.wo_id
       }
+    }
     })
     .then((res) => {
       console.log(res.status);
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response.data);
     });
 
 	};
@@ -139,7 +128,7 @@ function AssetDetails(props) {
 
     //Updating formData with tag value
     // setAssTag(tag);
-    setData({...formData,tag: tag})
+    setData({...formData,asset_tag: tag})
 
     //Adding asset tag and imagepath to formData
     // let temp = {assetTag: tag,image: imagepath}
@@ -170,6 +159,7 @@ function AssetDetails(props) {
 
   React.useEffect(async () => {
     getDeviceData();
+    // console.log(wo);
   },[]);
 
   return (
@@ -199,20 +189,20 @@ function AssetDetails(props) {
                 </Select>
 
                 <FormControl.Label>Manufacturer Name</FormControl.Label>
-                <Input mb={2} placeholder="Enter the manufacturer name" onChangeText={value => setData({...formData,mfname: value})}/>
+                <Input mb={2} placeholder="Enter the manufacturer name" onChangeText={value => setData({...formData,mfr_name: value})}/>
                 <FormControl.Label>Manufacturer P/N</FormControl.Label>
-                <Input mb={2} placeholder="Enter the manufacturer P/N" onChangeText={value => setData({...formData,mfptno: value})}/>
+                <Input mb={2} placeholder="Enter the manufacturer P/N" onChangeText={value => setData({...formData,mfr_pn: value})}/>
                 <FormControl.Label>Specification</FormControl.Label>
-                <Input mb={2} placeholder="Enter the specification" onChangeText={value => setData({...formData,spec: value})}/>
+                <Input mb={2} placeholder="Enter the specification" onChangeText={value => setData({...formData,specification: value})}/>
                 <FormControl.Label>Drawing No.</FormControl.Label>
-                <Input mb={2} placeholder="Enter the drawing no." onChangeText={value => setData({...formData,drawno: value})}/>
+                <Input mb={2} placeholder="Enter the drawing no." onChangeText={value => setData({...formData,drawing_no: value})}/>
                 <FormControl.Label>Floor No.</FormControl.Label>
-                <Input mb={2} placeholder="Enter the floor no." onChangeText={value => setData({...formData,floorno: value})}/>
+                <Input mb={2} placeholder="Enter the floor no." onChangeText={value => setData({...formData,floor_no: value})}/>
                 <FormControl.Label>Room No.</FormControl.Label>
-                <Input mb={2} placeholder="Enter the room no." onChangeText={value => setData({...formData,roomno: value})}/>
+                <Input mb={2} placeholder="Enter the room no." onChangeText={value => setData({...formData,room_no: value})}/>
                 <FormControl.Label>Tag</FormControl.Label>
                 <HStack alignItems={"center"} flex={1} space={2}>
-                <Input value={formData.tag} flex={2} placeholder="Enter tag no. or generate new" onChangeText={value => setData({...formData,tag: value})}/>
+                <Input value={formData.asset_tag} flex={2} placeholder="Enter tag no. or generate new" onChangeText={value => setData({...formData,asset_tag: value})}/>
                 <Button size={"sm"} flex={1} onPress={generateTag}>Generate</Button>
                 </HStack>
               </FormControl>
@@ -245,8 +235,8 @@ function AssetDetails(props) {
             <Modal.Header alignItems={"center"}>Asset Tag QR Code</Modal.Header>
             <Modal.Footer>
               <VStack flex={1} alignItems={'center'} space={5}>
-                <QRCode value={formData.tag == "" ? ("NoTagGiven"):(formData.tag)}/>
-                <Text>{formData.tag}</Text>
+                <QRCode value={formData.asset_tag == "" ? ("NoTagGiven"):(formData.asset_tag)}/>
+                <Text>{formData.asset_tag}</Text>
                 <Button style={{backgroundColor:'grey'}} onPress={() => {
                 onFinish();
                 setShowModal(false);
