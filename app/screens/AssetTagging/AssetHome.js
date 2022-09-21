@@ -90,7 +90,7 @@ function AssetHome(props) {
     // console.log("Final Data: ", user);
   }, []);
 
-  const [assetList, setAsset] = React.useState([])
+  const [assetList, setAsset] = React.useState([]);
 
   // const parentNavigator= props.navigation.getParent();
   // console.log(parentNavigator.getState())
@@ -99,20 +99,20 @@ function AssetHome(props) {
 
   const getAssets = async (WoID) => {
     await axios({
-      method: 'get',
-      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets"})
-    .then((res) => {
-      console.log(res.data.message);
-      setAsset([...assetList,...res.data.message])
-
+      method: "get",
+      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
     })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+      .then((res) => {
+        console.log(res.data.message);
+        setAsset([...assetList, ...res.data.message]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   React.useEffect(async () => {
-     getAssets(WoID);
+    getAssets(WoID);
   }, []);
 
   return (
@@ -120,7 +120,9 @@ function AssetHome(props) {
       <Fab
         colorScheme={"lightBlue"}
         renderInPortal={false}
-        onPress={() => props.navigation.navigate("PhotoScreen", {WoID: WoID, wo: wo})}
+        onPress={() =>
+          props.navigation.navigate("PhotoScreen", { WoID: WoID, wo: wo })
+        }
         icon={<AddIcon />}
         label={"Add Asset"}
       />
@@ -170,64 +172,73 @@ function AssetHome(props) {
         </Text>
 
         <Box flex={1} rounded={15} padding={1} bgColor={"white"}>
-          {assetList.length === 0 ? (<Center flex={1}><Text color={"coolGray.500"}>No Assets to View!</Text>
-          <Text color={"coolGray.400"}>Click + Add Asset to add a new asset</Text></Center>) : (
-          <ScrollView>
-            <HStack justifyContent={"space-around"} flexWrap={"wrap"}>
-              {assetList.map((item) => (
-                <Box padding={3}>
-                  <Box padding={4} rounded={10} bgColor={"coolGray.100"}>
-                    <HStack alignItems={"center"} space={5}>
-                      <Avatar
+          {assetList.length === 0 ? (
+            <Center flex={1}>
+              <Text color={"coolGray.500"}>No Assets to View!</Text>
+              <Text color={"coolGray.400"}>
+                Click + Add Asset to add a new asset
+              </Text>
+            </Center>
+          ) : (
+            <ScrollView>
+              <HStack justifyContent={"center"} flexWrap={"wrap"}>
+                {assetList.map((item) => (
+                  <Box padding={3}>
+                    <Box padding={4} rounded={10} bgColor={"coolGray.100"}>
+                      <HStack alignItems={"center"} space={5}>
+                        {/* <Avatar
                         bg="green.500"
                         source={{
                           uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
                         }}
-                      />
-                      <VStack>
-                        <Text>
-                          <Text bold>Device: </Text>
-                          <Text>{item.name}</Text>
-                        </Text>
+                      /> */}
+                        <VStack>
+                          <Text>
+                            <Text bold>Device: </Text>
+                            <Text>{item.device}</Text>
+                          </Text>
 
-                        <Text>
-                          <Text bold>Location: </Text>
-                          <Text>{item.location}</Text>
-                        </Text>
+                          <Text>
+                            <Text bold>Location: </Text>
+                            <Text>
+                              Floor {item.floor_no}, Room {item.room_no}
+                            </Text>
+                          </Text>
 
-                        <Text>
-                          <Text bold>Tag: </Text>
-                          <Text>{item.Tag}</Text>
-                        </Text>
-                        <Spacer />
-                      </VStack>
-                      <Menu
-                        w="190"
-                        trigger={(triggerProps) => {
-                          return (
-                            <Pressable
-                              accessibilityLabel="More options menu"
-                              {...triggerProps}
-                            >
-                              <Icon
-                                size={4}
-                                as={
-                                  <MaterialCommunityIcons name="dots-vertical" />
-                                }
-                              />
-                            </Pressable>
-                          );
-                        }}
-                      >
-                        <Menu.Item>Edit</Menu.Item>
-                        <Menu.Item>Delete</Menu.Item>
-                      </Menu>
-                    </HStack>
+                          <Text>
+                            <Text bold>Tag: </Text>
+                            <Text>{item.asset_tag}</Text>
+                          </Text>
+                          <Spacer />
+                        </VStack>
+                        <Menu
+                          w="190"
+                          trigger={(triggerProps) => {
+                            return (
+                              <Pressable
+                                accessibilityLabel="More options menu"
+                                {...triggerProps}
+                              >
+                                <Icon
+                                  size={4}
+                                  as={
+                                    <MaterialCommunityIcons name="dots-vertical" />
+                                  }
+                                />
+                              </Pressable>
+                            );
+                          }}
+                        >
+                          <Menu.Item>Edit</Menu.Item>
+                          <Menu.Item>Delete</Menu.Item>
+                        </Menu>
+                      </HStack>
+                    </Box>
                   </Box>
-                </Box>
-              ))}
-            </HStack>
-          </ScrollView>)}
+                ))}
+              </HStack>
+            </ScrollView>
+          )}
         </Box>
       </VStack>
     </Box>
