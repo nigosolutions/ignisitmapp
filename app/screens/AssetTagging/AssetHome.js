@@ -28,63 +28,6 @@ import axios from "axios";
 import { set } from "react-native-reanimated";
 
 function AssetHome(props) {
-  // const [assetList, setAsset] = React.useState([
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  //   {
-  //     name: "Smoke Detector",
-  //     mfr: "Ignis",
-  //     location: "Floor 1, Room 102",
-  //     Tag: "SD1102",
-  //   },
-  // ]);
-
   React.useEffect(async () => {
     let user = await getUser();
     // console.log("Final Data: ", user);
