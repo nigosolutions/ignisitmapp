@@ -68,8 +68,6 @@ var styles = StyleSheet.create({
   },
 });
 
-
-
 function WOScreen(props) {
   // const [status, setStatus] = React.useState(0);
   const [selectedWo, setselectedWo] = React.useState(0);
@@ -77,165 +75,6 @@ function WOScreen(props) {
   const [pwo, setPWO] = React.useState([]);
   const [cwo, setCWO] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-
-
-  // React.useEffect(() => {
-  //   setWO([
-  //     {
-  //       name: "Asset tagging",
-  //       type: "Asset Tagging",
-  //       id: "AT3224",
-  //       details: "Details of Asset tagging",
-  //       date: "10 Jan",
-  //       building: {
-  //         name: "Building 1",
-  //         location: { address: "XYZ street", coords: [25.2854, 51.531] },
-  //       },
-  //       status: "pending",
-  //     },
-  //     {
-  //       name: "Asset tagging",
-  //       type: "Asset Tagging",
-  //       id: 2,
-  //       details: "Details of Asset tagging",
-  //       date: "11 Jan",
-  //       building: {
-  //         name: "Building 2",
-  //         location: { address: "XYZ street", coords: [25, 55] },
-  //       },
-  //       status: "pending",
-  //     },
-  //     {
-  //       name: "Asset tagging",
-  //       type: "Asset Tagging",
-  //       id: 3,
-  //       details: "Details of Asset tagging",
-  //       date: "12 Jan",
-  //       building: {
-  //         name: "Building 3",
-  //         location: { address: "XYZ street", coords: [24.9909, 51.5493] },
-  //       },
-  //       status: "pending",
-  //     },
-  //     {
-  //       name: "ITM Work Order",
-  //       type: "ITM",
-  //       details: "Details of Asset tagging",
-  //       date: "12 Jan",
-  //       building: {
-  //         name: "Building 3",
-  //         location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-  //       },
-  //       status: "pending",
-  //     },
-  //     {
-  //       name: "ITM Work Order",
-  //       type: "ITM",
-  //       id: 5,
-  //       details: "Details of Asset tagging",
-  //       date: "12 Jan",
-  //       building: {
-  //         name: "Building 3",
-  //         location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-  //       },
-  //       status: "pending",
-  //     },
-  //   ]);
-  // }, []);
-
-
-
-  // const pendingWO = [
-  //   {
-  //     name: "Asset tagging",
-  //     type: "Asset Tagging",
-  //     id: "AT3224",
-  //     details: "Details of Asset tagging",
-  //     date: "10 Jan",
-  //     building: {
-  //       name: "Building 1",
-  //       location: { address: "XYZ street", coords: [25.2854, 51.531] },
-  //     },
-  //     status: "pending",
-  //   },
-  //   {
-  //     name: "Asset tagging",
-  //     type: "Asset Tagging",
-  //     id: 2,
-  //     details: "Details of Asset tagging",
-  //     date: "11 Jan",
-  //     building: {
-  //       name: "Building 2",
-  //       location: { address: "XYZ street", coords: [25, 55] },
-  //     },
-  //     status: "pending",
-  //   },
-  //   {
-  //     name: "Asset tagging",
-  //     type: "Asset Tagging",
-  //     id: 3,
-  //     details: "Details of Asset tagging",
-  //     date: "12 Jan",
-  //     building: {
-  //       name: "Building 3",
-  //       location: { address: "XYZ street", coords: [24.9909, 51.5493] },
-  //     },
-  //     status: "pending",
-  //   },
-  //   {
-  //     name: "ITM Work Order",
-  //     type: "ITM",
-  //     id: 4,
-  //     details: "Details of Asset tagging",
-  //     date: "12 Jan",
-  //     building: {
-  //       name: "Building 3",
-  //       location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-  //     },
-  //     status: "pending",
-  //   },
-  //   {
-  //     name: "ITM Work Order",
-  //     type: "ITM",
-  //     id: 5,
-  //     details: "Details of Asset tagging",
-  //     date: "12 Jan",
-  //     building: {
-  //       name: "Building 3",
-  //       location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-  //     },
-  //     status: "pending",
-  //   },
-  // ];
-
-  // const completedWO = [
-  //   {
-  //     name: "Asset tagging",
-  //     type: "Asset Tagging",
-  //     id: 3,
-  //     details: "Details of Asset tagging",
-  //     date: "12 Jan",
-  //     building: {
-  //       name: "Building 3",
-  //       location: { address: "XYZ street", coords: [24.9909, 51.5493] },
-  //     },
-  //     status: "completed",
-  //   },
-  //   {
-  //     name: "Asset tagging",
-  //     type: "Asset Tagging",
-  //     id: 5,
-  //     details: "Details of Asset tagging",
-  //     date: "12 Jan",
-  //     building: {
-  //       name: "Building 3",
-  //       location: { address: "XYZ street", coords: [25.1659, 51.5976] },
-  //     },
-  //     status: "completed",
-  //   },
-  // ];
-
-
 
   const getWO = async (stat) => {
     // await axios
@@ -255,23 +94,24 @@ function WOScreen(props) {
     // });
     setLoading(true);
     await axios
-    .get("https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders", {params: {status: stat}})
-    .then((res) => {
-      if (stat == "Pending") {
-        setPWO([...pwo,...res.data.message]);
-        // setPWO(Set([...pwo,...res.data.message]));
-        // setWO(new Set([...wo,...res.data.message]));
-      } else {
-        setCWO([...cwo,...res.data.message]);
-      }
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-
-  
+      .get(
+        "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders",
+        { params: { status: stat } }
+      )
+      .then((res) => {
+        if (stat == "Pending") {
+          setPWO([...pwo, ...res.data.message]);
+          // setPWO(Set([...pwo,...res.data.message]));
+          // setWO(new Set([...wo,...res.data.message]));
+        } else {
+          setCWO([...cwo, ...res.data.message]);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   React.useEffect(async () => {
     getWO("Completed");
@@ -290,72 +130,75 @@ function WOScreen(props) {
         lightTheme
       />
 
-      {loading === true ? (<Center flex={1}>
-        <Spinner size="lg"/>
-      </Center>) : (
-      <FlatList
-        data={pwo}
-        renderItem={({ item }) => {
-          const color = item.wo_id === selectedWo.wo_id ? "#ebf2ff" : "#e5e5e5";
-          return (
-            <Pressable
-              onPress={() => {
-                setselectedWo(item);
-              }}
-            >
-              <Box
-                backgroundColor={color}
-                borderRadius={10}
-                padding={2}
-                margin={2}
+      {loading === true ? (
+        <Center flex={1}>
+          <Spinner size="lg" />
+        </Center>
+      ) : (
+        <FlatList
+          data={pwo}
+          renderItem={({ item }) => {
+            const color =
+              item.wo_id === selectedWo.wo_id ? "coolGray.200" : "coolGray.100";
+            return (
+              <Pressable
+                onPress={() => {
+                  setselectedWo(item);
+                }}
               >
-                <HStack space={[2, 3]} justifyContent="space-between">
-                  <VStack alignItems={"center"}>
-                    <Icon
-                      size={40}
-                      name="pending"
-                      type="material"
-                      color="grey"
-                    />
-                    <Text fontSize={10}>{item.status}</Text>
-                  </VStack>
+                <Box
+                  backgroundColor={color}
+                  borderRadius={10}
+                  padding={2}
+                  margin={2}
+                >
+                  <HStack space={[2, 3]} justifyContent="space-between">
+                    <VStack alignItems={"center"}>
+                      <Icon
+                        size={40}
+                        name="pending"
+                        type="material"
+                        color="grey"
+                      />
+                      <Text fontSize={10}>{item.status}</Text>
+                    </VStack>
 
-                  <VStack justifyContent={"center"}>
+                    <VStack justifyContent={"center"}>
+                      <Text
+                        _dark={{
+                          color: "warmGray.50",
+                        }}
+                        style={styles.title}
+                      >
+                        {item.type}
+                      </Text>
+                      <Text
+                        _dark={{
+                          color: "warmGray.200",
+                        }}
+                        style={styles.subtext}
+                      >
+                        {item.full_id}
+                      </Text>
+                    </VStack>
+                    <Spacer />
                     <Text
+                      fontSize="xs"
                       _dark={{
                         color: "warmGray.50",
                       }}
-                      style={styles.title}
+                      color="coolGray.800"
+                      alignSelf="center"
                     >
-                      {item.type}
+                      {new Date(item.date).toDateString()}
                     </Text>
-                    <Text
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                      style={styles.subtext}
-                    >
-                      {item.full_id}
-                    </Text>
-                  </VStack>
-                  <Spacer />
-                  <Text
-                    fontSize="xs"
-                    _dark={{
-                      color: "warmGray.50",
-                    }}
-                    color="coolGray.800"
-                    alignSelf="center"
-                  >
-                    {new Date(item.date).toDateString()}
-                  </Text>
-                </HStack>
-              </Box>
-            </Pressable>
-          );
-        }}
-        keyExtractor={(item) => item.wo_id}
-      />
+                  </HStack>
+                </Box>
+              </Pressable>
+            );
+          }}
+          keyExtractor={(item) => item.wo_id}
+        />
       )}
       {/* <ScrollView>
         <VStack space={3} padding={3}>
@@ -401,68 +244,76 @@ function WOScreen(props) {
         lightTheme
       />
 
-      {loading === true ? (<Center flex={1}>
-        <Spinner size="lg"/>
-      </Center>) : (
-      <FlatList
-        data={cwo}
-        renderItem={({ item }) => {
-          const color = item.wo_id === selectedWo.wo_id ? "#ebf2ff" : "#e5e5e5";
-          return (
-            <Pressable
-              onPress={() => {
-                setselectedWo(item);
-              }}
-            >
-              <Box
-                backgroundColor={color}
-                borderRadius={10}
-                padding={2}
-                margin={2}
+      {loading === true ? (
+        <Center flex={1}>
+          <Spinner size="lg" />
+        </Center>
+      ) : (
+        <FlatList
+          data={cwo}
+          renderItem={({ item }) => {
+            const color =
+              item.wo_id === selectedWo.wo_id ? "coolGray.200" : "coolGray.100";
+            return (
+              <Pressable
+                onPress={() => {
+                  setselectedWo(item);
+                }}
               >
-                <HStack space={[2, 3]} justifyContent="space-between">
-                  <VStack alignItems={"center"}>
-                    <Icon size={40} name="done" type="material" color="grey" />
-                    <Text fontSize={10}>Completed</Text>
-                  </VStack>
+                <Box
+                  backgroundColor={color}
+                  borderRadius={10}
+                  padding={2}
+                  margin={2}
+                >
+                  <HStack space={[2, 3]} justifyContent="space-between">
+                    <VStack alignItems={"center"}>
+                      <Icon
+                        size={40}
+                        name="done"
+                        type="material"
+                        color="grey"
+                      />
+                      <Text fontSize={10}>Completed</Text>
+                    </VStack>
 
-                  <VStack justifyContent={"center"}>
+                    <VStack justifyContent={"center"}>
+                      <Text
+                        _dark={{
+                          color: "warmGray.50",
+                        }}
+                        style={styles.title}
+                      >
+                        {item.type}
+                      </Text>
+                      <Text
+                        _dark={{
+                          color: "warmGray.200",
+                        }}
+                        style={styles.subtext}
+                      >
+                        {item.full_id}
+                      </Text>
+                    </VStack>
+                    <Spacer />
                     <Text
+                      fontSize="xs"
                       _dark={{
                         color: "warmGray.50",
                       }}
-                      style={styles.title}
+                      color="coolGray.800"
+                      alignSelf="center"
                     >
-                      {item.type}
+                      {new Date(item.date).toDateString()}
                     </Text>
-                    <Text
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                      style={styles.subtext}
-                    >
-                      {item.full_id}
-                    </Text>
-                  </VStack>
-                  <Spacer />
-                  <Text
-                    fontSize="xs"
-                    _dark={{
-                      color: "warmGray.50",
-                    }}
-                    color="coolGray.800"
-                    alignSelf="center"
-                  >
-                    {new Date(item.date).toDateString()}
-                  </Text>
-                </HStack>
-              </Box>
-            </Pressable>
-          );
-        }}
-        keyExtractor={(item) => item.wo_id}
-        // extraData={selectedWo}
-      />
+                  </HStack>
+                </Box>
+              </Pressable>
+            );
+          }}
+          keyExtractor={(item) => item.wo_id}
+          // extraData={selectedWo}
+        />
       )}
     </Box>
   );
@@ -571,12 +422,15 @@ function WOScreen(props) {
                         selectedWo.type === "Asset Tagging"
                           ? props.navigation.navigate("AssetTagging", {
                               screen: "ATHome",
-                              params: { WoID: selectedWo.wo_id,wo: selectedWo },
+                              params: {
+                                WoID: selectedWo.wo_id,
+                                wo: selectedWo,
+                              },
                             })
                           : props.navigation.navigate("ITM", {
-                            screen: "ITMHome",
-                            params: { WoID: selectedWo.wo_id },
-                          });
+                              screen: "ITMHome",
+                              params: { WoID: selectedWo.wo_id },
+                            });
                       }}
                     >
                       {selectedWo.status === "Pending" ? "Continue" : "View"}

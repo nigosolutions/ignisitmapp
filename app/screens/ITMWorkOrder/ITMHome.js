@@ -1,12 +1,12 @@
 import { FAB, SearchBar } from "@rneui/themed";
 import {
+  Badge,
   Box,
   Button,
-  CheckIcon,
+  ChevronRightIcon,
   Divider,
-  FormControl,
+  FlatList,
   HStack,
-  Input,
   Modal,
   Progress,
   ScrollView,
@@ -14,13 +14,13 @@ import {
   Spacer,
   Text,
   VStack,
-  WarningOutlineIcon,
 } from "native-base";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import React from "react";
 import { getUser } from "../../auth/auth";
-import { TabBar } from "react-native-tab-view";
+
 import Requests from "./Requests";
+import { useWindowDimensions } from "react-native";
 
 function ITMHome(props) {
   const [showModal, setShowModal] = React.useState(false);
@@ -89,6 +89,84 @@ function ITMHome(props) {
   const { WoID } = props.route.params;
   // console.log(props.route.params)
 
+  const FirstRoute = () => (
+    <Box padding={3}>
+      <FlatList
+        data={assetLists}
+        renderItem={({ item }) => {
+          return (
+            <Box paddingY={1.5}>
+              <Box
+                shadow={"0"}
+                padding={3}
+                rounded={10}
+                bgColor={"coolGray.50"}
+              >
+                <HStack alignItems={"center"} space={5}>
+                  <VStack>
+                    <Text>
+                      <Text bold>{item.name}</Text>
+                    </Text>
+
+                    <Text>
+                      <Text bold>Location: </Text>
+                      <Text>{item.location}</Text>
+                    </Text>
+
+                    <Text>
+                      <Text bold>Tag: </Text>
+                      <Text>{item.Tag}</Text>
+                    </Text>
+                    <Spacer />
+                  </VStack>
+                  <Spacer />
+                  <HStack space={2}>
+                    <Badge variant="outline">Inspection</Badge>
+                    <Badge variant="outline">Testing</Badge>
+                    <Badge variant="outline">Maintenance</Badge>
+                  </HStack>
+                  <Spacer />
+                  <Button
+                    colorScheme={"lightBlue"}
+                    rightIcon={<ChevronRightIcon />}
+                    variant={"link"}
+                  >
+                    Start
+                  </Button>
+                </HStack>
+              </Box>
+            </Box>
+          );
+        }}
+        keyExtractor={(item) => item.Tag}
+      />
+    </Box>
+  );
+
+  const SecondRoute = () => FirstRoute;
+
+  const renderScene = SceneMap({
+    first: FirstRoute,
+    second: SecondRoute,
+  });
+
+  const layout = useWindowDimensions();
+
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: "first", title: "Pending" },
+    { key: "second", title: "Completed" },
+  ]);
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      activeColor={"#377dff"}
+      indicatorStyle={{ backgroundColor: "#377dff" }}
+      inactiveColor={"#8a94a6"}
+      style={{ backgroundColor: "white" }}
+      labelStyle={{ fontWeight: "bold" }}
+    />
+  );
   return (
     <Box flex={1} padding={5}>
       <VStack space={5} flex={1}>
@@ -151,83 +229,13 @@ function ITMHome(props) {
         </HStack>
 
         <Box padding={1} rounded={15} flex={1} bgColor={"white"}>
-          <VStack space={2}>
-            <HStack paddingY={1} paddingX={3} alignItems={"center"}>
-              <SearchBar
-                placeholder="Enter Search Text"
-                round
-                containerStyle={{
-                  width: 300,
-                  borderTopColor: "white",
-                  borderBottomColor: "white",
-                  backgroundColor: "white",
-                }}
-                inputContainerStyle={{
-                  height: 40,
-                  backgroundColor: "#e5e5e5",
-                }}
-                lightTheme
-              />
-
-              <Spacer />
-              <HStack space={3}>
-                <Select width={200} placeholder="Select Category">
-                  <Select.Item label="UX Research" value="ux" />
-                  <Select.Item label="Web Development" value="web" />
-                  <Select.Item
-                    label="Cross Platform Development"
-                    value="cross"
-                  />
-                  <Select.Item label="UI Designing" value="ui" />
-                  <Select.Item label="Backend Development" value="backend" />
-                </Select>
-                <Select width={200} placeholder="Select Category">
-                  <Select.Item label="UX Research" value="ux" />
-                  <Select.Item label="Web Development" value="web" />
-                  <Select.Item
-                    label="Cross Platform Development"
-                    value="cross"
-                  />
-                  <Select.Item label="UI Designing" value="ui" />
-                  <Select.Item label="Backend Development" value="backend" />
-                </Select>
-              </HStack>
-            </HStack>
-            <Divider />
-
-            <ScrollView>
-              <Box
-                justifyContent={"space-around"}
-                flexDirection={"row"}
-                flexWrap={"wrap"}
-              >
-                {assetLists.map((item) => (
-                  <Box minWidth={"25%"} padding={3}>
-                    <Box padding={4} rounded={10} bgColor={"blueGray.100"}>
-                      <HStack alignItems={"center"} space={5}>
-                        <VStack>
-                          <Text>
-                            <Text bold>{item.name}</Text>
-                          </Text>
-
-                          <Text>
-                            <Text bold>Location: </Text>
-                            <Text>{item.location}</Text>
-                          </Text>
-
-                          <Text>
-                            <Text bold>Tag: </Text>
-                            <Text>{item.Tag}</Text>
-                          </Text>
-                          <Spacer />
-                        </VStack>
-                      </HStack>
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            </ScrollView>
-          </VStack>
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            renderTabBar={renderTabBar}
+            initialLayout={{ width: layout.width }}
+          />
         </Box>
       </VStack>
     </Box>
