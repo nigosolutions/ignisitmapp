@@ -11,6 +11,8 @@ import {
   VStack,
   FlatList,
   Spacer,
+  Center,
+  Spinner,
 } from "native-base";
 import React from "react";
 import { useWindowDimensions, StyleSheet } from "react-native";
@@ -18,6 +20,7 @@ import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import axios from "axios";
+import { set } from "react-native-reanimated";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
 var styles = StyleSheet.create({
@@ -70,9 +73,10 @@ var styles = StyleSheet.create({
 function WOScreen(props) {
   // const [status, setStatus] = React.useState(0);
   const [selectedWo, setselectedWo] = React.useState(0);
-  // const [wo, setWO] = React.useState([]);
+  const [wo, setWO] = React.useState(new Set());
   const [pwo, setPWO] = React.useState([]);
   const [cwo, setCWO] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
 
   // React.useEffect(() => {
@@ -249,15 +253,18 @@ function WOScreen(props) {
     // .catch((err) => {
     //   console.log(err);
     // });
-
+    setLoading(true);
     await axios
     .get("https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders", {params: {status: stat}})
     .then((res) => {
       if (stat == "Pending") {
         setPWO([...pwo,...res.data.message]);
+        // setPWO(Set([...pwo,...res.data.message]));
+        // setWO(new Set([...wo,...res.data.message]));
       } else {
         setCWO([...cwo,...res.data.message]);
       }
+      setLoading(false);
     })
     .catch((err) => {
       console.log(err);
@@ -269,11 +276,12 @@ function WOScreen(props) {
   React.useEffect(async () => {
     getWO("Completed");
     getWO("Pending");
+    // console.log(wo);
   }, []);
 
   //Tab
   const FirstRoute = () => (
-    <Box>
+    <Box flex={1}>
       <SearchBar
         placeholder="Enter Search Text"
         round
@@ -282,6 +290,9 @@ function WOScreen(props) {
         lightTheme
       />
 
+      {loading === true ? (<Center flex={1}>
+        <Spinner size="lg"/>
+      </Center>) : (
       <FlatList
         data={pwo}
         renderItem={({ item }) => {
@@ -345,7 +356,7 @@ function WOScreen(props) {
         }}
         keyExtractor={(item) => item.wo_id}
       />
-
+      )}
       {/* <ScrollView>
         <VStack space={3} padding={3}>
           {wo.map((item) =>
@@ -390,6 +401,9 @@ function WOScreen(props) {
         lightTheme
       />
 
+      {loading === true ? (<Center flex={1}>
+        <Spinner size="lg"/>
+      </Center>) : (
       <FlatList
         data={cwo}
         renderItem={({ item }) => {
@@ -449,6 +463,7 @@ function WOScreen(props) {
         keyExtractor={(item) => item.wo_id}
         // extraData={selectedWo}
       />
+      )}
     </Box>
   );
 

@@ -310,8 +310,8 @@ function AssetDetails(props) {
                 <Button
                   style={{ backgroundColor: "grey" }}
                   onPress={() => {
-                    onFinish();
-                    setShowModal(false);
+                    // onFinish();
+                    // setShowModal(false);
                   }}
                 >
                   PRINT TAG
@@ -319,6 +319,7 @@ function AssetDetails(props) {
                 <Button
                   style={{ backgroundColor: "black" }}
                   onPress={() => {
+                    onFinish();
                     setShowModal(false);
                     props.navigation.navigate("ATHome", {
                       WoID: WoID,
