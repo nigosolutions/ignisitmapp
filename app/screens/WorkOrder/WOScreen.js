@@ -13,6 +13,8 @@ import {
   Spacer,
   Center,
   Spinner,
+  Divider,
+  ChevronRightIcon,
 } from "native-base";
 import React from "react";
 import { useWindowDimensions, StyleSheet } from "react-native";
@@ -100,11 +102,9 @@ function WOScreen(props) {
       )
       .then((res) => {
         if (stat == "Pending") {
-          setPWO([...pwo, ...res.data.message]);
-          // setPWO(Set([...pwo,...res.data.message]));
-          // setWO(new Set([...wo,...res.data.message]));
+          setPWO(res.data.message);
         } else {
-          setCWO([...cwo, ...res.data.message]);
+          setCWO(res.data.message);
         }
         setLoading(false);
       })
@@ -125,8 +125,13 @@ function WOScreen(props) {
       <SearchBar
         placeholder="Enter Search Text"
         round
-        containerStyle={{ backgroundColor: "white" }}
-        inputContainerStyle={{ backgroundColor: "#e5e5e5" }}
+        containerStyle={{
+          backgroundColor: "white",
+          borderBottomColor: "white",
+        }}
+        inputContainerStyle={{
+          backgroundColor: "#f7f7f8",
+        }}
         lightTheme
       />
 
@@ -139,7 +144,7 @@ function WOScreen(props) {
           data={pwo}
           renderItem={({ item }) => {
             const color =
-              item.wo_id === selectedWo.wo_id ? "coolGray.200" : "coolGray.100";
+              item.wo_id === selectedWo.wo_id ? "lightBlue.200" : "blueGray.50";
             return (
               <Pressable
                 onPress={() => {
@@ -200,37 +205,6 @@ function WOScreen(props) {
           keyExtractor={(item) => item.wo_id}
         />
       )}
-      {/* <ScrollView>
-        <VStack space={3} padding={3}>
-          {wo.map((item) =>
-            item.status != "completed" ? (
-              <ListItem
-                containerStyle={
-                  item === selectedWo ? styles.selectedLC : styles.listContainer
-                }
-                onPress={() => {
-                  setselectedWo(item);
-                }}
-              >
-                <VStack alignItems={"center"}>
-                  <Icon size={40} name="pending" type="material" color="grey" />
-                  <Text fontSize={10}>Pending</Text>
-                </VStack>
-                <ListItem.Content>
-                  <ListItem.Title style={styles.title}>
-                    {item.name}
-                  </ListItem.Title>
-                  <ListItem.Subtitle style={styles.subtitleView}>
-                    {"WO: "}
-                    {item.id}
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-                <Text>{item.date}</Text>
-              </ListItem>
-            ) : null
-          )}
-        </VStack>
-      </ScrollView> */}
     </Box>
   );
 
@@ -239,8 +213,11 @@ function WOScreen(props) {
       <SearchBar
         placeholder="Enter Search Text"
         round
-        containerStyle={{ backgroundColor: "white" }}
-        inputContainerStyle={{ backgroundColor: "#e5e5e5" }}
+        containerStyle={{
+          backgroundColor: "white",
+          borderBottomColor: "white",
+        }}
+        inputContainerStyle={{ backgroundColor: "#f7f7f8" }}
         lightTheme
       />
 
@@ -253,7 +230,7 @@ function WOScreen(props) {
           data={cwo}
           renderItem={({ item }) => {
             const color =
-              item.wo_id === selectedWo.wo_id ? "coolGray.200" : "coolGray.100";
+              item.wo_id === selectedWo.wo_id ? "lightBlue.200" : "blueGray.50";
             return (
               <Pressable
                 onPress={() => {
@@ -334,8 +311,8 @@ function WOScreen(props) {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
-      activeColor={"#4e5d78"}
-      indicatorStyle={{ backgroundColor: "#FF7D00" }}
+      activeColor={"#377dff"}
+      indicatorStyle={{ backgroundColor: "#377dff" }}
       inactiveColor={"#8a94a6"}
       style={{ backgroundColor: "white" }}
       labelStyle={{ fontWeight: "bold" }}
@@ -347,12 +324,7 @@ function WOScreen(props) {
     <Box padding={3} bgColor={"#E5E5E5"} flex={1}>
       <Box padding={2} rounded={15} bgColor={"white"} flex={1}>
         <HStack flex={1}>
-          <Box
-            bgColor={"white"}
-            flex={1}
-            borderRightWidth={1}
-            borderColor={"#e5e5e5"}
-          >
+          <Box bgColor={"white"} flex={1}>
             <VStack flex={1}>
               <TabView
                 navigationState={{ index, routes }}
@@ -373,69 +345,76 @@ function WOScreen(props) {
                 </Box>
               ) : (
                 <>
-                  <VStack borderBottomWidth={1} borderColor={"#e5e5e5"}>
-                    <Text style={styles.desc_title}>{selectedWo.type}</Text>
-                    <Text style={styles.subtext}>WO#: {selectedWo.wo_id}</Text>
-                  </VStack>
-                  <ScrollView>
-                    <Text style={styles.desc_title}>Details:</Text>
-                    <Text></Text>
-                    <Text>{selectedWo.details}</Text>
-                    <Text>{selectedWo.building_name}</Text>
-                    <Text></Text>
-                    <Text style={styles.desc_title}>Location:</Text>
-                    <Text></Text>
-                    <Text>{selectedWo.building_area}</Text>
-                    <Text></Text>
-                    <Box flex={1} alignItems={"center"}>
-                      <MapView
-                        width={"75%"}
-                        height={300}
-                        region={{
-                          latitude: selectedWo.building_loc[0],
-                          longitude: selectedWo.building_loc[1],
-                          latitudeDelta: 0.0922,
-                          longitudeDelta: 0.0421,
+                  <HStack bgColor={"blueGray.100"} rounded={10} padding={3}>
+                    <VStack space={2}>
+                      <Text style={styles.desc_title}>{selectedWo.type}</Text>
+                      <Text style={styles.subtext}>
+                        WO#: {selectedWo.wo_id}
+                      </Text>
+                    </VStack>
+                    <Spacer />
+                    <Box justifyContent={"center"}>
+                      <Button
+                        rightIcon={<ChevronRightIcon />}
+                        colorScheme={"lightBlue"}
+                        onPress={() => {
+                          // setselectedWo(0);
+                          selectedWo.type === "Asset Tagging"
+                            ? props.navigation.navigate("AssetTagging", {
+                                screen: "ATHome",
+                                params: {
+                                  WoID: selectedWo.wo_id,
+                                  wo: selectedWo,
+                                },
+                              })
+                            : props.navigation.navigate("ITM", {
+                                screen: "ITMHome",
+                                params: { WoID: selectedWo.wo_id },
+                              });
                         }}
                       >
-                        <Marker
-                          coordinate={{
+                        {selectedWo.status === "Pending" ? "Continue" : "View"}
+                      </Button>
+                    </Box>
+                  </HStack>
+
+                  <ScrollView padding={3} bgColor={"blueGray.50"} rounded={10}>
+                    <HStack>
+                      <Box>
+                        <Text style={styles.desc_title}>Details:</Text>
+                        <Text></Text>
+                        <Text>{selectedWo.details}</Text>
+                        <Text>{selectedWo.building_name}</Text>
+                        <Text></Text>
+                        <Text style={styles.desc_title}>Location:</Text>
+                        <Text></Text>
+                        <Text>{selectedWo.building_area}</Text>
+                        <Text></Text>
+                      </Box>
+                      <Spacer />
+                      <Box alignItems={"center"}>
+                        <MapView
+                          width={200}
+                          height={200}
+                          region={{
                             latitude: selectedWo.building_loc[0],
                             longitude: selectedWo.building_loc[1],
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
                           }}
-                          title={selectedWo.building_name}
-                          description={selectedWo.building_area}
-                        />
-                      </MapView>
-                    </Box>
+                        >
+                          <Marker
+                            coordinate={{
+                              latitude: selectedWo.building_loc[0],
+                              longitude: selectedWo.building_loc[1],
+                            }}
+                            title={selectedWo.building_name}
+                            description={selectedWo.building_area}
+                          />
+                        </MapView>
+                      </Box>
+                    </HStack>
                   </ScrollView>
-                  <Box
-                    alignItems={"center"}
-                    borderTopColor={"#e5e5e5"}
-                    borderTopWidth={"1"}
-                    paddingTop={3}
-                  >
-                    <Button
-                      colorScheme={"lightBlue"}
-                      onPress={() => {
-                        // setselectedWo(0);
-                        selectedWo.type === "Asset Tagging"
-                          ? props.navigation.navigate("AssetTagging", {
-                              screen: "ATHome",
-                              params: {
-                                WoID: selectedWo.wo_id,
-                                wo: selectedWo,
-                              },
-                            })
-                          : props.navigation.navigate("ITM", {
-                              screen: "ITMHome",
-                              params: { WoID: selectedWo.wo_id },
-                            });
-                      }}
-                    >
-                      {selectedWo.status === "Pending" ? "Continue" : "View"}
-                    </Button>
-                  </Box>
                 </>
               )}
             </VStack>

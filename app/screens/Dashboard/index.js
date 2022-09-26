@@ -57,7 +57,7 @@ function DashboardScreen(props) {
         <VStack rounded={20} padding={3} bgColor={"#fafbfc"} space={5}>
           <Text>Overview</Text>
           <HStack justifyContent={"center"} space={3}>
-            <ListItem containerStyle={styles.listContainer} flex={"1"}>
+            <ListItem containerStyle={styles.listContainer} flex={1}>
               <Icon
                 reverse
                 name="pending-actions"
@@ -73,7 +73,7 @@ function DashboardScreen(props) {
               </VStack>
             </ListItem>
 
-            <ListItem containerStyle={styles.listContainer} flex={"1"}>
+            <ListItem containerStyle={styles.listContainer} flex={1}>
               <Icon
                 reverse
                 name="progress-clock"
@@ -89,7 +89,7 @@ function DashboardScreen(props) {
               </VStack>
             </ListItem>
 
-            <ListItem containerStyle={styles.listContainer} flex={"1"}>
+            <ListItem containerStyle={styles.listContainer} flex={1}>
               <Icon
                 reverse
                 name="done-all"

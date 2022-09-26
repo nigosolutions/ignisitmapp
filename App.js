@@ -76,6 +76,7 @@ function CustomDrawerContent(props) {
             <VStack space="3">
               {props.state.routeNames.map((name, index) => (
                 <Pressable
+                  key={index}
                   px="5"
                   py="3"
                   rounded="md"

@@ -1,4 +1,4 @@
-import { FAB } from "@rneui/themed";
+import { FAB, SearchBar } from "@rneui/themed";
 import {
   AddIcon,
   Avatar,
@@ -9,6 +9,7 @@ import {
   DeleteIcon,
   Divider,
   Fab,
+  FlatList,
   HamburgerIcon,
   HStack,
   Icon,
@@ -25,7 +26,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { getUser } from "../../auth/auth";
 import axios from "axios";
-import { set } from "react-native-reanimated";
 
 function AssetHome(props) {
   React.useEffect(async () => {
@@ -47,7 +47,7 @@ function AssetHome(props) {
     })
       .then((res) => {
         console.log(res.data.message);
-        setAsset([...assetList, ...res.data.message]);
+        setAsset(res.data.message);
       })
       .catch((err) => {
         console.log(err);
@@ -110,9 +110,26 @@ function AssetHome(props) {
             </Button>
           </VStack>
         </HStack>
-        <Text mx={3} my={3} bold fontSize={"lg"}>
-          Assets
-        </Text>
+        <HStack>
+          <Text mx={3} my={3} bold fontSize={"lg"}>
+            Assets
+          </Text>
+          <Spacer />
+          <SearchBar
+            placeholder="Enter Search Text"
+            round
+            containerStyle={{
+              width: "40%",
+              backgroundColor: "transparent",
+              borderBottomColor: "transparent",
+              borderTopColor: "transparent",
+            }}
+            inputContainerStyle={{
+              backgroundColor: "white",
+            }}
+            lightTheme
+          />
+        </HStack>
 
         <Box flex={1} rounded={15} padding={1} bgColor={"white"}>
           {assetList.length === 0 ? (
@@ -123,64 +140,52 @@ function AssetHome(props) {
               </Text>
             </Center>
           ) : (
-            <ScrollView>
-              <HStack justifyContent={"center"} flexWrap={"wrap"}>
-                {assetList.map((item) => (
-                  <Box padding={3}>
-                    <Box padding={4} rounded={10} bgColor={"coolGray.100"}>
-                      <HStack alignItems={"center"} space={5}>
-                        {/* <Avatar
-                        bg="green.500"
-                        source={{
-                          uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                        }}
-                      /> */}
-                        <VStack>
-                          <Text>
-                            <Text bold>Device: </Text>
-                            <Text>{item.device}</Text>
-                          </Text>
-
-                          <Text>
-                            <Text bold>Location: </Text>
+            <Box padding={3}>
+              <FlatList
+                data={assetList}
+                renderItem={({ item }) => {
+                  return (
+                    <Box paddingY={1.5}>
+                      <Box
+                        shadow={"0"}
+                        padding={3}
+                        rounded={10}
+                        bgColor={"coolGray.50"}
+                      >
+                        <HStack alignItems={"center"} space={5}>
+                          <VStack>
                             <Text>
-                              Floor {item.floor_no}, Room {item.room_no}
+                              <Text bold>{item.device}</Text>
                             </Text>
-                          </Text>
 
-                          <Text>
-                            <Text bold>Tag: </Text>
-                            <Text>{item.asset_tag}</Text>
-                          </Text>
+                            <Text>
+                              <Text bold>Location: </Text>
+                              <Text>{item.floor_no}</Text>
+                            </Text>
+
+                            <Text>
+                              <Text bold>Tag: </Text>
+                              <Text>{item.asset_tag}</Text>
+                            </Text>
+                            <Spacer />
+                          </VStack>
                           <Spacer />
-                        </VStack>
-                        <Menu
-                          w="190"
-                          trigger={(triggerProps) => {
-                            return (
-                              <Pressable
-                                accessibilityLabel="More options menu"
-                                {...triggerProps}
-                              >
-                                <Icon
-                                  size={4}
-                                  as={
-                                    <MaterialCommunityIcons name="dots-vertical" />
-                                  }
-                                />
-                              </Pressable>
-                            );
-                          }}
-                        >
-                          <Menu.Item>Edit</Menu.Item>
-                          <Menu.Item>Delete</Menu.Item>
-                        </Menu>
-                      </HStack>
+                          <HStack space={2}>
+                            <Button colorScheme={"coolGray"} variant={"ghost"}>
+                              Edit
+                            </Button>
+                            <Button colorScheme={"danger"} variant={"ghost"}>
+                              Delete
+                            </Button>
+                          </HStack>
+                        </HStack>
+                      </Box>
                     </Box>
-                  </Box>
-                ))}
-              </HStack>
-            </ScrollView>
+                  );
+                }}
+                keyExtractor={(item) => item.Tag}
+              />
+            </Box>
           )}
         </Box>
       </VStack>
