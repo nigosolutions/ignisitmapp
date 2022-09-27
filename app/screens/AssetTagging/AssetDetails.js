@@ -13,10 +13,12 @@ import {
   VStack,
   Image,
   Modal,
+  CheckCircleIcon,
 } from "native-base";
 import React from "react";
 import QRCode from "react-native-qrcode-svg";
 import axios from "axios";
+import Select2 from "react-select2-native";
 
 function AssetDetails(props) {
   const [formData, setData] = React.useState({
@@ -30,10 +32,11 @@ function AssetDetails(props) {
     room_no: "",
     asset_tag: "",
   });
-  // const [devTypes, setDevTypes] = React.useState(["Dev1", "Dev2", "Dev3", "Dev4"])
-  // const [systems, setSystems] = React.useState(["Sys1", "Sys2", "Sys3", "Sys4"])
+
   const [devTypes, setDevTypes] = React.useState([]);
+  const [selectdev, setselectDev] = React.useState();
   const [systems, setSystems] = React.useState([]);
+  const [selectsys, setselectSystems] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   // const [assTag, setAssTag] = React.useState();
   // const { navigation } = props
@@ -56,7 +59,7 @@ function AssetDetails(props) {
     return ret;
   };
 
-  const getDeviceData = async () => {
+  const getDeviceData = async (sys) => {
     // setLoading(true);
     // api
     //   .get("/addAsset")
@@ -76,6 +79,17 @@ function AssetDetails(props) {
       .then((res) => {
         // console.log(res.data.systems);
         setDevTypes(res.data.devTypes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getSystemData = async () => {
+    await axios
+      .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/systems")
+      .then((res) => {
+        // console.log(res.data.systems);
         setSystems(res.data.systems);
       })
       .catch((err) => {
@@ -84,22 +98,6 @@ function AssetDetails(props) {
   };
 
   const onFinish = async () => {
-    // setAALoading(true);
-    // console.log("Success:", values);
-    // api
-    // 	.post("/addAsset", { project: values })
-    // 	.then((res) => {
-    // 		console.log(res);
-    // 		alert("Asset added Successfully!");
-    // 	})
-    // 	.catch((err) => {
-    // 		message.error("Error!");
-    // 	})
-    // 	.finally(() => {
-    // 		setAPLoading(false);
-    // 	});
-
-    // console.log(assTag);
     console.log(formData);
 
     await axios({
@@ -157,9 +155,12 @@ function AssetDetails(props) {
   };
 
   React.useEffect(async () => {
-    getDeviceData();
-    // console.log(wo);
+    getSystemData();
   }, []);
+
+  React.useEffect(async () => {
+    getDeviceData(selectsys);
+  }, [selectsys]);
 
   return (
     <Box padding={5} flex={1}>
@@ -172,33 +173,43 @@ function AssetDetails(props) {
             </Text>
             <ScrollView w="100%">
               <FormControl isRequired>
-                <FormControl.Label>Device</FormControl.Label>
-                <Select
-                  mb={2}
-                  placeholder="Select the Device"
-                  onValueChange={(value) =>
-                    setData({ ...formData, device: value })
-                  }
-                >
-                  {devTypes.map((item) => (
-                    <Select.Item label={item} value={item} />
-                  ))}
-                </Select>
                 <FormControl.Label>System</FormControl.Label>
-                <Select
-                  mb={2}
-                  placeholder="Select the System"
-                  onValueChange={(value) =>
-                    setData({ ...formData, system: value })
-                  }
-                >
-                  {systems.map((item) => (
-                    <Select.Item label={item} value={item} />
-                  ))}
-                </Select>
+                <Select2
+                  value={selectsys}
+                  colorTheme={"black"}
+                  isSelectSingle
+                  style={{ borderRadius: 5 }}
+                  popupTitle="Select item"
+                  title="Select item"
+                  data={systems}
+                  onSelect={(data) => {
+                    setselectSystems(data);
+                  }}
+                  onRemoveItem={(data) => {
+                    setselectSystems(data);
+                  }}
+                />
+                <FormControl.Label>Device</FormControl.Label>
+                <Select2
+                  value={selectdev}
+                  colorTheme={"black"}
+                  isSelectSingle
+                  style={{ borderRadius: 5 }}
+                  popupTitle="Select item"
+                  title="Select item"
+                  data={devTypes}
+                  onSelect={(data) => {
+                    setselectDev(data);
+                  }}
+                  onRemoveItem={(data) => {
+                    setselectDev(data);
+                  }}
+                />
 
                 <FormControl.Label>Manufacturer Name</FormControl.Label>
                 <Input
+                  size={"lg"}
+                  minH={10}
                   mb={2}
                   placeholder="Enter the manufacturer name"
                   onChangeText={(value) =>
@@ -207,6 +218,8 @@ function AssetDetails(props) {
                 />
                 <FormControl.Label>Manufacturer P/N</FormControl.Label>
                 <Input
+                  size={"lg"}
+                  minH={10}
                   mb={2}
                   placeholder="Enter the manufacturer P/N"
                   onChangeText={(value) =>
@@ -215,6 +228,8 @@ function AssetDetails(props) {
                 />
                 <FormControl.Label>Specification</FormControl.Label>
                 <Input
+                  size={"lg"}
+                  minH={10}
                   mb={2}
                   placeholder="Enter the specification"
                   onChangeText={(value) =>
@@ -223,6 +238,8 @@ function AssetDetails(props) {
                 />
                 <FormControl.Label>Drawing No.</FormControl.Label>
                 <Input
+                  size={"lg"}
+                  minH={10}
                   mb={2}
                   placeholder="Enter the drawing no."
                   onChangeText={(value) =>
@@ -231,6 +248,8 @@ function AssetDetails(props) {
                 />
                 <FormControl.Label>Floor No.</FormControl.Label>
                 <Input
+                  size={"lg"}
+                  minH={10}
                   mb={2}
                   placeholder="Enter the floor no."
                   onChangeText={(value) =>
@@ -239,6 +258,8 @@ function AssetDetails(props) {
                 />
                 <FormControl.Label>Room No.</FormControl.Label>
                 <Input
+                  size={"lg"}
+                  minH={10}
                   mb={2}
                   placeholder="Enter the room no."
                   onChangeText={(value) =>
@@ -248,6 +269,8 @@ function AssetDetails(props) {
                 <FormControl.Label>Tag</FormControl.Label>
                 <HStack alignItems={"center"} flex={1} space={2}>
                   <Input
+                    size={"lg"}
+                    minH={10}
                     value={formData.asset_tag}
                     flex={2}
                     placeholder="Enter tag no. or generate new"
@@ -255,8 +278,12 @@ function AssetDetails(props) {
                       setData({ ...formData, asset_tag: value })
                     }
                   />
-                  <Button size={"sm"} flex={1} onPress={generateTag}>
-                    Generate
+                  <Button
+                    colorScheme={"lightBlue"}
+                    flex={1}
+                    onPress={generateTag}
+                  >
+                    Generate Tag
                   </Button>
                 </HStack>
               </FormControl>
@@ -293,7 +320,9 @@ function AssetDetails(props) {
             Cancel
           </Button>
           {/* <Button onPress={()=>{console.log(formData)}}>Submit</Button> */}
-          <Button onPress={submit}>Submit</Button>
+          <Button colorScheme={"lightBlue"} onPress={submit}>
+            Submit
+          </Button>
         </Button.Group>
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
           <Modal.Content maxWidth="300px">

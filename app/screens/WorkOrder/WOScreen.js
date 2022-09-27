@@ -2,19 +2,16 @@ import { FAB, Icon, ListItem, SearchBar } from "@rneui/themed";
 import {
   Box,
   Button,
-  Heading,
   HStack,
-  Pressable,
   ScrollView,
   Text,
-  View,
   VStack,
-  FlatList,
   Spacer,
+  ChevronRightIcon,
+  Pressable,
+  FlatList,
   Center,
   Spinner,
-  Divider,
-  ChevronRightIcon,
 } from "native-base";
 import React from "react";
 import { useWindowDimensions, StyleSheet } from "react-native";
@@ -22,7 +19,7 @@ import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import axios from "axios";
-import { set } from "react-native-reanimated";
+
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
 var styles = StyleSheet.create({
@@ -71,29 +68,113 @@ var styles = StyleSheet.create({
 });
 
 function WOScreen(props) {
-  // const [status, setStatus] = React.useState(0);
   const [selectedWo, setselectedWo] = React.useState(0);
-  const [wo, setWO] = React.useState(new Set());
   const [pwo, setPWO] = React.useState([]);
   const [cwo, setCWO] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
+  const WOComponent = (swo) => {
+    return (
+      <Box flex={1}>
+        <SearchBar
+          placeholder="Enter Search Text"
+          round
+          containerStyle={{
+            backgroundColor: "white",
+            borderBottomColor: "white",
+          }}
+          inputContainerStyle={{
+            backgroundColor: "#f7f7f8",
+          }}
+          lightTheme
+        />
+
+        {loading === true ? (
+          <Center flex={1}>
+            <Spinner size="lg" />
+          </Center>
+        ) : (
+          <FlatList
+            data={swo}
+            renderItem={({ item }) => {
+              const color =
+                item.wo_id === selectedWo.wo_id
+                  ? "lightBlue.200"
+                  : "blueGray.50";
+              return (
+                <Pressable
+                  onPress={() => {
+                    setselectedWo(item);
+                  }}
+                >
+                  <Box
+                    backgroundColor={color}
+                    borderRadius={10}
+                    padding={2}
+                    margin={2}
+                  >
+                    <HStack space={[2, 3]} justifyContent="space-between">
+                      <VStack alignItems={"center"}>
+                        {item.status === "Pending" ? (
+                          <Icon
+                            size={40}
+                            name="pending"
+                            type="material"
+                            color="grey"
+                          />
+                        ) : (
+                          <Icon
+                            size={40}
+                            name="done"
+                            type="material"
+                            color="grey"
+                          />
+                        )}
+                        <Text fontSize={10}>{item.status}</Text>
+                      </VStack>
+
+                      <VStack justifyContent={"center"}>
+                        <Text
+                          _dark={{
+                            color: "warmGray.50",
+                          }}
+                          style={styles.title}
+                        >
+                          {item.type}
+                        </Text>
+                        <Text
+                          _dark={{
+                            color: "warmGray.200",
+                          }}
+                          style={styles.subtext}
+                        >
+                          {item.full_id}
+                        </Text>
+                      </VStack>
+                      <Spacer />
+                      <Text
+                        fontSize="xs"
+                        _dark={{
+                          color: "warmGray.50",
+                        }}
+                        color="coolGray.800"
+                        alignSelf="center"
+                      >
+                        {new Date(item.date).toDateString()}
+                      </Text>
+                    </HStack>
+                  </Box>
+                </Pressable>
+              );
+            }}
+            keyExtractor={(item) => item.wo_id}
+          />
+        )}
+      </Box>
+    );
+  };
+
   const getWO = async (stat) => {
-    // await axios
-    // .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/workorders", {params: {status: stat}})
-    // .then((res) => {
-    //   // console.log(res.data.data);
-    //   if (stat == "pending") {
-    //     setPWO([...pwo,...res.data.data]);
-    //   } else {
-    //     setCWO([...cwo,...res.data.data]);
-    //   }
-    //   // setWO(res.data.data);
-    //   // console.log(cwo)
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
     setLoading(true);
     await axios
       .get(
@@ -120,180 +201,13 @@ function WOScreen(props) {
   }, []);
 
   //Tab
-  const FirstRoute = () => (
-    <Box flex={1}>
-      <SearchBar
-        placeholder="Enter Search Text"
-        round
-        containerStyle={{
-          backgroundColor: "white",
-          borderBottomColor: "white",
-        }}
-        inputContainerStyle={{
-          backgroundColor: "#f7f7f8",
-        }}
-        lightTheme
-      />
+  const FirstRoute = () => {
+    return WOComponent(pwo);
+  };
 
-      {loading === true ? (
-        <Center flex={1}>
-          <Spinner size="lg" />
-        </Center>
-      ) : (
-        <FlatList
-          data={pwo}
-          renderItem={({ item }) => {
-            const color =
-              item.wo_id === selectedWo.wo_id ? "lightBlue.200" : "blueGray.50";
-            return (
-              <Pressable
-                onPress={() => {
-                  setselectedWo(item);
-                }}
-              >
-                <Box
-                  backgroundColor={color}
-                  borderRadius={10}
-                  padding={2}
-                  margin={2}
-                >
-                  <HStack space={[2, 3]} justifyContent="space-between">
-                    <VStack alignItems={"center"}>
-                      <Icon
-                        size={40}
-                        name="pending"
-                        type="material"
-                        color="grey"
-                      />
-                      <Text fontSize={10}>{item.status}</Text>
-                    </VStack>
-
-                    <VStack justifyContent={"center"}>
-                      <Text
-                        _dark={{
-                          color: "warmGray.50",
-                        }}
-                        style={styles.title}
-                      >
-                        {item.type}
-                      </Text>
-                      <Text
-                        _dark={{
-                          color: "warmGray.200",
-                        }}
-                        style={styles.subtext}
-                      >
-                        {item.full_id}
-                      </Text>
-                    </VStack>
-                    <Spacer />
-                    <Text
-                      fontSize="xs"
-                      _dark={{
-                        color: "warmGray.50",
-                      }}
-                      color="coolGray.800"
-                      alignSelf="center"
-                    >
-                      {new Date(item.date).toDateString()}
-                    </Text>
-                  </HStack>
-                </Box>
-              </Pressable>
-            );
-          }}
-          keyExtractor={(item) => item.wo_id}
-        />
-      )}
-    </Box>
-  );
-
-  const SecondRoute = () => (
-    <Box>
-      <SearchBar
-        placeholder="Enter Search Text"
-        round
-        containerStyle={{
-          backgroundColor: "white",
-          borderBottomColor: "white",
-        }}
-        inputContainerStyle={{ backgroundColor: "#f7f7f8" }}
-        lightTheme
-      />
-
-      {loading === true ? (
-        <Center flex={1}>
-          <Spinner size="lg" />
-        </Center>
-      ) : (
-        <FlatList
-          data={cwo}
-          renderItem={({ item }) => {
-            const color =
-              item.wo_id === selectedWo.wo_id ? "lightBlue.200" : "blueGray.50";
-            return (
-              <Pressable
-                onPress={() => {
-                  setselectedWo(item);
-                }}
-              >
-                <Box
-                  backgroundColor={color}
-                  borderRadius={10}
-                  padding={2}
-                  margin={2}
-                >
-                  <HStack space={[2, 3]} justifyContent="space-between">
-                    <VStack alignItems={"center"}>
-                      <Icon
-                        size={40}
-                        name="done"
-                        type="material"
-                        color="grey"
-                      />
-                      <Text fontSize={10}>Completed</Text>
-                    </VStack>
-
-                    <VStack justifyContent={"center"}>
-                      <Text
-                        _dark={{
-                          color: "warmGray.50",
-                        }}
-                        style={styles.title}
-                      >
-                        {item.type}
-                      </Text>
-                      <Text
-                        _dark={{
-                          color: "warmGray.200",
-                        }}
-                        style={styles.subtext}
-                      >
-                        {item.full_id}
-                      </Text>
-                    </VStack>
-                    <Spacer />
-                    <Text
-                      fontSize="xs"
-                      _dark={{
-                        color: "warmGray.50",
-                      }}
-                      color="coolGray.800"
-                      alignSelf="center"
-                    >
-                      {new Date(item.date).toDateString()}
-                    </Text>
-                  </HStack>
-                </Box>
-              </Pressable>
-            );
-          }}
-          keyExtractor={(item) => item.wo_id}
-          // extraData={selectedWo}
-        />
-      )}
-    </Box>
-  );
+  const SecondRoute = () => {
+    return WOComponent(cwo);
+  };
 
   const layout = useWindowDimensions();
 
