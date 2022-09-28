@@ -59,7 +59,7 @@ function LoginScreen(props) {
 
   return (
     <Center flex={1} w="100%">
-      <Box padding={10} bgColor={"white"} p="2" w="90%" maxW="290">
+      <Box rounded={10} padding={10} bgColor={"white"} p="2" w="90%" maxW="290">
         <VStack space={3}>
           <Image
             alt="Logo"
@@ -83,21 +83,13 @@ function LoginScreen(props) {
                 setFormData({ ...formData, password: value })
               }
             />
-            <Link
-              _text={{
-                fontSize: "xs",
-                fontWeight: "500",
-                color: "indigo.500",
-              }}
-              alignSelf="flex-end"
-              mt="1"
-            >
-              Forget Password?
-            </Link>
           </FormControl>
+          <Button colorScheme={"coolGray"} size={"sm"} variant={"link"}>
+            Forgot Password?
+          </Button>
           <Button
             mt="2"
-            colorScheme="blue"
+            colorScheme="lightBlue"
             onPress={onFinish}
             isLoading={loading}
           >

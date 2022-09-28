@@ -19,6 +19,7 @@ import {
   Pressable,
   ScrollView,
   Spacer,
+  Spinner,
   Text,
   VStack,
 } from "native-base";
@@ -34,6 +35,7 @@ function AssetHome(props) {
   }, []);
 
   const [assetList, setAsset] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   // const parentNavigator= props.navigation.getParent();
   // console.log(parentNavigator.getState())
@@ -41,6 +43,7 @@ function AssetHome(props) {
   // console.log(WoID);
 
   const getAssets = async (WoID) => {
+    setLoading(true);
     await axios({
       method: "get",
       url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
@@ -48,9 +51,11 @@ function AssetHome(props) {
       .then((res) => {
         console.log(res.data.message);
         setAsset(res.data.message);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -132,60 +137,74 @@ function AssetHome(props) {
         </HStack>
 
         <Box flex={1} rounded={15} padding={1} bgColor={"white"}>
-          {assetList.length === 0 ? (
+          {loading === true ? (
             <Center flex={1}>
-              <Text color={"coolGray.500"}>No Assets to View!</Text>
-              <Text color={"coolGray.400"}>
-                Click + Add Asset to add a new asset
-              </Text>
+              <Spinner size={"lg"} />
             </Center>
           ) : (
-            <Box padding={3}>
-              <FlatList
-                data={assetList}
-                renderItem={({ item }) => {
-                  return (
-                    <Box paddingY={1.5}>
-                      <Box
-                        shadow={"0"}
-                        padding={3}
-                        rounded={10}
-                        bgColor={"coolGray.50"}
-                      >
-                        <HStack alignItems={"center"} space={5}>
-                          <VStack>
-                            <Text>
-                              <Text bold>{item.device}</Text>
-                            </Text>
+            <>
+              {assetList.length === 0 ? (
+                <Center flex={1}>
+                  <Text color={"coolGray.500"}>No Assets to View!</Text>
+                  <Text color={"coolGray.400"}>
+                    Click + Add Asset to add a new asset
+                  </Text>
+                </Center>
+              ) : (
+                <Box padding={3}>
+                  <FlatList
+                    data={assetList}
+                    renderItem={({ item }) => {
+                      return (
+                        <Box paddingY={1.5}>
+                          <Box
+                            shadow={"0"}
+                            padding={3}
+                            rounded={10}
+                            bgColor={"coolGray.50"}
+                          >
+                            <HStack alignItems={"center"} space={5}>
+                              <VStack>
+                                <Text>
+                                  <Text bold>{item.device}</Text>
+                                </Text>
 
-                            <Text>
-                              <Text bold>Location: </Text>
-                              <Text>{item.floor_no}</Text>
-                            </Text>
+                                <Text>
+                                  <Text bold>Location: </Text>
+                                  <Text>{item.floor_no}</Text>
+                                </Text>
 
-                            <Text>
-                              <Text bold>Tag: </Text>
-                              <Text>{item.asset_tag}</Text>
-                            </Text>
-                            <Spacer />
-                          </VStack>
-                          <Spacer />
-                          <HStack space={2}>
-                            <Button colorScheme={"coolGray"} variant={"ghost"}>
-                              Edit
-                            </Button>
-                            <Button colorScheme={"danger"} variant={"ghost"}>
-                              Delete
-                            </Button>
-                          </HStack>
-                        </HStack>
-                      </Box>
-                    </Box>
-                  );
-                }}
-                keyExtractor={(item) => item.Tag}
-              />
-            </Box>
+                                <Text>
+                                  <Text bold>Tag: </Text>
+                                  <Text>{item.asset_tag}</Text>
+                                </Text>
+                                <Spacer />
+                              </VStack>
+                              <Spacer />
+                              <HStack space={2}>
+                                <Button
+                                  colorScheme={"coolGray"}
+                                  variant={"ghost"}
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  colorScheme={"danger"}
+                                  variant={"ghost"}
+                                >
+                                  Delete
+                                </Button>
+                              </HStack>
+                            </HStack>
+                          </Box>
+                        </Box>
+                      );
+                    }}
+                    keyExtractor={(item) => item.Tag}
+                  />
+                </Box>
+              )}
+            </>
           )}
         </Box>
       </VStack>

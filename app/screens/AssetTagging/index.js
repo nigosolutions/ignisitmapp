@@ -7,20 +7,20 @@ import AssetDetails from "./AssetDetails";
 
 const ATNav = createNativeStackNavigator();
 
-function AssetTagging({navigation,route}) {
+function AssetTagging({ navigation, route }) {
   React.useLayoutEffect(() => {
-    if (!navigation || !route) return
+    if (!navigation || !route) return;
 
     // Get parent by id
-    const drawerNavigator = navigation.getParent('Drawer')
+    const drawerNavigator = navigation.getParent("Drawer");
 
     if (drawerNavigator) {
       // Make sure the route name is AssetTagging before turn header off
-      if (route.name === 'AssetTagging') { 
+      if (route.name === "AssetTagging") {
         drawerNavigator.setOptions({
           headerShown: false,
           swipeEnabled: false,
-        })
+        });
       }
     }
 
@@ -30,33 +30,33 @@ function AssetTagging({navigation,route}) {
           drawerNavigator.setOptions({
             headerShown: true,
             swipeEnabled: true,
-          })
+          });
         }
-      : undefined
-  }, [navigation, route])
+      : undefined;
+  }, [navigation, route]);
 
   // const {WoID} = route.params;
   // const [woid, setWoID] = React.useState(WoID);
   // console.log(WoID)
   return (
     // <NavigationContainer independent={true}>
-      <ATNav.Navigator>
-        <ATNav.Screen
-          name="ATHome"
-          component={AssetHome}
-          options={{ title: "Asset Tagging", headerShown: false }}
-        />
-        <ATNav.Screen
-          name="PhotoScreen"
-          component={AssetTaggingPhotoScreen}
-          options={{ title: "Device Photo" }}
-        />
-        <ATNav.Screen
-          name="DetailScreen"
-          component={AssetDetails}
-          options={{ title: "Asset Details" }}
-        />
-      </ATNav.Navigator>
+    <ATNav.Navigator>
+      <ATNav.Screen
+        name="ATHome"
+        component={AssetHome}
+        options={{ title: "Asset Tagging", headerShown: false }}
+      />
+      <ATNav.Screen
+        name="PhotoScreen"
+        component={AssetTaggingPhotoScreen}
+        options={{ title: "Device Photo" }}
+      />
+      <ATNav.Screen
+        name="DetailScreen"
+        component={AssetDetails}
+        options={{ title: "Asset Details" }}
+      />
+    </ATNav.Navigator>
     // </NavigationContainer>
   );
 }

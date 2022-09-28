@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, HStack, VStack, Text, Icon, Image, Button} from "native-base";
+import { Box, HStack, VStack, Text, Icon, Image, Button } from "native-base";
 import { StyleSheet } from "react-native";
 import { MaterialCommunityIcons, AntDesign, Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -91,55 +91,80 @@ function AssetTaggingPhotoScreen(props) {
               </TouchableOpacity>
             </Box>
           </HStack> */}
-          <Box alignItems={'center'} flex={1}>
+          <Box alignItems={"center"} flex={1}>
             {pickedImagePath == "" ? (
-            <Box style={styles.card} margin={10}>
-              <VStack  flex={1} space={5} padding={5}>
-                <Box style={styles.card} shadow={1} padding={10}>
-                  <TouchableOpacity onPress={openCamera}>
-                    <HStack space={5} alignItems={"center"}>
-                      <Icon
-                        size={50}
-                        name="camera"
-                        as={MaterialCommunityIcons}
-                        color="grey"
-                      />
-                      <Text style={styles.title}>Open Camera</Text>
-                    </HStack>
-                  </TouchableOpacity>
-                </Box>
-                <Box style={styles.card} shadow={1} padding={10}>
-                  <TouchableOpacity
-                    onPress={showImagePicker}
-                  >
-                    <HStack space={5} alignItems={"center"}>
-                      <Icon
-                        size={50}
-                        name="upload"
-                        as={MaterialCommunityIcons}
-                        color="grey"
-                      />
-                      <Text style={styles.title}>Upload Image</Text>
-                    </HStack>
-                  </TouchableOpacity>
-                </Box>
-              </VStack>
-            </Box>
+              <Box style={styles.card} margin={10}>
+                <VStack flex={1} space={5} padding={5}>
+                  <Box style={styles.card} shadow={1} padding={10}>
+                    <TouchableOpacity onPress={openCamera}>
+                      <HStack space={5} alignItems={"center"}>
+                        <Icon
+                          size={50}
+                          name="camera"
+                          as={MaterialCommunityIcons}
+                          color="grey"
+                        />
+                        <Text style={styles.title}>Open Camera</Text>
+                      </HStack>
+                    </TouchableOpacity>
+                  </Box>
+                  <Box style={styles.card} shadow={1} padding={10}>
+                    <TouchableOpacity onPress={showImagePicker}>
+                      <HStack space={5} alignItems={"center"}>
+                        <Icon
+                          size={50}
+                          name="upload"
+                          as={MaterialCommunityIcons}
+                          color="grey"
+                        />
+                        <Text style={styles.title}>Upload Image</Text>
+                      </HStack>
+                    </TouchableOpacity>
+                  </Box>
+                </VStack>
+              </Box>
             ) : (
-              <VStack flex={1} space={2} alignItems={"center"} w="100%" margin={5}>
-                <Box style={styles.card} justifyContent={"center"} w="100%" padding={2}>
+              <VStack
+                flex={1}
+                space={2}
+                alignItems={"center"}
+                w="100%"
+                margin={5}
+              >
+                <Box
+                  style={styles.card}
+                  justifyContent={"center"}
+                  w="100%"
+                  padding={2}
+                >
                   <Image
                     flex={1}
                     source={{ uri: pickedImagePath }}
                     style={{ width: "100%" }}
-                    alt={'Device Image'}
+                    alt={"Device Image"}
                   />
                 </Box>
-               <Button.Group alignItems="center">
-                   <Button onPress={() => {setPickedImagePath("")}}>Change Photo</Button>
-                   <Button onPress={() => props.navigation.navigate("DetailScreen",{imagepath:pickedImagePath, WoID:WoID, wo:wo})}>Continue</Button>
+                <Button.Group alignItems="center">
+                  <Button
+                    onPress={() => {
+                      setPickedImagePath("");
+                    }}
+                  >
+                    Change Photo
+                  </Button>
+                  <Button
+                    onPress={() =>
+                      props.navigation.navigate("DetailScreen", {
+                        imagepath: pickedImagePath,
+                        WoID: WoID,
+                        wo: wo,
+                      })
+                    }
+                  >
+                    Continue
+                  </Button>
                 </Button.Group>
-              </VStack> 
+              </VStack>
             )}
           </Box>
         </VStack>

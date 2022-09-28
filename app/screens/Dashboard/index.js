@@ -13,6 +13,7 @@ import { StyleSheet } from "react-native";
 import Calendar, { modeToNum } from "react-native-big-calendar";
 import dayjs from "dayjs";
 import React from "react";
+import { getUser } from "../../auth/auth";
 
 const events = [
   {
@@ -30,8 +31,12 @@ var styles = StyleSheet.create({
 });
 
 function DashboardScreen(props) {
+  React.useEffect(async () => {
+    let user = await getUser();
+    setUser(user);
+  });
   const today = new Date();
-
+  const [user, setUser] = React.useState({});
   const [date, setDate] = React.useState(today);
 
   const _onPrevDate = () => {
@@ -53,7 +58,7 @@ function DashboardScreen(props) {
   return (
     <Box padding={5} flex={1}>
       <VStack flex={1} space={5}>
-        <Text>Welcome Gokul!</Text>
+        <Text>Welcome {user.name}!</Text>
         <VStack rounded={20} padding={3} bgColor={"#fafbfc"} space={5}>
           <Text>Overview</Text>
           <HStack justifyContent={"center"} space={3}>
