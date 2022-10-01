@@ -8,33 +8,6 @@ import AssetDetails from "./AssetDetails";
 const ATNav = createNativeStackNavigator();
 
 function AssetTagging({ navigation, route }) {
-  React.useLayoutEffect(() => {
-    if (!navigation || !route) return;
-
-    // Get parent by id
-    const drawerNavigator = navigation.getParent("Drawer");
-
-    if (drawerNavigator) {
-      // Make sure the route name is AssetTagging before turn header off
-      if (route.name === "AssetTagging") {
-        drawerNavigator.setOptions({
-          headerShown: false,
-          swipeEnabled: false,
-        });
-      }
-    }
-
-    // Turn header back on when unmount
-    return drawerNavigator
-      ? () => {
-          drawerNavigator.setOptions({
-            headerShown: true,
-            swipeEnabled: true,
-          });
-        }
-      : undefined;
-  }, [navigation, route]);
-
   // const {WoID} = route.params;
   // const [woid, setWoID] = React.useState(WoID);
   // console.log(WoID)

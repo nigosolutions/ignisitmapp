@@ -1,48 +1,24 @@
 import "react-native-gesture-handler";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-} from "@react-navigation/drawer";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import {
-  NativeBaseProvider,
-  Box,
-  Pressable,
-  VStack,
-  Text,
-  Center,
-  HStack,
-  Divider,
-  Icon,
-  Image,
-} from "native-base";
-import AssetTagging from "./app/screens/AssetTagging";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { NativeBaseProvider, Icon } from "native-base";
+
 import LoginScreen from "./app/screens/Login";
-import AssetDetails from "./app/screens/AssetTagging/AssetDetails";
-import ITMWorkOrder from "./app/screens/ITMWorkOrder";
-import WOScreen from "./app/screens/WorkOrder";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkOrder from "./app/screens/WorkOrder";
-import ITMHome from "./app/screens/ITMWorkOrder/ITMHome";
+
 import DashboardScreen from "./app/screens/Dashboard";
 import ScheduleScreen from "./app/screens/Schedule";
 import Requests from "./app/screens/ITMWorkOrder/Requests";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { SafeAreaView, StatusBar } from "react-native";
 
 const MainNav = createNativeStackNavigator();
 const sideMenuDisabledScreens = ["AssetTagging"];
 
-const Drawer = createDrawerNavigator();
-// function Component(props) {
-//   return (
-//     <Center>
-//       <Text mt="12" fontSize="18">
-//         This is {props.route.name} page.
-//       </Text>
-//     </Center>
-//   );
-// }
+const Tab = createBottomTabNavigator();
 
 const getIcon = (screenName) => {
   switch (screenName) {
@@ -59,126 +35,60 @@ const getIcon = (screenName) => {
   }
 };
 
-function CustomDrawerContent(props) {
+function MyTab() {
   return (
-    <>
-      <Center>
-        <Image
-          size={180}
-          resizeMode={"contain"}
-          alt="Logo"
-          source={require("./app/assets/logo.png")}
-        />
-      </Center>
-      <DrawerContentScrollView {...props} safeArea>
-        <VStack space="6" my="2" mx="1">
-          <VStack divider={<Divider top={100} />} space="4">
-            <VStack space="3">
-              {props.state.routeNames.map((name, index) => (
-                <Pressable
-                  key={index}
-                  px="5"
-                  py="3"
-                  rounded="md"
-                  bg={
-                    index === props.state.index
-                      ? "rgba(6, 182, 212, 0.1)"
-                      : "transparent"
-                  }
-                  onPress={(event) => {
-                    props.navigation.navigate(name);
-                  }}
-                >
-                  <HStack space="7" alignItems="center">
-                    <Icon
-                      color={
-                        index === props.state.index ? "primary.500" : "gray.500"
-                      }
-                      size="5"
-                      as={<MaterialCommunityIcons name={getIcon(name)} />}
-                    />
-                    <Text
-                      fontWeight="500"
-                      color={
-                        index === props.state.index ? "primary.500" : "gray.700"
-                      }
-                    >
-                      {name}
-                    </Text>
-                  </HStack>
-                </Pressable>
-              ))}
-            </VStack>
-            <VStack top={100} space="5">
-              <Text fontWeight="500" fontSize="14" px="5" color="gray.500">
-                Help
-              </Text>
-              <VStack space="3">
-                <Pressable px="5" py="3">
-                  <HStack space="7" alignItems="center">
-                    <Icon
-                      color="gray.500"
-                      size="5"
-                      as={<MaterialCommunityIcons name="phone" />}
-                    />
-                    <Text color="gray.700" fontWeight="500">
-                      Support
-                    </Text>
-                  </HStack>
-                </Pressable>
-                <Pressable px="5" py="2">
-                  <HStack space="7" alignItems="center">
-                    <Icon
-                      color="gray.500"
-                      size="5"
-                      as={<MaterialCommunityIcons name="nut" />}
-                    />
-                    <Text color="gray.700" fontWeight="500">
-                      Settings
-                    </Text>
-                  </HStack>
-                </Pressable>
-              </VStack>
-            </VStack>
-          </VStack>
-        </VStack>
-      </DrawerContentScrollView>
-    </>
-  );
-}
+    <Tab.Navigator
+      id="MyTab"
+      screenOptions={({ route }) => ({
+        headerShown: false,
 
-function MyDrawer() {
-  return (
-    <Box safeArea flex={1}>
-      <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-        id="Drawer"
-      >
-        <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-        <Drawer.Screen name="Work Orders" component={WorkOrder} options={{}} />
-        <Drawer.Screen name="Schedule" component={ScheduleScreen} />
-        <Drawer.Screen name="Requests" component={Requests} />
-      </Drawer.Navigator>
-    </Box>
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Dashboard") {
+            iconName = focused ? "grid" : "grid-outline";
+          } else if (route.name === "Work Orders") {
+            iconName = focused ? "briefcase" : "briefcase-outline";
+          } else if (route.name === "Schedule") {
+            iconName = focused ? "calendar" : "calendar-outline";
+          } else if (route.name === "Requests") {
+            iconName = focused ? "mail-open" : "mail-open-outline";
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "tomato",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Work Orders" component={WorkOrder} />
+      <Tab.Screen name="Schedule" component={ScheduleScreen} />
+      <Tab.Screen name="Requests" component={Requests} />
+    </Tab.Navigator>
   );
 }
 export default function Example() {
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>
-        <MainNav.Navigator>
-          <MainNav.Screen
-            name="Drawer"
-            component={MyDrawer}
-            options={{ headerShown: false }}
-          />
-          <MainNav.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-        </MainNav.Navigator>
-      </NativeBaseProvider>
-    </NavigationContainer>
+    <SafeAreaView style={{ backgroundColor: "lightgray", flex: 1 }}>
+      <StatusBar />
+      <NavigationContainer>
+        <NativeBaseProvider>
+          <MainNav.Navigator>
+            <MainNav.Screen
+              name="Tab"
+              component={MyTab}
+              options={{ headerShown: false }}
+            />
+            <MainNav.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+          </MainNav.Navigator>
+        </NativeBaseProvider>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }

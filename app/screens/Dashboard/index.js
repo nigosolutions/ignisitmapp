@@ -58,7 +58,7 @@ function DashboardScreen(props) {
   return (
     <Box padding={5} flex={1}>
       <VStack flex={1} space={5}>
-        <Text>Welcome {user.name}!</Text>
+        <Text>Welcome Gokul!</Text>
         <VStack rounded={20} padding={3} bgColor={"#fafbfc"} space={5}>
           <Text>Overview</Text>
           <HStack justifyContent={"center"} space={3}>

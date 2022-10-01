@@ -238,7 +238,7 @@ function WOScreen(props) {
     <Box padding={3} bgColor={"#E5E5E5"} flex={1}>
       <Box padding={2} rounded={15} bgColor={"white"} flex={1}>
         <HStack flex={1}>
-          <Box bgColor={"white"} flex={1}>
+          <Box width={"320"} bgColor={"white"}>
             <VStack flex={1}>
               <TabView
                 navigationState={{ index, routes }}
@@ -249,7 +249,7 @@ function WOScreen(props) {
               />
             </VStack>
           </Box>
-          <Box bgColor={"white"} flex={2}>
+          <Box bgColor={"white"} flex={1}>
             <VStack space={2} padding={2} flex={1}>
               {selectedWo === 0 ? (
                 <Box justifyContent={"center"} alignItems={"center"} flex={1}>

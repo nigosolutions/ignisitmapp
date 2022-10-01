@@ -154,6 +154,7 @@ function AssetHome(props) {
                 <Box padding={3}>
                   <FlatList
                     data={assetList}
+                    keyExtractor={(item) => item.asset_tag}
                     renderItem={({ item }) => {
                       return (
                         <Box paddingY={1.5}>
@@ -200,7 +201,6 @@ function AssetHome(props) {
                         </Box>
                       );
                     }}
-                    keyExtractor={(item) => item.Tag}
                   />
                 </Box>
               )}
