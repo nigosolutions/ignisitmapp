@@ -6,14 +6,10 @@ import {
   HStack,
   Input,
   ScrollView,
-  SectionList,
-  Select,
-  Stack,
   Text,
   VStack,
   Image,
   Modal,
-  CheckCircleIcon,
 } from "native-base";
 import React from "react";
 import QRCode from "react-native-qrcode-svg";
@@ -59,38 +55,29 @@ function AssetDetails(props) {
     return ret;
   };
 
-  const getDeviceData = async (sys) => {
-    // setLoading(true);
-    // api
-    //   .get("/addAsset")
-    //   .then((res) => {
-    //     setDevTypes(res.data.message.Items.device);
-    //     setSystems(res.data.message.Items.system);
-    //     console.log(res.data.message.Items);
-    //   })
-    //   .catch((err) => {
-    //     alert("Error in fetching device details!");
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
-    await axios
-      .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/devices")
+  const getDeviceData = async () => {
+    console.log(selectsys[0]);
+    await axios({
+      method: "get",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0]}`,
+    })
       .then((res) => {
-        // console.log(res.data.systems);
-        setDevTypes(res.data.devTypes);
+        console.log(res.data.message);
+        setDevTypes(res.data.message);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.message);
       });
   };
 
   const getSystemData = async () => {
-    await axios
-      .get("https://d40a1684-b76e-4d52-b202-bbe21e245ba9.mock.pstmn.io/systems")
+    await axios({
+      method: "get",
+      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/systems",
+    })
       .then((res) => {
-        // console.log(res.data.systems);
-        setSystems(res.data.systems);
+        console.log(res.data.message);
+        setSystems(res.data.message);
       })
       .catch((err) => {
         console.log(err);

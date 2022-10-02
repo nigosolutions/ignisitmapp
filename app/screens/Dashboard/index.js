@@ -7,6 +7,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   Spacer,
+  ScrollView,
 } from "native-base";
 import { Icon, ListItem } from "@rneui/themed";
 import { StyleSheet } from "react-native";
@@ -120,6 +121,7 @@ function DashboardScreen(props) {
             </Box>
           </HStack>
         </VStack>
+
         <Box padding={3} rounded={15} bgColor={"white"} flex={1}>
           <HStack marginBottom={2} alignItems={"center"} padding={2} space={2}>
             <Button

@@ -13,8 +13,28 @@ import { StatusBar, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import { Audio } from "expo-av";
+import axios from "axios";
 
 function ExecutionComponent(props) {
+  const getSystems = async (stat) => {
+    setLoading(true);
+    await axios
+      .get(
+        "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders",
+        { params: { status: stat } }
+      )
+      .then((res) => {
+        if (stat == "Pending") {
+          setPWO(res.data.message);
+        } else {
+          setCWO(res.data.message);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const [selectedButton, setSelectedButton] = React.useState();
   // Uploading image
   // The path of the picked image

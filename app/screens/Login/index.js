@@ -11,6 +11,7 @@ import {
   Text,
   VStack,
   Icon,
+  ScrollView,
 } from "native-base";
 import { useState, useEffect } from "react";
 import api from "../../../axiosConfig";
@@ -59,44 +60,53 @@ function LoginScreen(props) {
 
   return (
     <Center flex={1} w="100%">
-      <Box rounded={10} padding={10} bgColor={"white"} p="2" w="90%" maxW="290">
-        <VStack space={3}>
-          <Image
-            alt="Logo"
-            size={200}
-            resizeMode="contain"
-            source={require("../../assets/logo.png")}
-          />
-          <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
-            <Input
-              onChangeText={(value) =>
-                setFormData({ ...formData, email: value })
-              }
+      <ScrollView>
+        <Box
+          rounded={10}
+          padding={10}
+          bgColor={"white"}
+          p="2"
+          w="90%"
+          maxW="290"
+        >
+          <VStack space={3}>
+            <Image
+              alt="Logo"
+              size={200}
+              resizeMode="contain"
+              source={require("../../assets/logo.png")}
             />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input
-              type="password"
-              onChangeText={(value) =>
-                setFormData({ ...formData, password: value })
-              }
-            />
-          </FormControl>
-          <Button colorScheme={"coolGray"} size={"sm"} variant={"link"}>
-            Forgot Password?
-          </Button>
-          <Button
-            mt="2"
-            colorScheme="lightBlue"
-            onPress={onFinish}
-            isLoading={loading}
-          >
-            Sign In
-          </Button>
-        </VStack>
-      </Box>
+            <FormControl>
+              <FormControl.Label>Email ID</FormControl.Label>
+              <Input
+                onChangeText={(value) =>
+                  setFormData({ ...formData, email: value })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <FormControl.Label>Password</FormControl.Label>
+              <Input
+                type="password"
+                onChangeText={(value) =>
+                  setFormData({ ...formData, password: value })
+                }
+              />
+            </FormControl>
+            <Button colorScheme={"coolGray"} size={"sm"} variant={"link"}>
+              Forgot Password?
+            </Button>
+            <Button
+              mt="2"
+              colorScheme="lightBlue"
+              onPress={onFinish}
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </VStack>
+        </Box>
+      </ScrollView>
     </Center>
   );
 }
