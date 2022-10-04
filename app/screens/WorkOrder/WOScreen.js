@@ -19,6 +19,7 @@ import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import axios from "axios";
+import { getUser } from "../../auth/auth";
 
 // import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -72,6 +73,7 @@ function WOScreen(props) {
   const [pwo, setPWO] = React.useState([]);
   const [cwo, setCWO] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [user,setUser] = React.useState({});
 
   const WOComponent = (swo) => {
     return (
@@ -179,7 +181,7 @@ function WOScreen(props) {
     await axios
       .get(
         "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders",
-        { params: { status: stat } }
+        { params: { status: stat, user_id: 12 } }
       )
       .then((res) => {
         if (stat == "Pending") {
@@ -195,8 +197,11 @@ function WOScreen(props) {
   };
 
   React.useEffect(async () => {
+    let user = await getUser();
+    setUser(user);
     getWO("Completed");
     getWO("Pending");
+
     // console.log(wo);
   }, []);
 

@@ -1,0 +1,340 @@
+import {
+    Box,
+    Button,
+    Divider,
+    FormControl,
+    HStack,
+    Input,
+    ScrollView,
+    Text,
+    VStack,
+    Image,
+    Modal
+  } from "native-base";
+  import React from "react";
+  import axios from "axios";
+  import Select2 from "react-select2-native";
+  
+  function ViewAssets(props) {
+    const [formData, setData] = React.useState({
+      device: props.asset.device,
+      system: props.asset.system,
+      mfr_name: props.asset.mfr_name,
+      mfr_pn: props.asset.mfr_pn,
+      specification: props.asset.specification,
+      drawing_no: props.asset.drawing_no,
+      floor_no: props.asset.floor_no,
+      room_no: props.asset.room_no,
+      asset_tag: props.asset.asset_tag,
+    });
+  
+    const [devTypes, setDevTypes] = React.useState([]);
+    const [selectdev, setselectDev] = React.useState();
+    const [systems, setSystems] = React.useState([]);
+    const [selectsys, setselectSystems] = React.useState([]);
+    // const [isDisabled, setIsDisabled] = React.useState(false);
+    // const [showModal, setShowModal] = React.useState(false);
+
+    // const { imagepath, WoID, wo } = props.route.params;
+    // console.log(WoID)
+  
+    const validate = () => {
+      // console.log(formData)
+      var ret = true;
+      Object.entries(formData).map(([k, v]) => {
+        // console.log(k)
+        // console.log(v)
+        if (v == "") {
+          // console.log(k);
+          // return true;
+          ret = false;
+        }
+      });
+      return ret;
+    };
+  
+    const getDeviceData = async () => {
+      console.log(selectsys[0]);
+      await axios({
+        method: "get",
+        url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0]}`,
+      })
+        .then((res) => {
+          console.log(res.data.message);
+          setDevTypes(res.data.message);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    };
+  
+    const getSystemData = async () => {
+      await axios({
+        method: "get",
+        url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/systems",
+      })
+        .then((res) => {
+          console.log(res.data.message);
+          setSystems(res.data.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  
+    const onFinish = async () => {
+      console.log(formData);
+  
+      await axios({
+        method: "post",
+        url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
+        data: {
+          formData: formData,
+          otherData: {
+            image: "imagepath",
+            building_id: wo.building_id,
+            wo_id: wo.wo_id,
+          },
+        },
+      })
+        .then((res) => {
+          console.log(res.status);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    };
+  
+  
+    const submit = () => {
+      // console.log(validate())
+      if (validate() == true) {
+        console.log("All filled");
+  
+        //Generating asset tag
+        // generateTag();
+        // console.log(tag);
+        // console.log(assTag);
+  
+        //Display asset tag QR code
+        setShowModal(true);
+      } else {
+        // console.log('Fill all values')
+        alert("Fill all required values");
+      }
+    };
+    
+
+    React.useEffect(async () => {
+        setselectDev(props.asset.device);
+        setselectSystems(props.asset.system);
+        getSystemData();
+      
+    }, []);
+  
+    React.useEffect(async () => {
+      getDeviceData(selectsys);
+    }, [selectsys]);
+  
+    return (
+        <Modal.Content bgColor={"white"} maxHeight={"75%"} maxWidth={"75%"}>
+          <Modal.CloseButton />
+          {/* <Modal.Header>Asset </Modal.Header> */}
+          <Modal.Body>
+            <Box flex={1}>
+                {/* <Box rounded={10} padding={10} bgColor={"white"} flex={1}> */}
+                <VStack rounded={10}  space={2} bgColor={"white"} flex={1}>
+                <HStack space={10} padding={5} flex={1}>
+                    <Box flex={2}>
+                    <Text bold fontSize="xl" mb="4">
+                        Asset Details 
+                    </Text>
+                    <ScrollView w="100%">
+                        <FormControl isRequired>
+                        <FormControl.Label>System</FormControl.Label>
+                        {props.isDisabled ? (
+                            <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.system}
+                        />
+                        ):(
+                        <Select2
+                            value={selectsys}
+                            colorTheme={"black"}
+                            isSelectSingle
+                            style={{ borderRadius: 5 }}
+                            popupTitle="Select system"
+                            title={selectsys}
+                            data={systems}
+                            onSelect={(data) => {
+                            setselectSystems(data);
+                            setData({ ...formData, system: data });
+                            }}
+                            onRemoveItem={(data) => {
+                            setselectSystems(data);
+                            }}
+                        />)}
+                        <FormControl.Label>Device</FormControl.Label>
+                        {props.isDisabled ? (
+                            <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.device}
+                        />
+                        ):(
+                        <Select2
+                            value={formData.device}
+                            colorTheme={"black"}
+                            isSelectSingle
+                            style={{ borderRadius: 5 }}
+                            popupTitle="Select device"
+                            title="Select device"
+                            data={devTypes}
+                            onSelect={(data) => {
+                            setselectDev(data);
+                            setData({ ...formData, device: data });
+                            }}
+                            onRemoveItem={(data) => {
+                            setselectDev(data);
+                            }}
+                        />)}
+        
+                        <FormControl.Label>Manufacturer Name</FormControl.Label>
+                        <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.mfr_name}
+                            onChangeText={(value) =>
+                            setData({ ...formData, mfr_name: value })
+                            }
+                        />
+                        <FormControl.Label>Manufacturer P/N</FormControl.Label>
+                        <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.mfr_pn}
+                            // value={formData.mfr_pn}
+                            onChangeText={(value) =>
+                            setData({ ...formData, mfr_pn: value })
+                            }
+                        />
+                        <FormControl.Label>Specification</FormControl.Label>
+                        <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.specification}
+                            onChangeText={(value) =>
+                            setData({ ...formData, specification: value })
+                            }
+                        />
+                        <FormControl.Label>Drawing No.</FormControl.Label>
+                        <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.drawing_no}
+                            onChangeText={(value) =>
+                            setData({ ...formData, drawing_no: value })
+                            }
+                        />
+                        <FormControl.Label>Floor No.</FormControl.Label>
+                        <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.floor_no}
+                            onChangeText={(value) =>
+                            setData({ ...formData, floor_no: value })
+                            }
+                        />
+                        <FormControl.Label>Room No.</FormControl.Label>
+                        <Input
+                            size={"lg"}
+                            minH={10}
+                            mb={2}
+                            isDisabled={props.isDisabled}
+                            placeholder={props.asset.room_no}
+                            onChangeText={(value) =>
+                            setData({ ...formData, room_no: value })
+                            }
+                        />
+                        <FormControl.Label>Tag</FormControl.Label>
+                        <HStack alignItems={"center"} flex={1} space={2}>
+                            <Input
+                            size={"lg"}
+                            minH={10}
+                            value={formData.asset_tag}
+                            isDisabled={true}
+                            flex={2}
+                            placeholder={props.asset.asset_tag}
+                            onChangeText={(value) =>
+                                setData({ ...formData, asset_tag: value })
+                            }
+                            />
+        
+                        </HStack>
+                        </FormControl>
+                    </ScrollView>
+
+                    </Box>
+                    <Divider orientation="vertical" />
+                    <VStack flex={2} space={2} alignItems={"center"} paddingTop={10}>
+                    {/* <Box borderWidth={2} borderColor={"black"}>
+                        <Text>Hello</Text>
+                        <Image alt="Device image" source={require("../../assets/logo.png")}/>
+                    </Box> */}
+                    <Image
+                        alt="Device image"
+                        // source={{ uri: imagepath }}
+                        borderWidth={2}
+                        borderColor={"black"}
+                        flex={1}
+                        style={{ width: "100%", maxHeight: 400 }}
+                    />
+        
+                    </VStack>
+                </HStack>
+
+                {/* </Box> */}
+                </VStack>
+            </Box>
+        </Modal.Body>
+            {/* <Modal.Footer justifyContent={"center"}>
+            <Button.Group space={2}>
+                <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                    setShowModal(false);
+                }}
+                >
+                Cancel
+                </Button>
+                <Button
+                onPress={() => {
+                    setShowModal(false);
+                }}
+                >
+                Save
+                </Button>
+            </Button.Group>
+            </Modal.Footer> */}
+        </Modal.Content>    
+    );
+  }
+  
+  export default ViewAssets;
+  

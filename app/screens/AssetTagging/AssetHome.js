@@ -22,11 +22,13 @@ import {
   Spinner,
   Text,
   VStack,
+  Modal
 } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { getUser } from "../../auth/auth";
 import axios from "axios";
+import ViewAssets from "./ViewAssets";
 
 function AssetHome(props) {
   React.useEffect(async () => {
@@ -36,17 +38,28 @@ function AssetHome(props) {
 
   const [assetList, setAsset] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-
+  const [showModal, setShowModal] = React.useState(false);
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [selectedAsset, setSelectedAsset] = React.useState({    
+    device: "",
+    system: "",
+    mfr_name: "",
+    mfr_pn: "",
+    specification: "",
+    drawing_no: "",
+    floor_no: "",
+    room_no: "",
+    asset_tag: "",});
   // const parentNavigator= props.navigation.getParent();
   // console.log(parentNavigator.getState())
   const { WoID, wo } = props.route.params;
   // console.log(WoID);
 
-  const getAssets = async (WoID) => {
+  const getAssets = async () => {
     setLoading(true);
     await axios({
       method: "get",
-      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets?id=${WoID}`,
     })
       .then((res) => {
         console.log(res.data.message);
@@ -59,8 +72,22 @@ function AssetHome(props) {
       });
   };
 
+  const deleteAsset = async (id) => {
+    await axios({
+      method: "delete",
+      url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
+      data: {asset_id: id}
+    }).then((res) => {
+      console.log(res.status);
+      getAssets();
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+    });
+  };
+
   React.useEffect(async () => {
-    getAssets(WoID);
+    getAssets();
   }, []);
 
   return (
@@ -135,7 +162,13 @@ function AssetHome(props) {
             lightTheme
           />
         </HStack>
-
+        <Modal
+          size={"xl"}
+          isOpen={showModal}
+          onClose={() => {setShowModal(false)}}
+        >
+          <ViewAssets asset={selectedAsset} isDisabled={isDisabled}/>
+        </Modal>
         <Box flex={1} rounded={15} padding={1} bgColor={"white"}>
           {loading === true ? (
             <Center flex={1}>
@@ -172,7 +205,7 @@ function AssetHome(props) {
 
                                 <Text>
                                   <Text bold>Location: </Text>
-                                  <Text>{item.floor_no}</Text>
+                                  <Text>Room {item.room_no}, Floor {item.floor_no}</Text>
                                 </Text>
 
                                 <Text>
@@ -186,12 +219,25 @@ function AssetHome(props) {
                                 <Button
                                   colorScheme={"coolGray"}
                                   variant={"ghost"}
+                                  onPress={()=>{setSelectedAsset(item);
+                                                setIsDisabled(true);
+                                                setShowModal(true);}}
+                                >
+                                  View
+                                </Button>
+                                <Button
+                                  colorScheme={"coolGray"}
+                                  variant={"ghost"}
+                                  onPress={()=>{setSelectedAsset(item);
+                                                setIsDisabled(false);
+                                                setShowModal(true);}}
                                 >
                                   Edit
                                 </Button>
                                 <Button
                                   colorScheme={"danger"}
                                   variant={"ghost"}
+                                  onPress={()=>{deleteAsset(item.asset_id)}}
                                 >
                                   Delete
                                 </Button>
