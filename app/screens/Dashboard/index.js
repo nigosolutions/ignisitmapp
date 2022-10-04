@@ -15,14 +15,7 @@ import Calendar, { modeToNum } from "react-native-big-calendar";
 import dayjs from "dayjs";
 import React from "react";
 import { getUser } from "../../auth/auth";
-
-const events = [
-  {
-    title: "Asset Tagging",
-    start: "2022-04-15T08:05:49.292Z",
-    end: "2022-04-15T14:08:49.292Z",
-  },
-];
+import axios from "axios";
 
 var styles = StyleSheet.create({
   listContainer: {
@@ -32,10 +25,52 @@ var styles = StyleSheet.create({
 });
 
 function DashboardScreen(props) {
-  React.useEffect(async () => {
+  const [dash, setDash] = React.useState({});
+  const [schedule, setSchedule] = React.useState([]);
+
+  const getDash = async () => {
+    await axios({
+      method: "get",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/dashboard?id=${user.id}`,
+    })
+      .then((res) => {
+        setDash(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getSchedule = async () => {
+    await axios({
+      method: "get",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/schedule?id=${user.id}`,
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        let schedule = res.data.message.map((item) => ({
+          title: item.title,
+          start: new Date(item.start),
+          end: new Date(item.end),
+        }));
+        console.log(schedule);
+        setSchedule(schedule);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const setStart = async () => {
     let user = await getUser();
+
     setUser(user);
-  });
+    getDash();
+    getSchedule();
+  };
+  React.useEffect(async () => {
+    setStart();
+  }, []);
   const today = new Date();
   const [user, setUser] = React.useState({});
   const [date, setDate] = React.useState(today);
@@ -52,14 +87,10 @@ function DashboardScreen(props) {
     setDate(dayjs(date).add(modeToNum("week", date), "day").toDate());
   };
 
-  const _onToday = () => {
-    setDate(today);
-  };
-
   return (
     <Box padding={5} flex={1}>
       <VStack flex={1} space={5}>
-        <Text>Welcome Gokul!</Text>
+        <Text>Welcome {user.name}!</Text>
         <VStack rounded={20} padding={3} bgColor={"#fafbfc"} space={5}>
           <Text>Overview</Text>
           <HStack justifyContent={"center"} space={3}>
@@ -72,7 +103,7 @@ function DashboardScreen(props) {
                 reverseColor="rgba(255, 182, 72,1)'"
               />
               <VStack space={1}>
-                <ListItem.Title>100</ListItem.Title>
+                <ListItem.Title>{dash.pending}</ListItem.Title>
                 <ListItem.Subtitle style={{ color: "grey" }}>
                   Pending
                 </ListItem.Subtitle>
@@ -88,7 +119,7 @@ function DashboardScreen(props) {
                 reverseColor="rgba(47, 73, 209,1)'"
               />
               <VStack space={1}>
-                <ListItem.Title>100</ListItem.Title>
+                <ListItem.Title>{dash.inprogress}</ListItem.Title>
                 <ListItem.Subtitle style={{ color: "grey" }}>
                   In Progress
                 </ListItem.Subtitle>
@@ -104,7 +135,7 @@ function DashboardScreen(props) {
                 reverseColor="rgba(75, 222, 151, 1)'"
               />
               <VStack space={1}>
-                <ListItem.Title>100</ListItem.Title>
+                <ListItem.Title>{dash.completed}</ListItem.Title>
                 <ListItem.Subtitle style={{ color: "grey" }}>
                   Completed
                 </ListItem.Subtitle>
@@ -142,7 +173,12 @@ function DashboardScreen(props) {
             />
           </HStack>
 
-          <Calendar date={date} events={events} height={600} />
+          <Calendar
+            swipeEnabled={false}
+            date={date}
+            events={schedule}
+            height={600}
+          />
         </Box>
       </VStack>
     </Box>

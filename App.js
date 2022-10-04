@@ -20,21 +20,6 @@ const sideMenuDisabledScreens = ["AssetTagging"];
 
 const Tab = createBottomTabNavigator();
 
-const getIcon = (screenName) => {
-  switch (screenName) {
-    case "Dashboard":
-      return "apps";
-    case "Work Orders":
-      return "tools";
-    case "Schedule":
-      return "calendar";
-    case "Requests":
-      return "inbox";
-    default:
-      return undefined;
-  }
-};
-
 function MyTab() {
   return (
     <Tab.Navigator
@@ -77,13 +62,13 @@ export default function Example() {
         <NativeBaseProvider>
           <MainNav.Navigator>
             <MainNav.Screen
-              name="Tab"
-              component={MyTab}
+              name="Login"
+              component={LoginScreen}
               options={{ headerShown: false }}
             />
             <MainNav.Screen
-              name="Login"
-              component={LoginScreen}
+              name="Tab"
+              component={MyTab}
               options={{ headerShown: false }}
             />
           </MainNav.Navigator>

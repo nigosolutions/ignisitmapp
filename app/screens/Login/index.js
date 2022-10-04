@@ -29,11 +29,11 @@ function LoginScreen(props) {
 
   const onFinish = () => {
     setLoading(true);
-    let { email, password } = formData;
+    let { username, password } = formData;
     console.log(formData);
 
     api
-      .post("/auth/login", { userInfo: { email, password } })
+      .post("/auth/login", { userInfo: { username, password } })
       .then(async (res) => {
         setLoading(false);
         console.log(res);
@@ -41,7 +41,7 @@ function LoginScreen(props) {
           const user = res.data.message.user;
           const token = res.data.message.token;
           await setUserSession({ user, token });
-          props.navigation.navigate("Drawer");
+          props.navigation.navigate("Tab");
           // if (user.first_login) {
           // 	navigate("/resetpassword");
           // } else {
@@ -60,53 +60,44 @@ function LoginScreen(props) {
 
   return (
     <Center flex={1} w="100%">
-      <ScrollView>
-        <Box
-          rounded={10}
-          padding={10}
-          bgColor={"white"}
-          p="2"
-          w="90%"
-          maxW="290"
-        >
-          <VStack space={3}>
-            <Image
-              alt="Logo"
-              size={200}
-              resizeMode="contain"
-              source={require("../../assets/logo.png")}
+      <Box rounded={10} padding={10} bgColor={"white"} p="2" w="90%" maxW="290">
+        <VStack space={3}>
+          <Image
+            alt="Logo"
+            size={200}
+            resizeMode="contain"
+            source={require("../../assets/logo.png")}
+          />
+          <FormControl>
+            <FormControl.Label>Username</FormControl.Label>
+            <Input
+              onChangeText={(value) =>
+                setFormData({ ...formData, username: value })
+              }
             />
-            <FormControl>
-              <FormControl.Label>Email ID</FormControl.Label>
-              <Input
-                onChangeText={(value) =>
-                  setFormData({ ...formData, email: value })
-                }
-              />
-            </FormControl>
-            <FormControl>
-              <FormControl.Label>Password</FormControl.Label>
-              <Input
-                type="password"
-                onChangeText={(value) =>
-                  setFormData({ ...formData, password: value })
-                }
-              />
-            </FormControl>
-            <Button colorScheme={"coolGray"} size={"sm"} variant={"link"}>
-              Forgot Password?
-            </Button>
-            <Button
-              mt="2"
-              colorScheme="lightBlue"
-              onPress={onFinish}
-              isLoading={loading}
-            >
-              Sign In
-            </Button>
-          </VStack>
-        </Box>
-      </ScrollView>
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Password</FormControl.Label>
+            <Input
+              type="password"
+              onChangeText={(value) =>
+                setFormData({ ...formData, password: value })
+              }
+            />
+          </FormControl>
+          <Button colorScheme={"coolGray"} size={"sm"} variant={"link"}>
+            Forgot Password?
+          </Button>
+          <Button
+            mt="2"
+            colorScheme="lightBlue"
+            onPress={onFinish}
+            isLoading={loading}
+          >
+            Sign In
+          </Button>
+        </VStack>
+      </Box>
     </Center>
   );
 }

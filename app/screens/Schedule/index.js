@@ -10,16 +10,37 @@ import {
 import React from "react";
 import Calendar, { modeToNum } from "react-native-big-calendar";
 import dayjs from "dayjs";
-
-const events = [
-  {
-    title: "Asset Tagging",
-    start: "2022-04-15T08:05:49.292Z",
-    end: "2022-04-15T14:08:49.292Z",
-  },
-];
+import axios from "axios";
+import { getUser } from "../../auth/auth";
 
 function ScheduleScreen(props) {
+  const [schedule, setSchedule] = React.useState([]);
+  const [user, setUser] = React.useState({});
+  React.useEffect(async () => {
+    getSchedule();
+  }, []);
+  const getSchedule = async () => {
+    let user = await getUser();
+
+    setUser(user);
+    await axios({
+      method: "get",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/schedule?id=${user.id}`,
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        let schedule = res.data.message.map((item) => ({
+          title: item.title,
+          start: new Date(item.start),
+          end: new Date(item.end),
+        }));
+        console.log(schedule);
+        setSchedule(schedule);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const today = new Date();
 
   const [date, setDate] = React.useState(today);
@@ -60,9 +81,10 @@ function ScheduleScreen(props) {
         />
       </HStack>
       <Calendar
+        swipeEnabled={false}
         showAdjacentMonths
         date={date}
-        events={events}
+        events={schedule}
         height={100}
         mode="month"
       />
