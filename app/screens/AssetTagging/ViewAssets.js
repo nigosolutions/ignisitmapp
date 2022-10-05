@@ -167,7 +167,7 @@ import {
                             isSelectSingle
                             style={{ borderRadius: 5 }}
                             popupTitle="Select system"
-                            title={selectsys}
+                            title={formData.system}
                             data={systems}
                             onSelect={(data) => {
                             setselectSystems(data);
@@ -307,7 +307,12 @@ import {
         
                     </VStack>
                 </HStack>
-
+                {props.isDisabled==false &&  
+                <Button colorScheme={"lightBlue"}>
+                    Submit
+                </Button>
+                }
+                
                 {/* </Box> */}
                 </VStack>
             </Box>
