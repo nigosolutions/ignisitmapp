@@ -16,18 +16,19 @@ import {
   import Select2 from "react-select2-native";
   
   function ViewAssets(props) {
+    // console.log(props.asset);
     const [formData, setData] = React.useState({
-      device: props.asset.device,
-      system: props.asset.system,
-      mfr_name: props.asset.mfr_name,
-      mfr_pn: props.asset.mfr_pn,
-      specification: props.asset.specification,
-      drawing_no: props.asset.drawing_no,
-      floor_no: props.asset.floor_no,
-      room_no: props.asset.room_no,
-      asset_tag: props.asset.asset_tag,
+      "device": props.asset.device,
+      "system": props.asset.system,
+      "mfr_name": props.asset.mfr_name,
+      "mfr_pn": props.asset.mfr_pn,
+      "specification": props.asset.specification,
+      "drawing_no": props.asset.drawing_no,
+      "floor_no": props.asset.floor_no,
+      "room_no": props.asset.room_no,
+      "asset_tag": props.asset.asset_tag,
     });
-  
+    // console.log(formData);
     const [devTypes, setDevTypes] = React.useState([]);
     const [selectdev, setselectDev] = React.useState();
     const [systems, setSystems] = React.useState([]);
@@ -54,7 +55,7 @@ import {
     };
   
     const getDeviceData = async () => {
-      console.log(selectsys[0]);
+      // console.log(selectsys[0]);
       await axios({
         method: "get",
         url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0]}`,
@@ -135,6 +136,20 @@ import {
     React.useEffect(async () => {
       getDeviceData(selectsys);
     }, [selectsys]);
+
+    React.useEffect(() => {
+      setData({
+        "device": props.asset.device,
+        "system": props.asset.system,
+        "mfr_name": props.asset.mfr_name,
+        "mfr_pn": props.asset.mfr_pn,
+        "specification": props.asset.specification,
+        "drawing_no": props.asset.drawing_no,
+        "floor_no": props.asset.floor_no,
+        "room_no": props.asset.room_no,
+        "asset_tag": props.asset.asset_tag,
+      });
+    }, [props.asset]);
   
     return (
         <Modal.Content bgColor={"white"} maxHeight={"75%"} maxWidth={"75%"}>
@@ -169,9 +184,15 @@ import {
                             popupTitle="Select system"
                             title={formData.system}
                             data={systems}
-                            onSelect={(data) => {
-                            setselectSystems(data);
-                            setData({ ...formData, system: data });
+                            // onSelect={(data, value) => {
+                            // setselectSystems(data);
+                            // // setData({ ...formData, system: data });
+                            // setData({ ...formData, system: value[0].name });
+                            // }}
+                            onSelect={(data,value) => {
+                              setselectSystems(data);
+                              // console.log(value);
+                              setData({ ...formData, system: value[0].name });
                             }}
                             onRemoveItem={(data) => {
                             setselectSystems(data);
@@ -193,11 +214,16 @@ import {
                             isSelectSingle
                             style={{ borderRadius: 5 }}
                             popupTitle="Select device"
-                            title="Select device"
+                            title={formData.device}
                             data={devTypes}
-                            onSelect={(data) => {
-                            setselectDev(data);
-                            setData({ ...formData, device: data });
+                            // onSelect={(data) => {
+                            // setselectDev(data);
+                            // setData({ ...formData, device: data });
+                            // }}
+                            onSelect={(data,value) => {
+                              setselectDev(data);
+                              // console.log(value);
+                              setData({ ...formData, device: value[0].name });
                             }}
                             onRemoveItem={(data) => {
                             setselectDev(data);
@@ -276,7 +302,6 @@ import {
                             <Input
                             size={"lg"}
                             minH={10}
-                            value={formData.asset_tag}
                             isDisabled={true}
                             flex={2}
                             placeholder={props.asset.asset_tag}
@@ -308,7 +333,7 @@ import {
                     </VStack>
                 </HStack>
                 {props.isDisabled==false &&  
-                <Button colorScheme={"lightBlue"}>
+                <Button colorScheme={"lightBlue"} onPress={()=>{console.log(formData)}}>
                     Submit
                 </Button>
                 }

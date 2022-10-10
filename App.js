@@ -14,6 +14,7 @@ import ScheduleScreen from "./app/screens/Schedule";
 import Requests from "./app/screens/ITMWorkOrder/Requests";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaView, ScrollView, StatusBar } from "react-native";
+import AssetDetails from "./app/screens/AssetTagging/AssetDetails";
 
 const MainNav = createNativeStackNavigator();
 const sideMenuDisabledScreens = ["AssetTagging"];

@@ -10,16 +10,23 @@ import {
   VStack,
   Image,
   Modal,
+  Icon
 } from "native-base";
 import React from "react";
 import QRCode from "react-native-qrcode-svg";
 import axios from "axios";
 import Select2 from "react-select2-native";
+import { StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { MaterialCommunityIcons} from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 
 function AssetDetails(props) {
   const [formData, setData] = React.useState({
     device: "",
+    device_id:"",
     system: "",
+    // system_id: "",
     mfr_name: "",
     mfr_pn: "",
     specification: "",
@@ -37,11 +44,58 @@ function AssetDetails(props) {
   // const [assTag, setAssTag] = React.useState();
   // const { navigation } = props
   // const imagepath = navigation.getParam('imagepath',"../../assets/logo.png")
-  const { imagepath, WoID, wo } = props.route.params;
+  // const { imagepath, WoID, wo } = props.route.params;
+  const { WoID, wo } = props.route.params;
   // console.log(WoID)
 
+  const [pickedImagePath, setPickedImagePath] = React.useState("");
+  const img = require('../../assets/logo.png');
+
+  //Upload image
+  const showImagePicker = async () => {
+    // Ask the user for the permission to access the media library
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your photos!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+
+    // Explore the result
+    console.log(result);
+
+    if (!result.cancelled) {
+      setPickedImagePath(result.uri);
+      console.log(result.uri);
+    }
+  };
+
+  //Open Camera
+  const openCamera = async () => {
+    // Ask the user for the permission to access the camera
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your camera!");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync();
+
+    // Explore the result
+    console.log(result);
+
+    if (!result.cancelled) {
+      setPickedImagePath(result.uri);
+      console.log(result.uri);
+    }
+  };
+
   const validate = () => {
-    // console.log(formData)
+    console.log(formData)
     var ret = true;
     Object.entries(formData).map(([k, v]) => {
       // console.log(k)
@@ -62,7 +116,7 @@ function AssetDetails(props) {
       url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0]}`,
     })
       .then((res) => {
-        console.log(res.data.message);
+        // console.log(res.data.message);
         setDevTypes(res.data.message);
       })
       .catch((err) => {
@@ -76,7 +130,7 @@ function AssetDetails(props) {
       url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/systems",
     })
       .then((res) => {
-        console.log(res.data.message);
+        // console.log(res.data.message);
         setSystems(res.data.message);
       })
       .catch((err) => {
@@ -133,8 +187,13 @@ function AssetDetails(props) {
       // console.log(tag);
       // console.log(assTag);
 
-      //Display asset tag QR code
-      setShowModal(true);
+      if (pickedImagePath == "") {
+        alert("Take asset photo or upload image")
+      } else {
+        //Display asset tag QR code
+        setShowModal(true);
+      }
+      
     } else {
       // console.log('Fill all values')
       alert("Fill all required values");
@@ -169,8 +228,14 @@ function AssetDetails(props) {
                   popupTitle="Select item"
                   title="Select item"
                   data={systems}
-                  onSelect={(data) => {
+                  onSelect={(data,value) => {
+                    // console.log(data.length);
+                    if (data.length != 0) {
                     setselectSystems(data);
+                    // console.log(data);
+                    // setData({ ...formData, system: value[0].name, system_id: value[0].id });
+                    setData({ ...formData, system: value[0].name });
+                    }
                   }}
                   onRemoveItem={(data) => {
                     setselectSystems(data);
@@ -185,8 +250,13 @@ function AssetDetails(props) {
                   popupTitle="Select item"
                   title="Select item"
                   data={devTypes}
-                  onSelect={(data) => {
+                  onSelect={(data,value) => {
+                    if (data.length != 0) {
                     setselectDev(data);
+                    // console.log(value);
+                    setData({ ...formData, device: value[0].name, device_id: value[0].id });
+                    // setData({ ...formData, device_id: value[0].id });
+                    }
                   }}
                   onRemoveItem={(data) => {
                     setselectDev(data);
@@ -286,17 +356,86 @@ function AssetDetails(props) {
               <Text>Hello</Text>
               <Image alt="Device image" source={require("../../assets/logo.png")}/>
             </Box> */}
-            <Image
+            {/* <Image
               alt="Device image"
-              source={{ uri: imagepath }}
+              // source={{ uri: imagepath }}
+              source={img}
               borderWidth={2}
               borderColor={"black"}
               flex={1}
               style={{ width: "100%", maxHeight: 400 }}
-            />
+            /> */}
+              {/* <Box alignItems={"center"} flex={1}> */}
+              {pickedImagePath == "" ? (
+                <Box style={styles.card} margin={10}>
+                  <VStack flex={1} space={5} padding={5}>
+                    <Box style={styles.card} shadow={1} padding={10}>
+                      <TouchableOpacity onPress={openCamera}>
+                        <HStack space={5} alignItems={"center"}>
+                          <Icon
+                            size={50}
+                            name="camera"
+                            as={MaterialCommunityIcons}
+                            color="grey"
+                          />
+                          <Text style={styles.title}>Open Camera</Text>
+                        </HStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box style={styles.card} shadow={1} padding={10}>
+                      <TouchableOpacity onPress={showImagePicker}>
+                        <HStack space={5} alignItems={"center"}>
+                          <Icon
+                            size={50}
+                            name="upload"
+                            as={MaterialCommunityIcons}
+                            color="grey"
+                          />
+                          <Text style={styles.title}>Upload Image</Text>
+                        </HStack>
+                      </TouchableOpacity>
+                    </Box>
+                  </VStack>
+                </Box>
+              ) : (
+                <VStack
+                  flex={1}
+                  space={2}
+                  alignItems={"center"}
+                  w="100%"
+                  margin={5}
+                >
+                  <Box
+                    style={styles.card}
+                    justifyContent={"center"}
+                    w="100%"
+                    padding={2}
+                  >
+                    <Image
+                      flex={1}
+                      source={{ uri: pickedImagePath }}
+                      style={{ width: "100%" }}
+                      borderWidth={2}
+                      borderColor={"black"}
+                      alt={"Device Image"}
+                      resizeMode={'stretch'}
+                    />
+                  </Box>
+                  <Button.Group alignItems="center">
+                    <Button
+                      onPress={() => {
+                        console.log(pickedImagePath);
+                        setPickedImagePath("");
+                      }}
+                    >
+                      Change Photo
+                    </Button>
+                    
+                  </Button.Group>
+                </VStack>
+              )}
+            {/* </Box> */}
 
-            {/* <QRCode value="Device100"/> */}
-            {/* <Button maxW={200}>Change image</Button> */}
           </VStack>
         </HStack>
         <Button.Group alignSelf={"center"}>
@@ -313,7 +452,7 @@ function AssetDetails(props) {
         </Button.Group>
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
           <Modal.Content maxWidth="300px">
-            <Modal.CloseButton />
+            {/* <Modal.CloseButton /> */}
             <Modal.Header alignItems={"center"}>Asset Tag QR Code</Modal.Header>
             <Modal.Footer>
               <VStack flex={1} alignItems={"center"} space={5}>
@@ -354,5 +493,31 @@ function AssetDetails(props) {
     </Box>
   );
 }
+
+var styles = StyleSheet.create({
+  title: {
+    color: "black",
+    fontWeight: "500",
+    fontSize: 20,
+  },
+  desc_title: {
+    color: "#4e5d78",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  subtext: {
+    color: "#99879D",
+    fontWeight: "normal",
+  },
+  card: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    maxHeight: 400,
+    maxWidth: 400,
+  },
+});
 
 export default AssetDetails;

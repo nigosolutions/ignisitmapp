@@ -178,6 +178,7 @@ function WOScreen(props) {
 
   const getWO = async (stat) => {
     setLoading(true);
+    // console.log(user.id);
     await axios
       .get(
         "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders",
