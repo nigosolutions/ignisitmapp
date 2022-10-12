@@ -19,6 +19,8 @@ import React from "react";
 import { getUser } from "../../auth/auth";
 import axios from "axios";
 import ViewAssets from "./ViewAssets";
+// import Config from "react-native-config";
+import {TEST} from '@env';
 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -231,7 +233,7 @@ function AssetHome(props) {
           </VStack>
           <Spacer />
           <VStack space={3}>
-            <Button colorScheme={"lightBlue"} width={150} rounded={100}>
+            <Button colorScheme={"lightBlue"} width={150} rounded={100} onPress={() => {console.log(TEST)}}>
               Submit
             </Button>
             <Button

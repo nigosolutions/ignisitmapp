@@ -274,6 +274,7 @@ function WOScreen(props) {
                     </VStack>
                     <Spacer />
                     <Box justifyContent={"center"}>
+                      {selectedWo.status === "Pending" &&
                       <Button
                         rightIcon={<ChevronRightIcon />}
                         colorScheme={"lightBlue"}
@@ -289,12 +290,12 @@ function WOScreen(props) {
                               })
                             : props.navigation.navigate("ITM", {
                                 screen: "ITMHome",
-                                params: { WoID: selectedWo.wo_id },
+                                params: { WoID: selectedWo.wo_id , wo: selectedWo,},
                               });
                         }}
                       >
                         {selectedWo.status === "Pending" ? "Continue" : "View"}
-                      </Button>
+                      </Button>}
                     </Box>
                   </HStack>
 

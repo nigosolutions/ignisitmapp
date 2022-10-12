@@ -86,7 +86,7 @@ function ITMHome(props) {
     console.log("Final Data: ", user);
   }, []);
 
-  const { WoID } = props.route.params;
+  const { WoID, wo } = props.route.params;
   // console.log(props.route.params)
 
   const FirstRoute = () => (
@@ -174,7 +174,7 @@ function ITMHome(props) {
           rounded={15}
           bgColor={"white"}
           alignItems={"center"}
-          height={150}
+          height={175}
           padding={5}
         >
           <Box>
@@ -182,13 +182,13 @@ function ITMHome(props) {
               <Text
                 style={{ color: "#4e5d78", fontWeight: "bold", fontSize: 20 }}
               >
-                {WoID}
+                WO#: {WoID}
               </Text>
               <Text style={{ color: "#99879D", fontWeight: "normal" }}>
-                Type: Asset Tagging
+                Type: ITM
               </Text>
               <Text style={{ color: "#99879D", fontWeight: "normal" }}>
-                Property: Building XYZ
+                Property: {wo.building_name}
               </Text>
             </VStack>
           </Box>
@@ -221,6 +221,11 @@ function ITMHome(props) {
               rounded={100}
             >
               Start
+            </Button>
+            <Button colorScheme={"coolGray"} rounded={100} onPress={() => {
+                props.navigation.navigate("WOHome");
+              }}>
+              Save & Exit
             </Button>
             <Button colorScheme={"lightBlue"} rounded={100}>
               Submit

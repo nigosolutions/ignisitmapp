@@ -27,7 +27,8 @@ function WorkOrder() {
       <WONav.Screen
         name="ITM"
         component={ITMWorkOrder}
-        options={{ title: "ITM Work Order" }}
+        options={{ title: "ITM Work Order", headerBackVisible: false,
+        gestureEnabled: false, }}
       />
     </WONav.Navigator>
   );

@@ -20,6 +20,8 @@ import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons} from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import S3 from "react-aws-s3";
+import {REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY,REACT_APP_BUCKET_NAME,REACT_APP_REGION} from '@env';
 
 function AssetDetails(props) {
   const [formData, setData] = React.useState({
@@ -41,6 +43,7 @@ function AssetDetails(props) {
   const [systems, setSystems] = React.useState([]);
   const [selectsys, setselectSystems] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(false);
   // const [assTag, setAssTag] = React.useState();
   // const { navigation } = props
   // const imagepath = navigation.getParam('imagepath',"../../assets/logo.png")
@@ -48,8 +51,11 @@ function AssetDetails(props) {
   const { WoID, wo } = props.route.params;
   // console.log(WoID)
 
+  //Base url to save images
+  const s3Url = "https://ignis-building-docs.s3.amazonaws.com";
+
   const [pickedImagePath, setPickedImagePath] = React.useState("");
-  const img = require('../../assets/logo.png');
+  // const img = require('../../assets/logo.png');
 
   //Upload image
   const showImagePicker = async () => {
@@ -159,16 +165,39 @@ function AssetDetails(props) {
       .catch((err) => {
         console.log(err.response.data);
       });
+
   };
 
-  const generateTag = () => {
-    let tag = Math.floor(Math.random() * 1000);
-    tag = tag.toString();
-    tag = "AS".concat(tag);
+  const generateTag = async () => {
 
-    //Updating formData with tag value
-    // setAssTag(tag);
-    setData({ ...formData, asset_tag: tag });
+    let ID = 1;
+    setLoading(true);
+    await axios({
+      method: "get",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets`,
+      params: { type: "AssetID" },
+    })
+      .then((res) => {
+        // console.log(res.data.message);
+        ID = parseInt(res.data.message.asset_id) + ID;
+        let tag = ID.toString();
+        tag = wo.building_id.toString() + tag;
+        tag = "AS".concat(tag);
+        setData({ ...formData, asset_tag: tag });
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+      });
+
+    // let tag = Math.floor(Math.random() * 1000);
+    // tag = tag.toString();
+    // tag = "AS".concat(tag);
+
+    // //Updating formData with tag value
+    // // setAssTag(tag);
+    // setData({ ...formData, asset_tag: tag });
 
     //Adding asset tag and imagepath to formData
     // let temp = {assetTag: tag,image: imagepath}
@@ -177,7 +206,7 @@ function AssetDetails(props) {
     // console.log(formData);
   };
 
-  const submit = () => {
+  const submit = async () => {
     // console.log(validate())
     if (validate() == true) {
       console.log("All filled");
@@ -198,6 +227,37 @@ function AssetDetails(props) {
       // console.log('Fill all values')
       alert("Fill all required values");
     }
+
+    let dirName = formData.asset_tag;
+    const config = {
+      bucketName: REACT_APP_BUCKET_NAME,
+      region: REACT_APP_REGION,
+      accessKeyId: REACT_APP_ACCESS_ID,
+      secretAccessKey: REACT_APP_ACCESS_KEY,
+      s3Url,
+      dirName,
+    }; 
+    let time = new Date().toJSON().slice(0,16);
+    let filename = formData.asset_tag.concat("-",".jpg");
+    console.log(dirName);
+    console.log(filename);
+    console.log(config);
+    const ReactS3Client = new S3(config);
+    try {
+      let data = await ReactS3Client.uploadFile(pickedImagePath, filename);
+      console.log(data);
+      if (data.status === 204) {
+        console.log("success");
+      } else {
+        console.log("fail");
+        // fail = true;
+      }
+    } catch (err) {
+      console.log(err);
+      // fail = true;
+    }
+
+
   };
 
   React.useEffect(async () => {
@@ -339,6 +399,7 @@ function AssetDetails(props) {
                     colorScheme={"lightBlue"}
                     flex={1}
                     onPress={generateTag}
+                    isLoading={isLoading} isLoadingText="Generating"
                   >
                     Generate Tag
                   </Button>
@@ -441,7 +502,7 @@ function AssetDetails(props) {
         <Button.Group alignSelf={"center"}>
           <Button
             colorScheme={"coolGray"}
-            onPress={() => props.navigation.navigate("ATHome", { WoID: WoID })}
+            onPress={() => props.navigation.navigate("ATHome", { WoID: WoID, wo: wo})}
           >
             Cancel
           </Button>

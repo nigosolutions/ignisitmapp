@@ -19,6 +19,7 @@ import {
     // console.log(props.asset);
     const [formData, setData] = React.useState({
       "device": props.asset.device,
+      "device_id": props.asset.device_id,
       "system": props.asset.system,
       "mfr_name": props.asset.mfr_name,
       "mfr_pn": props.asset.mfr_pn,
@@ -127,8 +128,8 @@ import {
     
 
     React.useEffect(async () => {
-        setselectDev(props.asset.device);
-        setselectSystems(props.asset.system);
+        // setselectDev(props.asset.device);
+        // setselectSystems(props.asset.system);
         getSystemData();
       
     }, []);
@@ -140,6 +141,7 @@ import {
     React.useEffect(() => {
       setData({
         "device": props.asset.device,
+        "device_id": props.asset.device_id,
         "system": props.asset.system,
         "mfr_name": props.asset.mfr_name,
         "mfr_pn": props.asset.mfr_pn,
@@ -149,6 +151,8 @@ import {
         "room_no": props.asset.room_no,
         "asset_tag": props.asset.asset_tag,
       });
+      setselectDev(props.asset.device);
+      setselectSystems(props.asset.system);
     }, [props.asset]);
   
     return (
@@ -184,16 +188,15 @@ import {
                             popupTitle="Select system"
                             title={formData.system}
                             data={systems}
-                            // onSelect={(data, value) => {
-                            // setselectSystems(data);
-                            // // setData({ ...formData, system: data });
-                            // setData({ ...formData, system: value[0].name });
-                            // }}
                             onSelect={(data,value) => {
+                              // console.log(data.length);
+                              if (data.length != 0) {
                               setselectSystems(data);
-                              // console.log(value);
+                              // console.log(data);
                               setData({ ...formData, system: value[0].name });
+                              }
                             }}
+                      
                             onRemoveItem={(data) => {
                             setselectSystems(data);
                             }}
@@ -216,14 +219,12 @@ import {
                             popupTitle="Select device"
                             title={formData.device}
                             data={devTypes}
-                            // onSelect={(data) => {
-                            // setselectDev(data);
-                            // setData({ ...formData, device: data });
-                            // }}
                             onSelect={(data,value) => {
+                              if (data.length != 0) {
                               setselectDev(data);
                               // console.log(value);
-                              setData({ ...formData, device: value[0].name });
+                              setData({ ...formData, device: value[0].name, device_id: value[0].id });
+                              }
                             }}
                             onRemoveItem={(data) => {
                             setselectDev(data);
