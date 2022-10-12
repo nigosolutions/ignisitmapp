@@ -31,7 +31,7 @@ import {
     });
     // console.log(formData);
     const [devTypes, setDevTypes] = React.useState([]);
-    const [selectdev, setselectDev] = React.useState();
+    const [selectdev, setselectDev] = React.useState(Array[props.asset.device_id]);
     const [systems, setSystems] = React.useState([]);
     const [selectsys, setselectSystems] = React.useState([]);
     // const [isDisabled, setIsDisabled] = React.useState(false);
@@ -62,7 +62,7 @@ import {
         url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0]}`,
       })
         .then((res) => {
-          console.log(res.data.message);
+          // console.log(res.data.message);
           setDevTypes(res.data.message);
         })
         .catch((err) => {
@@ -76,7 +76,7 @@ import {
         url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/systems",
       })
         .then((res) => {
-          console.log(res.data.message);
+          // console.log(res.data.message);
           setSystems(res.data.message);
         })
         .catch((err) => {
@@ -136,6 +136,7 @@ import {
   
     React.useEffect(async () => {
       getDeviceData(selectsys);
+      setData({ ...formData, device: "", device_id: "" });
     }, [selectsys]);
 
     React.useEffect(() => {
@@ -151,8 +152,8 @@ import {
         "room_no": props.asset.room_no,
         "asset_tag": props.asset.asset_tag,
       });
-      setselectDev(props.asset.device);
-      setselectSystems(props.asset.system);
+      // setselectDev(props.asset.device);
+      // setselectSystems(props.asset.system);
     }, [props.asset]);
   
     return (
@@ -177,11 +178,12 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.system}
+                            // placeholder={props.asset.system}
+                            value={formData.system}
                         />
                         ):(
                         <Select2
-                            value={selectsys}
+                            value={formData.system}
                             colorTheme={"black"}
                             isSelectSingle
                             style={{ borderRadius: 5 }}
@@ -208,21 +210,24 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.device}
+                            // placeholder={props.asset.device}
+                            value={formData.device}
                         />
                         ):(
                         <Select2
-                            value={formData.device}
+                            value={selectdev}
                             colorTheme={"black"}
                             isSelectSingle
                             style={{ borderRadius: 5 }}
                             popupTitle="Select device"
                             title={formData.device}
+                            // title="Select device"
                             data={devTypes}
                             onSelect={(data,value) => {
                               if (data.length != 0) {
                               setselectDev(data);
-                              // console.log(value);
+                              console.log(value);
+                              console.log(data);
                               setData({ ...formData, device: value[0].name, device_id: value[0].id });
                               }
                             }}
@@ -237,7 +242,8 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.mfr_name}
+                            // placeholder={props.asset.mfr_name}
+                            value={formData.mfr_name}
                             onChangeText={(value) =>
                             setData({ ...formData, mfr_name: value })
                             }
@@ -248,8 +254,8 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.mfr_pn}
-                            // value={formData.mfr_pn}
+                            // placeholder={props.asset.mfr_pn}
+                            value={formData.mfr_pn}
                             onChangeText={(value) =>
                             setData({ ...formData, mfr_pn: value })
                             }
@@ -260,7 +266,8 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.specification}
+                            // placeholder={props.asset.specification}
+                            value={formData.specification}
                             onChangeText={(value) =>
                             setData({ ...formData, specification: value })
                             }
@@ -271,7 +278,8 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.drawing_no}
+                            // placeholder={props.asset.drawing_no}
+                            value={formData.drawing_no}
                             onChangeText={(value) =>
                             setData({ ...formData, drawing_no: value })
                             }
@@ -282,7 +290,8 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.floor_no}
+                            // placeholder={props.asset.floor_no}
+                            value={formData.floor_no}
                             onChangeText={(value) =>
                             setData({ ...formData, floor_no: value })
                             }
@@ -293,7 +302,8 @@ import {
                             minH={10}
                             mb={2}
                             isDisabled={props.isDisabled}
-                            placeholder={props.asset.room_no}
+                            // placeholder={props.asset.room_no}
+                            value={formData.room_no}
                             onChangeText={(value) =>
                             setData({ ...formData, room_no: value })
                             }
@@ -305,7 +315,8 @@ import {
                             minH={10}
                             isDisabled={true}
                             flex={2}
-                            placeholder={props.asset.asset_tag}
+                            // placeholder={props.asset.asset_tag}
+                            value={formData.asset_tag}
                             onChangeText={(value) =>
                                 setData({ ...formData, asset_tag: value })
                             }

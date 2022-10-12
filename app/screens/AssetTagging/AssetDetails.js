@@ -266,6 +266,7 @@ function AssetDetails(props) {
 
   React.useEffect(async () => {
     getDeviceData(selectsys);
+    setData({ ...formData, device: "", device_id: "" });
   }, [selectsys]);
 
   return (
