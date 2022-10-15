@@ -30,9 +30,10 @@ function ScheduleScreen(props) {
       .then((res) => {
         console.log(res.data.message);
         let schedule = res.data.message.map((item) => ({
-          title: item.title,
+          title: item.activity,
           start: new Date(item.start),
           end: new Date(item.end),
+          wo_id: item.wo_id,
         }));
         console.log(schedule);
         setSchedule(schedule);
@@ -81,6 +82,7 @@ function ScheduleScreen(props) {
         />
       </HStack>
       <Calendar
+        onPressEvent={(item) => props.navigation.navigate("Work Orders")}
         swipeEnabled={false}
         showAdjacentMonths
         date={date}

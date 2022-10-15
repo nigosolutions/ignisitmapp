@@ -20,9 +20,10 @@ import { getUser } from "../../auth/auth";
 import axios from "axios";
 import ViewAssets from "./ViewAssets";
 // import Config from "react-native-config";
-import {TEST} from '@env';
+import { TEST } from "@env";
 
 import { useFocusEffect } from "@react-navigation/native";
+import { Alert } from "react-native";
 
 function AssetHome(props) {
   React.useEffect(async () => {
@@ -137,59 +138,31 @@ function AssetHome(props) {
             >
               View
             </Button>
+
             <Button
-              colorScheme={"coolGray"}
-              variant={"ghost"}
-              onPress={() => {
-                setSelectedAsset(item);
-                setIsDisabled(false);
-                setShowModal(true);
-              }}
+              colorScheme="danger"
+              onPress={() =>
+                Alert.alert(
+                  "Delete Asset",
+                  "This will remove all data relating to " +
+                    item.asset_tag +
+                    ". This action cannot be reversed. Deleted data can not be recovered.",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      onPress: () => deleteAsset(item.asset_id),
+                    },
+                  ]
+                )
+              }
             >
-              Edit
+              Delete
             </Button>
-            {/* <Button
-                colorScheme={"danger"}
-                variant={"ghost"}
-                onPress={()=>{deleteAsset(item.asset_id)}}
-              >
-                Delete
-              </Button> */}
-            <Popover
-              placement={"left top"}
-              trigger={(triggerProps) => {
-                return (
-                  <Button {...triggerProps} colorScheme="danger">
-                    Delete
-                  </Button>
-                );
-              }}
-            >
-              <Popover.Content accessibilityLabel="Delete Asset" w="56">
-                <Popover.Arrow />
-                <Popover.CloseButton />
-                <Popover.Header>Delete Asset</Popover.Header>
-                <Popover.Body>
-                  This will remove all data relating to this asset. This action
-                  cannot be reversed. Deleted data can not be recovered.
-                </Popover.Body>
-                <Popover.Footer justifyContent="center">
-                  {/* <Button.Group space={2}> */}
-                  {/* <Button colorScheme="coolGray" variant="ghost">
-                        Cancel
-                      </Button> */}
-                  <Button
-                    colorScheme="danger"
-                    onPress={() => {
-                      deleteAsset(item.asset_id);
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                  {/* </Button.Group> */}
-                </Popover.Footer>
-              </Popover.Content>
-            </Popover>
           </HStack>
         </HStack>
       </Box>
@@ -233,7 +206,14 @@ function AssetHome(props) {
           </VStack>
           <Spacer />
           <VStack space={3}>
-            <Button colorScheme={"lightBlue"} width={150} rounded={100} onPress={() => {console.log(TEST)}}>
+            <Button
+              colorScheme={"lightBlue"}
+              width={150}
+              rounded={100}
+              onPress={() => {
+                console.log(TEST);
+              }}
+            >
               Submit
             </Button>
             <Button
@@ -297,7 +277,6 @@ function AssetHome(props) {
             <Box padding={3}>
               <FlatList
                 data={assetList}
-               
                 renderItem={({ item }) => {
                   if (search === "") {
                     return <ListItem item={item} />;
@@ -320,9 +299,8 @@ function AssetHome(props) {
                   ) {
                     return <ListItem item={item} />;
                   }
-
-   
-                }} keyExtractor={(item) => item.asset_tag}
+                }}
+                keyExtractor={(item) => item.asset_tag}
               />
             </Box>
           )}
