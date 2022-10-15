@@ -21,6 +21,7 @@ import {
       "device": props.asset.device,
       "device_id": props.asset.device_id,
       "system": props.asset.system,
+      "system_id": props.asset.system_id,
       "mfr_name": props.asset.mfr_name,
       "mfr_pn": props.asset.mfr_pn,
       "specification": props.asset.specification,
@@ -31,9 +32,9 @@ import {
     });
     // console.log(formData);
     const [devTypes, setDevTypes] = React.useState([]);
-    const [selectdev, setselectDev] = React.useState(Array[props.asset.device_id]);
+    const [selectdev, setselectDev] = React.useState([props.asset.device_id]);
     const [systems, setSystems] = React.useState([]);
-    const [selectsys, setselectSystems] = React.useState([]);
+    const [selectsys, setselectSystems] = React.useState([props.asset.system_id]);
     // const [isDisabled, setIsDisabled] = React.useState(false);
     // const [showModal, setShowModal] = React.useState(false);
 
@@ -135,15 +136,22 @@ import {
     }, []);
   
     React.useEffect(async () => {
+      if (selectsys.length != 0) {
       getDeviceData(selectsys);
       setData({ ...formData, device: "", device_id: "" });
+      }
     }, [selectsys]);
 
+
+
     React.useEffect(() => {
+      setselectSystems([]);
+      setselectDev([]);
       setData({
         "device": props.asset.device,
         "device_id": props.asset.device_id,
         "system": props.asset.system,
+        "system_id": props.asset.system_id,
         "mfr_name": props.asset.mfr_name,
         "mfr_pn": props.asset.mfr_pn,
         "specification": props.asset.specification,
@@ -152,11 +160,11 @@ import {
         "room_no": props.asset.room_no,
         "asset_tag": props.asset.asset_tag,
       });
-      // setselectDev(props.asset.device);
-      // setselectSystems(props.asset.system);
+
     }, [props.asset]);
   
     return (
+      <>
         <Modal.Content bgColor={"white"} maxHeight={"75%"} maxWidth={"75%"}>
           <Modal.CloseButton />
           {/* <Modal.Header>Asset </Modal.Header> */}
@@ -183,7 +191,8 @@ import {
                         />
                         ):(
                         <Select2
-                            value={formData.system}
+                            // value={formData.system}
+                            value={selectsys}
                             colorTheme={"black"}
                             isSelectSingle
                             style={{ borderRadius: 5 }}
@@ -195,7 +204,7 @@ import {
                               if (data.length != 0) {
                               setselectSystems(data);
                               // console.log(data);
-                              setData({ ...formData, system: value[0].name });
+                              setData({ ...formData, system: value[0].name, system_id: value[0].id });
                               }
                             }}
                       
@@ -216,6 +225,7 @@ import {
                         ):(
                         <Select2
                             value={selectdev}
+                            // value={formData.device}
                             colorTheme={"black"}
                             isSelectSingle
                             style={{ borderRadius: 5 }}
@@ -375,6 +385,7 @@ import {
             </Button.Group>
             </Modal.Footer> */}
         </Modal.Content>    
+        </>
     );
   }
   

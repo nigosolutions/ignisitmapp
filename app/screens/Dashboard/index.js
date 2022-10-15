@@ -29,6 +29,9 @@ function DashboardScreen(props) {
   const [schedule, setSchedule] = React.useState([]);
 
   const getDash = async () => {
+    let user = await getUser();
+
+    setUser(user);
     await axios({
       method: "get",
       url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/dashboard?id=${user.id}`,
@@ -42,6 +45,9 @@ function DashboardScreen(props) {
   };
 
   const getSchedule = async () => {
+    let user = await getUser();
+
+    setUser(user);
     await axios({
       method: "get",
       url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/schedule?id=${user.id}`,
@@ -61,15 +67,9 @@ function DashboardScreen(props) {
       });
   };
 
-  const setStart = async () => {
-    let user = await getUser();
-
-    setUser(user);
+  React.useEffect(async () => {
     getDash();
     getSchedule();
-  };
-  React.useEffect(async () => {
-    setStart();
   }, []);
   const today = new Date();
   const [user, setUser] = React.useState({});

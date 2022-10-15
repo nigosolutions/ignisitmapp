@@ -103,7 +103,7 @@ function AssetHome(props) {
 
   // Component for an item/asset in assets list
   const ListItem = ({ item }) => (
-    <Box paddingY={1.5}>
+    <Box index={item.asset_id} paddingY={1.5}>
       <Box shadow={"0"} padding={3} rounded={10} bgColor={"coolGray.50"}>
         <HStack alignItems={"center"} space={5}>
           <VStack>
@@ -297,7 +297,7 @@ function AssetHome(props) {
             <Box padding={3}>
               <FlatList
                 data={assetList}
-                keyExtractor={(item) => item.asset_tag}
+               
                 renderItem={({ item }) => {
                   if (search === "") {
                     return <ListItem item={item} />;
@@ -321,87 +321,8 @@ function AssetHome(props) {
                     return <ListItem item={item} />;
                   }
 
-                  // return (
-                  //   <Box paddingY={1.5}>
-                  //     <Box
-                  //       shadow={"0"}
-                  //       padding={3}
-                  //       rounded={10}
-                  //       bgColor={"coolGray.50"}
-                  //     >
-                  //       <HStack alignItems={"center"} space={5}>
-                  //         <VStack>
-                  //           <Text>
-                  //             <Text bold>{item.device}</Text>
-                  //           </Text>
-
-                  //           <Text>
-                  //             <Text bold>Location: </Text>
-                  //             <Text>Room {item.room_no}, Floor {item.floor_no}</Text>
-                  //           </Text>
-
-                  //           <Text>
-                  //             <Text bold>Tag: </Text>
-                  //             <Text>{item.asset_tag}</Text>
-                  //           </Text>
-                  //           <Spacer />
-                  //         </VStack>
-                  //         <Spacer />
-                  //         <HStack space={2}>
-                  //           <Button
-                  //             colorScheme={"coolGray"}
-                  //             variant={"ghost"}
-                  //             onPress={()=>{setSelectedAsset(item);
-                  //                           setIsDisabled(true);
-                  //                           setShowModal(true);}}
-                  //           >
-                  //             View
-                  //           </Button>
-                  //           <Button
-                  //             colorScheme={"coolGray"}
-                  //             variant={"ghost"}
-                  //             onPress={()=>{setSelectedAsset(item);
-                  //                           setIsDisabled(false);
-                  //                           setShowModal(true);}}
-                  //           >
-                  //             Edit
-                  //           </Button>
-                  //           {/* <Button
-                  //             colorScheme={"danger"}
-                  //             variant={"ghost"}
-                  //             onPress={()=>{deleteAsset(item.asset_id)}}
-                  //           >
-                  //             Delete
-                  //           </Button> */}
-                  //           <Popover placement={'left top'} trigger={triggerProps => {
-                  //           return <Button {...triggerProps} colorScheme="danger">
-                  //                   Delete
-                  //                 </Button>;
-                  //         }}>
-                  //             <Popover.Content accessibilityLabel="Delete Asset" w="56">
-                  //               <Popover.Arrow />
-                  //               <Popover.CloseButton />
-                  //               <Popover.Header>Delete Asset</Popover.Header>
-                  //               <Popover.Body>
-                  //                 This will remove all data relating to this asset. This action cannot be
-                  //                 reversed. Deleted data can not be recovered.
-                  //               </Popover.Body>
-                  //               <Popover.Footer justifyContent="center">
-                  //                 {/* <Button.Group space={2}> */}
-                  //                   {/* <Button colorScheme="coolGray" variant="ghost">
-                  //                     Cancel
-                  //                   </Button> */}
-                  //                   <Button colorScheme="danger" onPress={()=>{deleteAsset(item.asset_id)}}>Confirm</Button>
-                  //                 {/* </Button.Group> */}
-                  //               </Popover.Footer>
-                  //             </Popover.Content>
-                  //           </Popover>
-                  //         </HStack>
-                  //       </HStack>
-                  //     </Box>
-                  //   </Box>
-                  // );
-                }}
+   
+                }} keyExtractor={(item) => item.asset_tag}
               />
             </Box>
           )}

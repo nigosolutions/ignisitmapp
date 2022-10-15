@@ -28,7 +28,7 @@ function AssetDetails(props) {
     device: "",
     device_id:"",
     system: "",
-    // system_id: "",
+    system_id: "",
     mfr_name: "",
     mfr_pn: "",
     specification: "",
@@ -294,8 +294,8 @@ function AssetDetails(props) {
                     if (data.length != 0) {
                     setselectSystems(data);
                     // console.log(data);
-                    // setData({ ...formData, system: value[0].name, system_id: value[0].id });
-                    setData({ ...formData, system: value[0].name });
+                    setData({ ...formData, system: value[0].name, system_id: value[0].id });
+                    // setData({ ...formData, system: value[0].name });
                     }
                   }}
                   onRemoveItem={(data) => {
