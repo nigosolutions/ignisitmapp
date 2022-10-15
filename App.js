@@ -62,17 +62,16 @@ export default function Example() {
       <NavigationContainer>
         <NativeBaseProvider>
           <MainNav.Navigator>
-          <MainNav.Screen
-              name="Tab"
-              component={MyTab}
-              options={{ headerShown: false }}
-            />
             <MainNav.Screen
               name="Login"
               component={LoginScreen}
               options={{ headerShown: false }}
             />
-        
+            <MainNav.Screen
+              name="Tab"
+              component={MyTab}
+              options={{ headerShown: false }}
+            />
           </MainNav.Navigator>
         </NativeBaseProvider>
       </NavigationContainer>

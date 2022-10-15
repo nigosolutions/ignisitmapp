@@ -10,7 +10,8 @@ import {
   VStack,
   Image,
   Modal,
-  Icon
+  Icon,
+  KeyboardAvoidingView,
 } from "native-base";
 import React from "react";
 import QRCode from "react-native-qrcode-svg";
@@ -18,15 +19,20 @@ import axios from "axios";
 import Select2 from "react-select2-native";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { MaterialCommunityIcons} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import S3 from "react-aws-s3";
-import {REACT_APP_ACCESS_ID,REACT_APP_ACCESS_KEY,REACT_APP_BUCKET_NAME,REACT_APP_REGION} from '@env';
+import {
+  REACT_APP_ACCESS_ID,
+  REACT_APP_ACCESS_KEY,
+  REACT_APP_BUCKET_NAME,
+  REACT_APP_REGION,
+} from "@env";
 
 function AssetDetails(props) {
   const [formData, setData] = React.useState({
     device: "",
-    device_id:"",
+    device_id: "",
     system: "",
     system_id: "",
     mfr_name: "",
@@ -101,7 +107,7 @@ function AssetDetails(props) {
   };
 
   const validate = () => {
-    console.log(formData)
+    console.log(formData);
     var ret = true;
     Object.entries(formData).map(([k, v]) => {
       // console.log(k)
@@ -165,11 +171,9 @@ function AssetDetails(props) {
       .catch((err) => {
         console.log(err.response.data);
       });
-
   };
 
   const generateTag = async () => {
-
     let ID = 1;
     setLoading(true);
     await axios({
@@ -217,12 +221,11 @@ function AssetDetails(props) {
       // console.log(assTag);
 
       if (pickedImagePath == "") {
-        alert("Take asset photo or upload image")
+        alert("Take asset photo or upload image");
       } else {
         //Display asset tag QR code
         setShowModal(true);
       }
-      
     } else {
       // console.log('Fill all values')
       alert("Fill all required values");
@@ -236,9 +239,9 @@ function AssetDetails(props) {
       secretAccessKey: REACT_APP_ACCESS_KEY,
       s3Url,
       dirName,
-    }; 
-    let time = new Date().toJSON().slice(0,16);
-    let filename = formData.asset_tag.concat("-",".jpg");
+    };
+    let time = new Date().toJSON().slice(0, 16);
+    let filename = formData.asset_tag.concat("-", ".jpg");
     console.log(dirName);
     console.log(filename);
     console.log(config);
@@ -256,8 +259,6 @@ function AssetDetails(props) {
       console.log(err);
       // fail = true;
     }
-
-
   };
 
   React.useEffect(async () => {
@@ -278,135 +279,146 @@ function AssetDetails(props) {
             <Text bold fontSize="xl" mb="4">
               Asset Details
             </Text>
-            <ScrollView w="100%">
-              <FormControl isRequired>
-                <FormControl.Label>System</FormControl.Label>
-                <Select2
-                  value={selectsys}
-                  colorTheme={"black"}
-                  isSelectSingle
-                  style={{ borderRadius: 5 }}
-                  popupTitle="Select item"
-                  title="Select item"
-                  data={systems}
-                  onSelect={(data,value) => {
-                    // console.log(data.length);
-                    if (data.length != 0) {
-                    setselectSystems(data);
-                    // console.log(data);
-                    setData({ ...formData, system: value[0].name, system_id: value[0].id });
-                    // setData({ ...formData, system: value[0].name });
-                    }
-                  }}
-                  onRemoveItem={(data) => {
-                    setselectSystems(data);
-                  }}
-                />
-                <FormControl.Label>Device</FormControl.Label>
-                <Select2
-                  value={selectdev}
-                  colorTheme={"black"}
-                  isSelectSingle
-                  style={{ borderRadius: 5 }}
-                  popupTitle="Select item"
-                  title="Select item"
-                  data={devTypes}
-                  onSelect={(data,value) => {
-                    if (data.length != 0) {
-                    setselectDev(data);
-                    // console.log(value);
-                    setData({ ...formData, device: value[0].name, device_id: value[0].id });
-                    // setData({ ...formData, device_id: value[0].id });
-                    }
-                  }}
-                  onRemoveItem={(data) => {
-                    setselectDev(data);
-                  }}
-                />
+            <KeyboardAvoidingView>
+              <ScrollView w="100%">
+                <FormControl isRequired>
+                  <FormControl.Label>System</FormControl.Label>
+                  <Select2
+                    value={selectsys}
+                    colorTheme={"black"}
+                    isSelectSingle
+                    style={{ borderRadius: 5 }}
+                    popupTitle="Select item"
+                    title="Select item"
+                    data={systems}
+                    onSelect={(data, value) => {
+                      // console.log(data.length);
+                      if (data.length != 0) {
+                        setselectSystems(data);
+                        // console.log(data);
+                        setData({
+                          ...formData,
+                          system: value[0].name,
+                          system_id: value[0].id,
+                        });
+                        // setData({ ...formData, system: value[0].name });
+                      }
+                    }}
+                    onRemoveItem={(data) => {
+                      setselectSystems(data);
+                    }}
+                  />
+                  <FormControl.Label>Device</FormControl.Label>
+                  <Select2
+                    value={selectdev}
+                    colorTheme={"black"}
+                    isSelectSingle
+                    style={{ borderRadius: 5 }}
+                    popupTitle="Select item"
+                    title="Select item"
+                    data={devTypes}
+                    onSelect={(data, value) => {
+                      if (data.length != 0) {
+                        setselectDev(data);
+                        // console.log(value);
+                        setData({
+                          ...formData,
+                          device: value[0].name,
+                          device_id: value[0].id,
+                        });
+                        // setData({ ...formData, device_id: value[0].id });
+                      }
+                    }}
+                    onRemoveItem={(data) => {
+                      setselectDev(data);
+                    }}
+                  />
 
-                <FormControl.Label>Manufacturer Name</FormControl.Label>
-                <Input
-                  size={"lg"}
-                  minH={10}
-                  mb={2}
-                  placeholder="Enter the manufacturer name"
-                  onChangeText={(value) =>
-                    setData({ ...formData, mfr_name: value })
-                  }
-                />
-                <FormControl.Label>Manufacturer P/N</FormControl.Label>
-                <Input
-                  size={"lg"}
-                  minH={10}
-                  mb={2}
-                  placeholder="Enter the manufacturer P/N"
-                  onChangeText={(value) =>
-                    setData({ ...formData, mfr_pn: value })
-                  }
-                />
-                <FormControl.Label>Specification</FormControl.Label>
-                <Input
-                  size={"lg"}
-                  minH={10}
-                  mb={2}
-                  placeholder="Enter the specification"
-                  onChangeText={(value) =>
-                    setData({ ...formData, specification: value })
-                  }
-                />
-                <FormControl.Label>Drawing No.</FormControl.Label>
-                <Input
-                  size={"lg"}
-                  minH={10}
-                  mb={2}
-                  placeholder="Enter the drawing no."
-                  onChangeText={(value) =>
-                    setData({ ...formData, drawing_no: value })
-                  }
-                />
-                <FormControl.Label>Floor No.</FormControl.Label>
-                <Input
-                  size={"lg"}
-                  minH={10}
-                  mb={2}
-                  placeholder="Enter the floor no."
-                  onChangeText={(value) =>
-                    setData({ ...formData, floor_no: value })
-                  }
-                />
-                <FormControl.Label>Room No.</FormControl.Label>
-                <Input
-                  size={"lg"}
-                  minH={10}
-                  mb={2}
-                  placeholder="Enter the room no."
-                  onChangeText={(value) =>
-                    setData({ ...formData, room_no: value })
-                  }
-                />
-                <FormControl.Label>Tag</FormControl.Label>
-                <HStack alignItems={"center"} flex={1} space={2}>
+                  <FormControl.Label>Manufacturer Name</FormControl.Label>
                   <Input
                     size={"lg"}
                     minH={10}
-                    value={formData.asset_tag}
-                    flex={2}
-                    placeholder="Enter tag no. or generate new"
+                    mb={2}
+                    placeholder="Enter the manufacturer name"
                     onChangeText={(value) =>
-                      setData({ ...formData, asset_tag: value })
+                      setData({ ...formData, mfr_name: value })
                     }
                   />
-                  <Button
-                    colorScheme={"lightBlue"}
-                    flex={1}
-                    onPress={generateTag}
-                    isLoading={isLoading} isLoadingText="Generating"
-                  >
-                    Generate Tag
-                  </Button>
-                </HStack>
-              </FormControl>
-            </ScrollView>
+                  <FormControl.Label>Manufacturer P/N</FormControl.Label>
+                  <Input
+                    size={"lg"}
+                    minH={10}
+                    mb={2}
+                    placeholder="Enter the manufacturer P/N"
+                    onChangeText={(value) =>
+                      setData({ ...formData, mfr_pn: value })
+                    }
+                  />
+                  <FormControl.Label>Specification</FormControl.Label>
+                  <Input
+                    size={"lg"}
+                    minH={10}
+                    mb={2}
+                    placeholder="Enter the specification"
+                    onChangeText={(value) =>
+                      setData({ ...formData, specification: value })
+                    }
+                  />
+                  <FormControl.Label>Drawing No.</FormControl.Label>
+                  <Input
+                    size={"lg"}
+                    minH={10}
+                    mb={2}
+                    placeholder="Enter the drawing no."
+                    onChangeText={(value) =>
+                      setData({ ...formData, drawing_no: value })
+                    }
+                  />
+                  <FormControl.Label>Floor No.</FormControl.Label>
+                  <Input
+                    size={"lg"}
+                    minH={10}
+                    mb={2}
+                    placeholder="Enter the floor no."
+                    onChangeText={(value) =>
+                      setData({ ...formData, floor_no: value })
+                    }
+                  />
+                  <FormControl.Label>Room No.</FormControl.Label>
+                  <Input
+                    size={"lg"}
+                    minH={10}
+                    mb={2}
+                    placeholder="Enter the room no."
+                    onChangeText={(value) =>
+                      setData({ ...formData, room_no: value })
+                    }
+                  />
+                  <FormControl.Label>Tag</FormControl.Label>
+                  <HStack alignItems={"center"} flex={1} space={2}>
+                    <Input
+                      size={"lg"}
+                      minH={10}
+                      value={formData.asset_tag}
+                      flex={2}
+                      placeholder="Enter tag no. or generate new"
+                      onChangeText={(value) =>
+                        setData({ ...formData, asset_tag: value })
+                      }
+                    />
+                    <Button
+                      colorScheme={"lightBlue"}
+                      flex={1}
+                      onPress={generateTag}
+                      isLoading={isLoading}
+                      isLoadingText="Generating"
+                    >
+                      Generate Tag
+                    </Button>
+                  </HStack>
+                </FormControl>
+              </ScrollView>
+            </KeyboardAvoidingView>
             {/* <Button.Group alignSelf={"center"}>
               <Button colorScheme={"coolGray"}>Cancel</Button>
               <Button>Submit</Button>
@@ -427,83 +439,83 @@ function AssetDetails(props) {
               flex={1}
               style={{ width: "100%", maxHeight: 400 }}
             /> */}
-              {/* <Box alignItems={"center"} flex={1}> */}
-              {pickedImagePath == "" ? (
-                <Box style={styles.card} margin={10}>
-                  <VStack flex={1} space={5} padding={5}>
-                    <Box style={styles.card} shadow={1} padding={10}>
-                      <TouchableOpacity onPress={openCamera}>
-                        <HStack space={5} alignItems={"center"}>
-                          <Icon
-                            size={50}
-                            name="camera"
-                            as={MaterialCommunityIcons}
-                            color="grey"
-                          />
-                          <Text style={styles.title}>Open Camera</Text>
-                        </HStack>
-                      </TouchableOpacity>
-                    </Box>
-                    <Box style={styles.card} shadow={1} padding={10}>
-                      <TouchableOpacity onPress={showImagePicker}>
-                        <HStack space={5} alignItems={"center"}>
-                          <Icon
-                            size={50}
-                            name="upload"
-                            as={MaterialCommunityIcons}
-                            color="grey"
-                          />
-                          <Text style={styles.title}>Upload Image</Text>
-                        </HStack>
-                      </TouchableOpacity>
-                    </Box>
-                  </VStack>
-                </Box>
-              ) : (
-                <VStack
-                  flex={1}
-                  space={2}
-                  alignItems={"center"}
-                  w="100%"
-                  margin={5}
-                >
-                  <Box
-                    style={styles.card}
-                    justifyContent={"center"}
-                    w="100%"
-                    padding={2}
-                  >
-                    <Image
-                      flex={1}
-                      source={{ uri: pickedImagePath }}
-                      style={{ width: "100%" }}
-                      borderWidth={2}
-                      borderColor={"black"}
-                      alt={"Device Image"}
-                      resizeMode={'stretch'}
-                    />
+            {/* <Box alignItems={"center"} flex={1}> */}
+            {pickedImagePath == "" ? (
+              <Box style={styles.card} margin={10}>
+                <VStack flex={1} space={5} padding={5}>
+                  <Box style={styles.card} shadow={1} padding={10}>
+                    <TouchableOpacity onPress={openCamera}>
+                      <HStack space={5} alignItems={"center"}>
+                        <Icon
+                          size={50}
+                          name="camera"
+                          as={MaterialCommunityIcons}
+                          color="grey"
+                        />
+                        <Text style={styles.title}>Open Camera</Text>
+                      </HStack>
+                    </TouchableOpacity>
                   </Box>
-                  <Button.Group alignItems="center">
-                    <Button
-                      onPress={() => {
-                        console.log(pickedImagePath);
-                        setPickedImagePath("");
-                      }}
-                    >
-                      Change Photo
-                    </Button>
-                    
-                  </Button.Group>
+                  <Box style={styles.card} shadow={1} padding={10}>
+                    <TouchableOpacity onPress={showImagePicker}>
+                      <HStack space={5} alignItems={"center"}>
+                        <Icon
+                          size={50}
+                          name="upload"
+                          as={MaterialCommunityIcons}
+                          color="grey"
+                        />
+                        <Text style={styles.title}>Upload Image</Text>
+                      </HStack>
+                    </TouchableOpacity>
+                  </Box>
                 </VStack>
-              )}
+              </Box>
+            ) : (
+              <VStack
+                flex={1}
+                space={2}
+                alignItems={"center"}
+                w="100%"
+                margin={5}
+              >
+                <Box
+                  style={styles.card}
+                  justifyContent={"center"}
+                  w="100%"
+                  padding={2}
+                >
+                  <Image
+                    flex={1}
+                    source={{ uri: pickedImagePath }}
+                    style={{ width: "100%" }}
+                    borderWidth={2}
+                    borderColor={"black"}
+                    alt={"Device Image"}
+                    resizeMode={"stretch"}
+                  />
+                </Box>
+                <Button.Group alignItems="center">
+                  <Button
+                    onPress={() => {
+                      console.log(pickedImagePath);
+                      setPickedImagePath("");
+                    }}
+                  >
+                    Change Photo
+                  </Button>
+                </Button.Group>
+              </VStack>
+            )}
             {/* </Box> */}
-
           </VStack>
         </HStack>
         <Button.Group alignSelf={"center"}>
           <Button
             colorScheme={"coolGray"}
-            onPress={() => props.navigation.navigate("ATHome", { WoID: WoID, wo: wo})}
+            onPress={() =>
+              props.navigation.navigate("ATHome", { WoID: WoID, wo: wo })
+            }
           >
             Cancel
           </Button>

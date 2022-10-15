@@ -73,8 +73,8 @@ function WOScreen(props) {
   const [pwo, setPWO] = React.useState([]);
   const [cwo, setCWO] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [user,setUser] = React.useState({});
-
+  const [user, setUser] = React.useState({});
+  const window = useWindowDimensions();
   const WOComponent = (swo) => {
     return (
       <Box flex={1}>
@@ -274,49 +274,54 @@ function WOScreen(props) {
                     </VStack>
                     <Spacer />
                     <Box justifyContent={"center"}>
-                      {selectedWo.status === "Pending" &&
-                      <Button
-                        rightIcon={<ChevronRightIcon />}
-                        colorScheme={"lightBlue"}
-                        onPress={() => {
-                          // setselectedWo(0);
-                          selectedWo.type === "Asset Tagging"
-                            ? props.navigation.navigate("AssetTagging", {
-                                screen: "ATHome",
-                                params: {
-                                  WoID: selectedWo.wo_id,
-                                  wo: selectedWo,
-                                },
-                              })
-                            : props.navigation.navigate("ITM", {
-                                screen: "ITMHome",
-                                params: { WoID: selectedWo.wo_id , wo: selectedWo,},
-                              });
-                        }}
-                      >
-                        {selectedWo.status === "Pending" ? "Continue" : "View"}
-                      </Button>}
+                      {selectedWo.status === "Pending" && (
+                        <Button
+                          rightIcon={<ChevronRightIcon />}
+                          colorScheme={"lightBlue"}
+                          onPress={() => {
+                            // setselectedWo(0);
+                            selectedWo.type === "Asset Tagging"
+                              ? props.navigation.navigate("AssetTagging", {
+                                  screen: "ATHome",
+                                  params: {
+                                    WoID: selectedWo.wo_id,
+                                    wo: selectedWo,
+                                  },
+                                })
+                              : props.navigation.navigate("ITM", {
+                                  screen: "ITMHome",
+                                  params: {
+                                    WoID: selectedWo.wo_id,
+                                    wo: selectedWo,
+                                  },
+                                });
+                          }}
+                        >
+                          {selectedWo.status === "Pending"
+                            ? "Continue"
+                            : "View"}
+                        </Button>
+                      )}
                     </Box>
                   </HStack>
 
                   <ScrollView padding={3} bgColor={"blueGray.50"} rounded={10}>
-                    <HStack>
-                      <Box>
-                        <Text style={styles.desc_title}>Details:</Text>
-                        <Text></Text>
-                        <Text>{selectedWo.details}</Text>
-                        <Text>{selectedWo.building_name}</Text>
-                        <Text></Text>
-                        <Text style={styles.desc_title}>Location:</Text>
-                        <Text></Text>
-                        <Text>{selectedWo.building_area}</Text>
-                        <Text></Text>
-                      </Box>
-                      <Spacer />
+                    <Box>
+                      <Text style={styles.desc_title}>Details:</Text>
+                      <Text></Text>
+                      <Text>{selectedWo.details}</Text>
+                      <Text>{selectedWo.building_name}</Text>
+                      <Text></Text>
+                      <Text style={styles.desc_title}>Location:</Text>
+                      <Text></Text>
+                      <Text>{selectedWo.building_area}</Text>
+                      <Text></Text>
+                    </Box>
+                    <Box rounded={5} padding={2} bgColor={"white"}>
                       <Box alignItems={"center"}>
                         <MapView
-                          width={200}
-                          height={200}
+                          width={"100%"}
+                          height={0.4 * window.height}
                           region={{
                             latitude: selectedWo.building_loc[0],
                             longitude: selectedWo.building_loc[1],
@@ -334,7 +339,7 @@ function WOScreen(props) {
                           />
                         </MapView>
                       </Box>
-                    </HStack>
+                    </Box>
                   </ScrollView>
                 </>
               )}

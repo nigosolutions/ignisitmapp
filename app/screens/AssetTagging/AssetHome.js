@@ -13,6 +13,7 @@ import {
   Text,
   VStack,
   Modal,
+  KeyboardAvoidingView,
 } from "native-base";
 
 import React from "react";
@@ -275,33 +276,39 @@ function AssetHome(props) {
             </Center>
           ) : (
             <Box padding={3}>
-              <FlatList
-                data={assetList}
-                renderItem={({ item }) => {
-                  if (search === "") {
-                    return <ListItem item={item} />;
-                  }
+              <KeyboardAvoidingView>
+                <FlatList
+                  data={assetList}
+                  renderItem={({ item }) => {
+                    if (search === "") {
+                      return <ListItem item={item} />;
+                    }
 
-                  //filter of asset name
-                  if (
-                    item.device
-                      .toUpperCase()
-                      .includes(search.toUpperCase().trim().replace(/\s/g, ""))
-                  ) {
-                    return <ListItem item={item} />;
-                  }
+                    //filter of asset name
+                    if (
+                      item.device
+                        .toUpperCase()
+                        .includes(
+                          search.toUpperCase().trim().replace(/\s/g, "")
+                        )
+                    ) {
+                      return <ListItem item={item} />;
+                    }
 
-                  //filter of asset tag
-                  if (
-                    item.asset_tag
-                      .toUpperCase()
-                      .includes(search.toUpperCase().trim().replace(/\s/g, ""))
-                  ) {
-                    return <ListItem item={item} />;
-                  }
-                }}
-                keyExtractor={(item) => item.asset_tag}
-              />
+                    //filter of asset tag
+                    if (
+                      item.asset_tag
+                        .toUpperCase()
+                        .includes(
+                          search.toUpperCase().trim().replace(/\s/g, "")
+                        )
+                    ) {
+                      return <ListItem item={item} />;
+                    }
+                  }}
+                  keyExtractor={(item) => item.asset_tag}
+                />
+              </KeyboardAvoidingView>
             </Box>
           )}
         </Box>

@@ -1,10 +1,12 @@
 import {
   Box,
   Button,
+  Center,
   ChevronLeftIcon,
   ChevronRightIcon,
   HStack,
   Spacer,
+  Spinner,
   Text,
 } from "native-base";
 import React from "react";
@@ -16,10 +18,12 @@ import { getUser } from "../../auth/auth";
 function ScheduleScreen(props) {
   const [schedule, setSchedule] = React.useState([]);
   const [user, setUser] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
   React.useEffect(async () => {
     getSchedule();
   }, []);
   const getSchedule = async () => {
+    setLoading(true);
     let user = await getUser();
 
     setUser(user);
@@ -28,6 +32,7 @@ function ScheduleScreen(props) {
       url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/schedule?id=${user.id}`,
     })
       .then((res) => {
+        setLoading(false);
         console.log(res.data.message);
         let schedule = res.data.message.map((item) => ({
           title: item.activity,
@@ -61,7 +66,11 @@ function ScheduleScreen(props) {
   const _onToday = () => {
     setDate(today);
   };
-  return (
+  return loading === true ? (
+    <Center flex={1}>
+      <Spinner size={"lg"} />
+    </Center>
+  ) : (
     <Box padding={5} flex={1} bgColor={"white"}>
       <HStack marginBottom={3} alignItems={"center"} padding={1} space={2}>
         <Button
