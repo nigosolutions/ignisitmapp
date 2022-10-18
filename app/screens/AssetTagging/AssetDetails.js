@@ -17,8 +17,8 @@ import React from "react";
 import QRCode from "react-native-qrcode-svg";
 import axios from "axios";
 import Select2 from "react-select2-native";
-import { StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 // import S3 from "react-aws-s3";
@@ -34,7 +34,7 @@ import {
 // import fs from 'react-native-fs';
 // import Base64Binary from 'base64-arraybuffer';
 
-import {RNS3} from 'react-native-aws3';
+import { RNS3 } from "react-native-aws3";
 
 function AssetDetails(props) {
   const [formData, setData] = React.useState({
@@ -70,9 +70,8 @@ function AssetDetails(props) {
   const [pickedImagePath, setPickedImagePath] = React.useState("");
   // const img = require('../../assets/logo.png');
   const [filePath, setFilePath] = React.useState({});
-  const [uploadSuccessMessage, setUploadSuccessMessage] = React.useState('');
-  const [imageLocation, setImageLocation] = React.useState('');
-
+  const [uploadSuccessMessage, setUploadSuccessMessage] = React.useState("");
+  const [imageLocation, setImageLocation] = React.useState("");
 
   //Upload image
   const showImagePicker = async () => {
@@ -222,92 +221,90 @@ function AssetDetails(props) {
     // console.log(formData);
   };
 
-//   const uploadImageOnS3 = async (file) => {
-//     const s3bucket = new S3({
-//       accessKeyId: REACT_APP_ACCESS_ID,
-//       secretAccessKey: REACT_APP_ACCESS_KEY,
-//       Bucket: REACT_APP_BUCKET_NAME,
-//       signatureVersion: 'v4',
-//     });
-//     let contentType = 'image/jpeg';
-//     let contentDeposition = 'inline;filename="' + file.name + '"';
-//     const base64 = await fs.readFile(file.uri, 'base64');
-//     const arrayBuffer = Base64Binary.decode(base64);
-//     s3bucket.createBucket(() => {
-//       const params = {
-//         Bucket: REACT_APP_BUCKET_NAME,
-//         Key: file.name,
-//         Body: arrayBuffer,
-//         ContentDisposition: contentDeposition,
-//         ContentType: contentType,
-//     };
-//     s3bucket.upload(params, (err, data) => {
-//       if (err) {
-//         console.log('error in callback');
-//       }
-//     console.log('success');
-//     console.log("Respomse URL : "+ data.Location);
-//     });
-//   });
-//  };
+  //   const uploadImageOnS3 = async (file) => {
+  //     const s3bucket = new S3({
+  //       accessKeyId: REACT_APP_ACCESS_ID,
+  //       secretAccessKey: REACT_APP_ACCESS_KEY,
+  //       Bucket: REACT_APP_BUCKET_NAME,
+  //       signatureVersion: 'v4',
+  //     });
+  //     let contentType = 'image/jpeg';
+  //     let contentDeposition = 'inline;filename="' + file.name + '"';
+  //     const base64 = await fs.readFile(file.uri, 'base64');
+  //     const arrayBuffer = Base64Binary.decode(base64);
+  //     s3bucket.createBucket(() => {
+  //       const params = {
+  //         Bucket: REACT_APP_BUCKET_NAME,
+  //         Key: file.name,
+  //         Body: arrayBuffer,
+  //         ContentDisposition: contentDeposition,
+  //         ContentType: contentType,
+  //     };
+  //     s3bucket.upload(params, (err, data) => {
+  //       if (err) {
+  //         console.log('error in callback');
+  //       }
+  //     console.log('success');
+  //     console.log("Respomse URL : "+ data.Location);
+  //     });
+  //   });
+  //  };
 
- const uploadFile = () => {
-
+  const uploadFile = () => {
     let dirName = formData.asset_tag;
-    dirName = dirName + '/';
+    dirName = dirName + "/";
     let time = new Date().toJSON().slice(0, 16);
-    time = time.replace(":","");
+    time = time.replace(":", "");
     let filename = formData.asset_tag.concat("-", time);
     console.log(dirName);
     console.log(filename);
 
-  if (Object.keys(filePath).length == 0) {
-    alert('Please select image first');
-    return;
-  }
-   RNS3.put(
-    {
-      // `uri` can also be a file system path (i.e. file://)
-      uri: filePath.uri,
-      name: filename,
-      type: filePath.type,
-    },
-    {
-      keyPrefix: dirName, // Ex. myuploads/
-      bucket: 'ignis-building-docs', // Ex. aboutreact
-      region: 'us-east-1', // Ex. ap-south-1
-      accessKey: 'AKIA22XEQOCAMOW65Y6R',
-      // Ex. AKIH73GS7S7C53M46OQ
-      secretKey: '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',
-      // Ex. Pt/2hdyro977ejd/h2u8n939nh89nfdnf8hd8f8fd
-      successActionStatus: 201,
-    },
-  )
-    .progress((progress) =>
-      setUploadSuccessMessage(
-        `Uploading: ${progress.loaded / progress.total} (${
-          progress.percent
-        }%)`,
-      ),
+    if (Object.keys(filePath).length == 0) {
+      alert("Please select image first");
+      return;
+    }
+    RNS3.put(
+      {
+        // `uri` can also be a file system path (i.e. file://)
+        uri: filePath.uri,
+        name: filename,
+        type: filePath.type,
+      },
+      {
+        keyPrefix: dirName, // Ex. myuploads/
+        bucket: "ignis-building-docs", // Ex. aboutreact
+        region: "us-east-1", // Ex. ap-south-1
+        accessKey: "AKIA22XEQOCAMOW65Y6R",
+        // Ex. AKIH73GS7S7C53M46OQ
+        secretKey: "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",
+        // Ex. Pt/2hdyro977ejd/h2u8n939nh89nfdnf8hd8f8fd
+        successActionStatus: 201,
+      }
     )
-    .then((response) => {
-      if (response.status !== 201)
-        alert('Failed to upload image to S3');
-      console.log(response.body);
-      setFilePath('');
-      setImageLocation(response.body.postResponse.location);
-      /**
-       * {
-       *   postResponse: {
-       *     bucket: "your-bucket",
-       *     etag : "9f620878e06d28774406017480a59fd4",
-       *     key: "uploads/image.png",
-       *     location: "https://bucket.s3.amazonaws.com/**.png"
-       *   }
-       * }
-       */
-    });
-};
+      .progress((progress) =>
+        setUploadSuccessMessage(
+          `Uploading: ${progress.loaded / progress.total} (${
+            progress.percent
+          }%)`
+        )
+      )
+      .then((response) => {
+        if (response.status !== 201) alert("Failed to upload image to S3");
+        console.log(response.body);
+        setFilePath("");
+        setImageLocation(response.body.postResponse.location);
+        /**
+         * {
+         *   postResponse: {
+         *     bucket: "your-bucket",
+         *     etag : "9f620878e06d28774406017480a59fd4",
+         *     key: "uploads/image.png",
+         *     location: "https://bucket.s3.amazonaws.com/**.png"
+         *   }
+         * }
+         */
+      });
+  };
 
   const submit = async () => {
     // console.log(validate())
@@ -331,7 +328,6 @@ function AssetDetails(props) {
       alert("Fill all required values");
     }
 
-    
     // await uploadImageOnS3(file);
 
     // let dirName = formData.asset_tag;
