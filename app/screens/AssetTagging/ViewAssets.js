@@ -45,6 +45,7 @@ import {
       "name": props.asset.system,
     }]);
     const [isLoading, setLoading] = React.useState(false);
+    const [imagepath, setImagePath] = React.useState(props.asset.image);
     // const [isDisabled, setIsDisabled] = React.useState(false);
     // const [showModal, setShowModal] = React.useState(false);
 
@@ -169,6 +170,7 @@ import {
         "room_no": props.asset.room_no,
         "asset_tag": props.asset.asset_tag,
       });
+      setImagePath(props.asset.image);
 
     }, [props.asset]);
 
@@ -355,7 +357,7 @@ import {
                     </Box> */}
                     <Image
                         alt="Device image"
-                        // source={{ uri: imagepath }}
+                        source={{ uri: props.asset.image }}
                         borderWidth={2}
                         borderColor={"black"}
                         flex={1}
