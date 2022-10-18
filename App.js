@@ -15,6 +15,10 @@ import Requests from "./app/screens/ITMWorkOrder/Requests";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaView, ScrollView, StatusBar } from "react-native";
 import AssetDetails from "./app/screens/AssetTagging/AssetDetails";
+import SC from "./app/screens/SettingsScreen";
+import SettingsScreen from "./app/screens/SettingsScreen";
+
+
 
 const MainNav = createNativeStackNavigator();
 const sideMenuDisabledScreens = ["AssetTagging"];
@@ -40,6 +44,9 @@ function MyTab() {
           } else if (route.name === "Requests") {
             iconName = focused ? "mail-open" : "mail-open-outline";
           }
+          else if (route.name === "Settings") {
+            iconName = focused ? "settings" : "settings-outline";
+          }
 
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -52,6 +59,7 @@ function MyTab() {
       <Tab.Screen name="Work Orders" component={WorkOrder} />
       <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Requests" component={Requests} />
+      <Tab.Screen name="Settings" component={SettingsScreen}/>
     </Tab.Navigator>
   );
 }

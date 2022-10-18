@@ -72,6 +72,7 @@ function AssetDetails(props) {
   const [filePath, setFilePath] = React.useState({});
   const [uploadSuccessMessage, setUploadSuccessMessage] = React.useState("");
   const [imageLocation, setImageLocation] = React.useState("");
+  const [isLoadingSubmit, setLoadingSubmit] = React.useState(false);
 
   //Upload image
   const showImagePicker = async () => {
@@ -113,6 +114,7 @@ function AssetDetails(props) {
 
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
+      setFilePath(result);
       console.log(result.uri);
     }
   };
@@ -251,6 +253,7 @@ function AssetDetails(props) {
   //  };
 
   const uploadFile = () => {
+    setLoadingSubmit(true);
     let dirName = formData.asset_tag;
     dirName = dirName + "/";
     let time = new Date().toJSON().slice(0, 16);
@@ -268,7 +271,7 @@ function AssetDetails(props) {
         // `uri` can also be a file system path (i.e. file://)
         uri: filePath.uri,
         name: filename,
-        type: filePath.type,
+        type: "image/jpeg",
       },
       {
         keyPrefix: dirName, // Ex. myuploads/
@@ -293,6 +296,11 @@ function AssetDetails(props) {
         console.log(response.body);
         setFilePath("");
         setImageLocation(response.body.postResponse.location);
+        setLoadingSubmit(false);
+
+        //Display asset tag QR code
+        setShowModal(true);
+
         /**
          * {
          *   postResponse: {
@@ -320,8 +328,8 @@ function AssetDetails(props) {
         alert("Take asset photo or upload image");
       } else {
         uploadFile();
-        //Display asset tag QR code
-        setShowModal(true);
+        // //Display asset tag QR code
+        // setShowModal(true);
       }
     } else {
       // console.log('Fill all values')
@@ -619,7 +627,8 @@ function AssetDetails(props) {
             Cancel
           </Button>
           {/* <Button onPress={()=>{console.log(formData)}}>Submit</Button> */}
-          <Button colorScheme={"lightBlue"} onPress={submit}>
+          <Button colorScheme={"lightBlue"} isLoading={isLoadingSubmit}
+                      isLoadingText="Submitting" onPress={submit}>
             Submit
           </Button>
         </Button.Group>

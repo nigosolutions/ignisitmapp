@@ -358,6 +358,7 @@ import {
                     <Image
                         alt="Device image"
                         source={{ uri: props.asset.image }}
+                        loadingIndicatorSource={require("../../assets/loading.gif")}
                         borderWidth={2}
                         borderColor={"black"}
                         flex={1}
