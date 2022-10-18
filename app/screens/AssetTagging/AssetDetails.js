@@ -21,13 +21,18 @@ import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import S3 from "react-aws-s3";
+// import S3 from "react-aws-s3";
+import S3 from "aws-sdk";
 import {
   REACT_APP_ACCESS_ID,
   REACT_APP_ACCESS_KEY,
   REACT_APP_BUCKET_NAME,
   REACT_APP_REGION,
 } from "@env";
+// import * as fs from 'react-native-fs';
+// import * as fs from 'expo-file-system';
+// import fs from 'react-native-fs';
+// import Base64Binary from 'base64-arraybuffer';
 
 function AssetDetails(props) {
   const [formData, setData] = React.useState({
@@ -210,6 +215,35 @@ function AssetDetails(props) {
     // console.log(formData);
   };
 
+  const uploadImageOnS3 = async (file) => {
+    const s3bucket = new S3({
+      accessKeyId: REACT_APP_ACCESS_ID,
+      secretAccessKey: REACT_APP_ACCESS_KEY,
+      Bucket: REACT_APP_BUCKET_NAME,
+      signatureVersion: 'v4',
+    });
+    let contentType = 'image/jpeg';
+    let contentDeposition = 'inline;filename="' + file.name + '"';
+    const base64 = await fs.readFile(file.uri, 'base64');
+    const arrayBuffer = Base64Binary.decode(base64);
+    s3bucket.createBucket(() => {
+      const params = {
+        Bucket: REACT_APP_BUCKET_NAME,
+        Key: file.name,
+        Body: arrayBuffer,
+        ContentDisposition: contentDeposition,
+        ContentType: contentType,
+    };
+    s3bucket.upload(params, (err, data) => {
+      if (err) {
+        console.log('error in callback');
+      }
+    console.log('success');
+    console.log("Respomse URL : "+ data.Location);
+    });
+  });
+ };
+
   const submit = async () => {
     // console.log(validate())
     if (validate() == true) {
@@ -231,34 +265,42 @@ function AssetDetails(props) {
       alert("Fill all required values");
     }
 
-    let dirName = formData.asset_tag;
-    const config = {
-      bucketName: REACT_APP_BUCKET_NAME,
-      region: REACT_APP_REGION,
-      accessKeyId: REACT_APP_ACCESS_ID,
-      secretAccessKey: REACT_APP_ACCESS_KEY,
-      s3Url,
-      dirName,
-    };
-    let time = new Date().toJSON().slice(0, 16);
-    let filename = formData.asset_tag.concat("-", ".jpg");
-    console.log(dirName);
-    console.log(filename);
-    console.log(config);
-    const ReactS3Client = new S3(config);
-    try {
-      let data = await ReactS3Client.uploadFile(pickedImagePath, filename);
-      console.log(data);
-      if (data.status === 204) {
-        console.log("success");
-      } else {
-        console.log("fail");
-        // fail = true;
-      }
-    } catch (err) {
-      console.log(err);
-      // fail = true;
-    }
+    const file = {
+      uri: pickedImagePath,
+      name: "test_1",
+      type: 'image/jpeg',
+   };
+
+    await uploadImageOnS3(file);
+
+    // let dirName = formData.asset_tag;
+    // const config = {
+    //   bucketName: REACT_APP_BUCKET_NAME,
+    //   region: REACT_APP_REGION,
+    //   accessKeyId: REACT_APP_ACCESS_ID,
+    //   secretAccessKey: REACT_APP_ACCESS_KEY,
+    //   s3Url,
+    //   dirName,
+    // };
+    // let time = new Date().toJSON().slice(0, 16);
+    // let filename = formData.asset_tag.concat("-", ".jpg");
+    // console.log(dirName);
+    // console.log(filename);
+    // console.log(config);
+    // const ReactS3Client = new S3(config);
+    // try {
+    //   let data = await ReactS3Client.uploadFile(pickedImagePath, filename);
+    //   console.log(data);
+    //   if (data.status === 204) {
+    //     console.log("success");
+    //   } else {
+    //     console.log("fail");
+    //     // fail = true;
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   // fail = true;
+    // }
   };
 
   React.useEffect(async () => {

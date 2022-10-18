@@ -14,6 +14,7 @@ import {
   import React from "react";
   import axios from "axios";
   import Select2 from "react-select2-native";
+
   
   function ViewAssets(props) {
     // console.log(props.asset);
@@ -32,9 +33,18 @@ import {
     });
     // console.log(formData);
     const [devTypes, setDevTypes] = React.useState([]);
-    const [selectdev, setselectDev] = React.useState([props.asset.device_id]);
+    const [selectdev, setselectDev] = React.useState([{
+      "checked": true,
+      "id": props.asset.device_id,
+      "name": props.asset.device,
+    }]);
     const [systems, setSystems] = React.useState([]);
-    const [selectsys, setselectSystems] = React.useState([props.asset.system_id]);
+    const [selectsys, setselectSystems] = React.useState([{
+      "checked": true,
+      "id": props.asset.system_id,
+      "name": props.asset.system,
+    }]);
+    const [isLoading, setLoading] = React.useState(false);
     // const [isDisabled, setIsDisabled] = React.useState(false);
     // const [showModal, setShowModal] = React.useState(false);
 
@@ -60,7 +70,7 @@ import {
       // console.log(selectsys[0]);
       await axios({
         method: "get",
-        url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0]}`,
+        url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/devices?id=${selectsys[0].id}`,
       })
         .then((res) => {
           // console.log(res.data.message);
@@ -87,40 +97,31 @@ import {
   
     const onFinish = async () => {
       console.log(formData);
-  
+      setLoading(true);
       await axios({
-        method: "post",
+        method: "put",
         url: "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets",
         data: {
           formData: formData,
-          otherData: {
-            image: "imagepath",
-            building_id: wo.building_id,
-            wo_id: wo.wo_id,
-          },
+          asset_id: props.asset.asset_id,
         },
       })
         .then((res) => {
           console.log(res.status);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err.response.data);
+          setLoading(false);
         });
     };
   
   
     const submit = () => {
       // console.log(validate())
+      // console.log(formData);
       if (validate() == true) {
         console.log("All filled");
-  
-        //Generating asset tag
-        // generateTag();
-        // console.log(tag);
-        // console.log(assTag);
-  
-        //Display asset tag QR code
-        setShowModal(true);
       } else {
         // console.log('Fill all values')
         alert("Fill all required values");
@@ -138,15 +139,23 @@ import {
     React.useEffect(async () => {
       if (selectsys.length != 0) {
       getDeviceData(selectsys);
-      setData({ ...formData, device: "", device_id: "" });
+      // setData({ ...formData, device: "", device_id: "" });
       }
     }, [selectsys]);
 
 
 
     React.useEffect(() => {
-      setselectSystems([]);
-      setselectDev([]);
+      setselectSystems([{
+        "checked": true,
+        "id": props.asset.system_id,
+        "name": props.asset.system,
+      }]);
+      setselectDev([{
+        "checked": true,
+        "id": props.asset.device_id,
+        "name": props.asset.device,
+      }]);
       setData({
         "device": props.asset.device,
         "device_id": props.asset.device_id,
@@ -162,7 +171,8 @@ import {
       });
 
     }, [props.asset]);
-  
+
+
     return (
       <>
         <Modal.Content bgColor={"white"} maxHeight={"75%"} maxWidth={"75%"}>
@@ -202,9 +212,9 @@ import {
                             onSelect={(data,value) => {
                               // console.log(data.length);
                               if (data.length != 0) {
-                              setselectSystems(data);
-                              // console.log(data);
-                              setData({ ...formData, system: value[0].name, system_id: value[0].id });
+                              setselectSystems(value);
+                              console.log(value);
+                              setData({ ...formData, system: value[0].name, system_id: value[0].id, device: "", device_id: "" });
                               }
                             }}
                       
@@ -355,7 +365,13 @@ import {
                     </VStack>
                 </HStack>
                 {props.isDisabled==false &&  
-                <Button colorScheme={"lightBlue"} onPress={()=>{console.log(formData)}}>
+                <Button 
+                colorScheme={"lightBlue"} 
+                isLoading={isLoading}
+                isLoadingText="Submitting" onPress={()=>{
+                  submit();
+                  onFinish();
+                }}>
                     Submit
                 </Button>
                 }

@@ -141,6 +141,18 @@ function AssetHome(props) {
             </Button>
 
             <Button
+              colorScheme={"coolGray"}
+              variant={"ghost"}
+              onPress={() => {
+                setSelectedAsset(item);
+                setIsDisabled(false);
+                setShowModal(true);
+              }}
+            >
+              Edit
+            </Button>
+
+            <Button
               colorScheme="danger"
               onPress={() =>
                 Alert.alert(
