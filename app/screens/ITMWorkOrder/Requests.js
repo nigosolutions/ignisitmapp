@@ -5,6 +5,7 @@ import {
   FlatList,
   FormControl,
   HStack,
+  IconButton,
   Input,
   Modal,
   ScrollView,
@@ -30,8 +31,9 @@ function Requests(props) {
     { key: "third", title: "Resources" },
   ]);
   const [tools, setTools] = React.useState([]);
-  const [item, setItem] = React.useState({ tool: "", qty: "" });
-  const [qnty, setQty] = React.useState();
+  const [item, setItem] = React.useState({ tool: "", qty: 1 });
+  const [qnty, setQty] = React.useState(1);
+  const [isDisabled, setIsDisabled] = React.useState(true);
   const data = [
     {
       id: "1",
@@ -109,7 +111,7 @@ function Requests(props) {
   const FirstRoute = () => (
     <VStack space={7} padding={3}>
       <HStack alignItems={"center"} space={3}>
-        <FormControl flex={1}>
+        <FormControl flex={3}>
           <FormControl.Label>Select Item</FormControl.Label>
           <Select
             accessibilityLabel="Select Item"
@@ -125,33 +127,56 @@ function Requests(props) {
             Please make a selection!
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl flex={1}>
+        <FormControl flex={3}>
           <FormControl.Label>Quantity</FormControl.Label>
-          <Input
+          {/* <Input
             value={qnty}
             placeholder="Enter Quantity"
             onChangeText={(value) => {
               setQty(value), setItem({ ...item, qty: value });
             }}
-          />
+          /> */}
+          <HStack flex={1} justifyContent={"center"} space={2}>
+            <Button isDisabled={(qnty == 1) ? true : false} onPress={() => {
+              setQty(qnty-1), setItem({ ...item, qty: qnty-1 }); 
+              if (qnty==2) {
+                setIsDisabled(true);
+            }}}>-</Button>
+            <Text>{qnty}</Text>
+            <Button onPress={() => {
+              setQty(qnty+1), setItem({ ...item, qty: qnty+1 });
+              if (qnty==1) {
+                setIsDisabled(false);
+              }}}>+</Button>
+          </HStack>
           <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
             Please enter Quantity!
           </FormControl.ErrorMessage>
         </FormControl>
-        <Button
-          flex={1 / 4}
-          rounded={100}
-          onPress={() => {
-            setTools([...tools, { item: item.tool, qty: item.qty }]);
-          }}
-        >
-          Add
-        </Button>
+        <FormControl flex={1}>
+          <FormControl.Label>   </FormControl.Label>
+          <Button
+            // flex={1}
+            rounded={100}
+            maxWidth={100}
+            onPress={() => {
+              if (item.tool == "") {
+                alert("Please select an item")
+              } else {
+                setTools([...tools, { item: item.tool, qty: item.qty }]);
+                setQty(1), setItem({ ...item, qty: 1 });
+              }
+            }}
+          >
+            Add
+          </Button>
+        </FormControl>
+        
       </HStack>
       <VStack space={2}>
         <HStack paddingX={4} paddingY={2} rounded={10} bgColor={"gray.200"}>
           <Text bold>Item</Text>
-          <Spacer />
+          <Spacer/>
           <Text bold>Quantity</Text>
         </HStack>
         <ScrollView maxHeight={70}>
@@ -159,13 +184,27 @@ function Requests(props) {
             <Box paddingY={1}>
               <HStack
                 paddingX={4}
-                paddingY={1}
+                // paddingY={1}
+                alignItems={"center"}
                 rounded={10}
                 bgColor={"coolGray.50"}
               >
-                <Text>{item.item}</Text>
-                <Spacer />
-                <Text>{item.qty}</Text>
+                <Text >{item.item}</Text>
+                <Spacer/>
+                <HStack  alignItems={"center"}>
+                  <Text>{item.qty}</Text>
+                  {/* <IconButton _icon={{ type:"material", name: "done"}}/> */}
+                  <Button variant={"ghost"} size={"lg"} colorScheme={"secondary"} 
+                  onPress={() => {
+                    // const index = tools.indexOf(item);
+                    const array = tools.filter(value => value !== item)
+                    // tools.splice(index,1);
+                    // console.log(tools);
+                    // console.log(array);
+                    setTools(array);
+                  }}>X</Button>
+                </HStack>
+                
               </HStack>
             </Box>
           ))}

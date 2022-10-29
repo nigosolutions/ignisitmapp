@@ -74,6 +74,7 @@ function WOScreen(props) {
   const [cwo, setCWO] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [user, setUser] = React.useState({});
+  const [search, setSearch] = React.useState("");
   const window = useWindowDimensions();
   const WOComponent = (swo) => {
     return (
@@ -89,6 +90,10 @@ function WOScreen(props) {
             backgroundColor: "#f7f7f8",
           }}
           lightTheme
+          value={search}
+          onChangeText={(search) => {
+            setSearch(search);
+          }}
         />
 
         {loading === true ? (
