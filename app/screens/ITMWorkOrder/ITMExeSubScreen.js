@@ -96,9 +96,9 @@ export default function ITMExeSubScreen(props) {
   );
 
   return (
-    <VStack space={5} padding={3} flex={1}>
+    <VStack space={3} padding={3} flex={1}>
       <HStack
-        padding={2}
+        // padding={2}
         alignItems={"center"}
         rounded={10}
         bgColor={"gray.200"}
@@ -127,7 +127,7 @@ export default function ITMExeSubScreen(props) {
           Next
         </Button>
       </HStack>
-      <HStack space={5}>
+      <HStack space={5} minHeight={200}>
         <Box padding={5} rounded={10} bgColor={"white"} flex={3}>
           <HStack flex={1}>
             <VStack flex={2} space={2}>
