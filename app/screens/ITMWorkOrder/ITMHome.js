@@ -18,68 +18,73 @@ import {
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import React from "react";
 import { getUser } from "../../auth/auth";
+import axios from "axios";
 
 import Requests from "./Requests";
 import { useWindowDimensions } from "react-native";
 
 function ITMHome(props) {
   const [showModal, setShowModal] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(false);
   const [assetLists, setAsset] = React.useState([
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
-    {
-      name: "Smoke Detector",
-      mfr: "Ignis",
-      location: "Floor 1, Room 102",
-      Tag: "SD1102",
-    },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+    // {
+    //   name: "Smoke Detector",
+    //   mfr: "Ignis",
+    //   location: "Floor 1, Room 102",
+    //   Tag: "SD1102",
+    // },
+
   ]);
+  const [pendingAssets, setPendingAssets] = React.useState([]);
+  const [completedAssets, setCompletedAssets] = React.useState([]);
 
   React.useEffect(async () => {
     let user = await getUser();
@@ -89,10 +94,41 @@ function ITMHome(props) {
   const { WoID, wo } = props.route.params;
   // console.log(props.route.params)
 
+  const getAssets = async (stat) => {
+    setLoading(true);
+    // console.log(user.id);
+    await axios
+      .get(
+        "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/itmworkorder",
+        { params: { status: stat, wo_id: wo.wo_id } }
+      )
+      .then((res) => {
+        if (stat == "Pending") {
+          setPendingAssets(res.data.message);
+        } else {
+          setCompletedAssets(res.data.message);
+        }
+        // console.log(res.data.message);
+        // setAsset(res.data.message);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  React.useEffect(async () => {
+    getAssets("Pending");
+    getAssets("Completed");
+    // console.log("assset")
+    // console.log(assetLists);
+    // console.log(wo);
+  }, []);
+
   const FirstRoute = () => (
     <Box padding={3}>
       <FlatList
-        data={assetLists}
+        data={pendingAssets}
         renderItem={({ item }) => {
           return (
             <Box paddingY={1.5}>
@@ -103,33 +139,35 @@ function ITMHome(props) {
                 bgColor={"coolGray.50"}
               >
                 <HStack alignItems={"center"} space={5}>
-                  <VStack>
-                    <Text>
-                      <Text bold>{item.name}</Text>
-                    </Text>
 
-                    <Text>
-                      <Text bold>Location: </Text>
-                      <Text>{item.location}</Text>
-                    </Text>
+                    <VStack flex={2}>
+                      <Text>
+                        <Text bold>{item.device}</Text>
+                      </Text>
 
-                    <Text>
-                      <Text bold>Tag: </Text>
-                      <Text>{item.Tag}</Text>
-                    </Text>
-                    <Spacer />
-                  </VStack>
-                  <Spacer />
-                  <HStack space={2}>
-                    <Badge variant="outline">Inspection</Badge>
-                    <Badge variant="outline">Testing</Badge>
-                    <Badge variant="outline">Maintenance</Badge>
-                  </HStack>
-                  <Spacer />
+                      <Text>
+                        <Text bold>Location: </Text>
+                        <Text>Floor: {item.floor_no}, Room: {item.room_no}</Text>
+                      </Text>
+
+                      <Text>
+                        <Text bold>Tag: </Text>
+                        <Text>{item.asset_tag}</Text>
+                      </Text>
+                    </VStack>
+                  {/* <Spacer /> */}
+                    <HStack space={2} flex={1}>
+                      <Badge variant="outline">Inspection</Badge>
+                      <Badge variant="outline">Testing</Badge>
+                      <Badge variant="outline">Maintenance</Badge>
+                    </HStack>
+                  {/* <Spacer /> */}
                   <Button
                     colorScheme={"lightBlue"}
                     rightIcon={<ChevronRightIcon />}
                     variant={"link"}
+                    flex={1}
+                    justifyContent={"flex-end"}
                   >
                     Start
                   </Button>
