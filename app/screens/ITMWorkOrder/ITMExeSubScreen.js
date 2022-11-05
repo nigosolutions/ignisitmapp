@@ -14,14 +14,31 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 import ExecutionComponent from "./ExecutionComponent";
 
-export default function ITMExeSubScreen() {
+export default function ITMExeSubScreen(props) {
+
+  const {asset} = props.route.params;
+
   const [index, setIndex] = React.useState(0);
 
-  const [routes] = React.useState([
-    { key: "first", title: "Inspection" },
-    { key: "second", title: "Testing" },
-    { key: "third", title: "Maintenance" },
+  const [routes, setRoutes] = React.useState([
+    // { key: "first", title: "Inspection" },
+    // { key: "second", title: "Testing" },
+    // { key: "third", title: "Maintenance" },
   ]);
+
+  React.useEffect(() => {
+    let rts = [];
+    if (asset.types.includes('I')){
+      rts = [...rts, { key: "first", title: "Inspection" }];
+    } 
+    if (asset.types.includes('T')){
+      rts = [...rts, { key: "second", title: "Testing" }];
+    } 
+    if (asset.types.includes('M')){
+      rts = [...rts, { key: "third", title: "Maintenance" }];
+    } 
+    setRoutes(rts);
+  },[]);
 
   //Upload image
 
@@ -32,6 +49,12 @@ export default function ITMExeSubScreen() {
   const ThirdRoute = () => <FirstRoute />;
 
   const initialLayout = { width: Dimensions.get("window").width };
+
+  // const renderScene = SceneMap({
+  //   first: FirstRoute,
+  //   second: SecondRoute,
+  //   third: ThirdRoute,
+  // });
 
   const renderScene = SceneMap({
     first: FirstRoute,
@@ -77,6 +100,7 @@ export default function ITMExeSubScreen() {
           endIcon={<ChevronRightIcon />}
           variant={"ghost"}
           rounded={100}
+          onPress={()=>{console.log(asset)}}
         >
           Next
         </Button>
@@ -85,11 +109,11 @@ export default function ITMExeSubScreen() {
         <Box padding={5} rounded={10} bgColor={"white"} flex={3}>
           <HStack>
             <VStack flex={2} space={2}>
-              <Text bold>Control Valve</Text>
-              <Text>Location:</Text>
-              <Text>Room No:</Text>
-              <Text>Floor No:</Text>
-              <Text>Room No:</Text>
+              <Text bold>{asset.device}</Text>
+              {/* <Text>Location:</Text> */}
+              <Text>Room No: {asset.room_no}</Text>
+              <Text>Floor No: {asset.floor_no}</Text>
+              {/* <Text>Room No:</Text> */}
               <Text>Building No:</Text>
             </VStack>
             <Box bgColor={"green.100"} flex={1}></Box>

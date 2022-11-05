@@ -14,6 +14,7 @@ import {
   Spacer,
   Text,
   VStack,
+  Spinner
 } from "native-base";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import React from "react";
@@ -157,9 +158,9 @@ function ITMHome(props) {
                     </VStack>
                   {/* <Spacer /> */}
                     <HStack space={2} flex={1}>
-                      <Badge variant="outline">Inspection</Badge>
-                      <Badge variant="outline">Testing</Badge>
-                      <Badge variant="outline">Maintenance</Badge>
+                      {item.types.includes('I') && (<Badge variant="outline" >Inspection</Badge>)}
+                      {item.types.includes('T') && (<Badge variant="outline" colorScheme="info">Testing</Badge>)}
+                      {item.types.includes('M') && (<Badge variant="outline" colorScheme="danger">Maintenance</Badge>)}
                     </HStack>
                   {/* <Spacer /> */}
                   <Button
@@ -168,6 +169,7 @@ function ITMHome(props) {
                     variant={"link"}
                     flex={1}
                     justifyContent={"flex-end"}
+                    onPress={() => {props.navigation.navigate("ExecutionScreen", {asset: item})}}
                   >
                     Start
                   </Button>
