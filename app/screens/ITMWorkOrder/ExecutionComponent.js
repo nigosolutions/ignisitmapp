@@ -7,7 +7,10 @@ import {
   Text,
   TextArea,
   VStack,
+  Image,
+  Button
 } from "native-base";
+import { FAB } from '@rneui/base';
 import React from "react";
 import { StatusBar, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -16,26 +19,28 @@ import { Audio } from "expo-av";
 import axios from "axios";
 
 function ExecutionComponent(props) {
-  const getSystems = async (stat) => {
-    setLoading(true);
-    await axios
-      .get(
-        "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders",
-        { params: { status: stat } }
-      )
-      .then((res) => {
-        if (stat == "Pending") {
-          setPWO(res.data.message);
-        } else {
-          setCWO(res.data.message);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const getSystems = async (stat) => {
+  //   setLoading(true);
+  //   await axios
+  //     .get(
+  //       "https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/workorders",
+  //       { params: { status: stat } }
+  //     )
+  //     .then((res) => {
+  //       if (stat == "Pending") {
+  //         setPWO(res.data.message);
+  //       } else {
+  //         setCWO(res.data.message);
+  //       }
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   const [selectedButton, setSelectedButton] = React.useState();
+  const [reading, setReading] = React.useState("");
+  const [remarks, setRemarks] = React.useState("");
   // Uploading image
   // The path of the picked image
   const [pickedImagePath, setPickedImagePath] = React.useState("");
@@ -241,6 +246,7 @@ function ExecutionComponent(props) {
                 </HStack>
               </Box>
             </VStack>
+            <Button>Submit</Button>
           </ScrollView>
         </VStack>
         <Box flex={1} padding={5}>
