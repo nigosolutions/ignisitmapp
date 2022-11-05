@@ -7,10 +7,12 @@ import {
   Spacer,
   ChevronLeftIcon,
   ChevronRightIcon,
+  Image
 } from "native-base";
 import * as React from "react";
 import { StyleSheet, Dimensions, StatusBar } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import axios from "axios";
 
 import ExecutionComponent from "./ExecutionComponent";
 
@@ -26,6 +28,26 @@ export default function ITMExeSubScreen(props) {
     // { key: "third", title: "Maintenance" },
   ]);
 
+  const [imagepath, setImagePath] = React.useState("");
+
+  const getAssetImage = async (id) => {
+    // setLoading(true);
+    await axios({
+      method: "get",
+      url: `https://bjiwogsbrc.execute-api.us-east-1.amazonaws.com/Prod/assets`,
+      params: { type: "Image", asset_id : id },
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        setImagePath(res.data.message);
+        // console.log(res.data.message);
+        // setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   React.useEffect(() => {
     let rts = [];
     if (asset.types.includes('I')){
@@ -38,9 +60,9 @@ export default function ITMExeSubScreen(props) {
       rts = [...rts, { key: "third", title: "Maintenance" }];
     } 
     setRoutes(rts);
+    getAssetImage(asset.asset_id);
   },[]);
 
-  //Upload image
 
   const FirstRoute = () => <ExecutionComponent />;
 
@@ -107,16 +129,27 @@ export default function ITMExeSubScreen(props) {
       </HStack>
       <HStack space={5}>
         <Box padding={5} rounded={10} bgColor={"white"} flex={3}>
-          <HStack>
+          <HStack flex={1}>
             <VStack flex={2} space={2}>
               <Text bold>{asset.device}</Text>
               {/* <Text>Location:</Text> */}
               <Text>Room No: {asset.room_no}</Text>
               <Text>Floor No: {asset.floor_no}</Text>
               {/* <Text>Room No:</Text> */}
-              <Text>Building No:</Text>
+              {/* <Text>Building No:</Text> */}
             </VStack>
-            <Box bgColor={"green.100"} flex={1}></Box>
+            <Box bgColor={"green.100"} flex={1}>
+              {imagepath==="" ? (<Text>Device Image</Text>) : (
+                <Image
+                alt="Device image"
+                source={{ uri: imagepath.image }}
+                loadingIndicatorSource={require("../../assets/loading.gif")}
+                borderWidth={2}
+                borderColor={"black"}
+                flex={1}
+                style={{ width: "100%", maxHeight: 400 }}/>
+              )}
+            </Box>
           </HStack>
         </Box>
         <VStack justifyContent={"center"} space={5} padding={5} flex={1 / 2}>

@@ -78,7 +78,7 @@ export default function Example() {
             <MainNav.Screen
               name="Tab"
               component={MyTab}
-              options={{ headerShown: false }}
+              options={{ headerShown: false, gestureEnabled: false}}
             />
           </MainNav.Navigator>
         </NativeBaseProvider>

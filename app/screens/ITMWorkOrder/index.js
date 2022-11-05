@@ -14,7 +14,7 @@ function ITMWorkOrder({ navigation, route }) {
       <ITMNav.Screen
         name="ITMHome"
         component={ITMHome}
-        options={{ title: "ITM Work Order", headerShown: false }}
+        options={{ title: "ITM Work Order", headerShown: false, gestureEnabled: false}}
       />
       <ITMNav.Screen
         name="VerifyScreen"
@@ -24,7 +24,7 @@ function ITMWorkOrder({ navigation, route }) {
       <ITMNav.Screen
         name="ExecutionScreen"
         component={ITMExeSubScreen}
-        options={{ title: "Execute Work Order" }}
+        options={{ title: "Execute Work Order", headerShown: false }}
       />
     </ITMNav.Navigator>
     // </NavigationContainer>
