@@ -125,10 +125,10 @@ function ITMHome(props) {
     // console.log(wo);
   }, []);
 
-  const FirstRoute = () => (
+  const TabComponent = (assets) => (
     <Box padding={3}>
       <FlatList
-        data={pendingAssets}
+        data={assets}
         renderItem={({ item }) => {
           return (
             <Box paddingY={1.5}>
@@ -181,7 +181,64 @@ function ITMHome(props) {
     </Box>
   );
 
-  const SecondRoute = () => FirstRoute;
+  // const FirstRoute = () => (
+  //   <Box padding={3}>
+  //     <FlatList
+  //       data={pendingAssets}
+  //       renderItem={({ item }) => {
+  //         return (
+  //           <Box paddingY={1.5}>
+  //             <Box
+  //               shadow={"0"}
+  //               padding={3}
+  //               rounded={10}
+  //               bgColor={"coolGray.50"}
+  //             >
+  //               <HStack alignItems={"center"} space={5}>
+
+  //                   <VStack flex={2}>
+  //                     <Text>
+  //                       <Text bold>{item.device}</Text>
+  //                     </Text>
+
+  //                     <Text>
+  //                       <Text bold>Location: </Text>
+  //                       <Text>Floor: {item.floor_no}, Room: {item.room_no}</Text>
+  //                     </Text>
+
+  //                     <Text>
+  //                       <Text bold>Tag: </Text>
+  //                       <Text>{item.asset_tag}</Text>
+  //                     </Text>
+  //                   </VStack>
+  //                 {/* <Spacer /> */}
+  //                   <HStack space={2} flex={1}>
+  //                     <Badge variant="outline">Inspection</Badge>
+  //                     <Badge variant="outline">Testing</Badge>
+  //                     <Badge variant="outline">Maintenance</Badge>
+  //                   </HStack>
+  //                 {/* <Spacer /> */}
+  //                 <Button
+  //                   colorScheme={"lightBlue"}
+  //                   rightIcon={<ChevronRightIcon />}
+  //                   variant={"link"}
+  //                   flex={1}
+  //                   justifyContent={"flex-end"}
+  //                 >
+  //                   Start
+  //                 </Button>
+  //               </HStack>
+  //             </Box>
+  //           </Box>
+  //         );
+  //       }}
+  //       keyExtractor={(item) => item.Tag}
+  //     />
+  //   </Box>
+  // );
+
+  const FirstRoute = () => {return TabComponent(pendingAssets)};
+  const SecondRoute = () => {return TabComponent(completedAssets)};
 
   const renderScene = SceneMap({
     first: FirstRoute,
